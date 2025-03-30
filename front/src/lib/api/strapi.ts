@@ -48,7 +48,7 @@ export async function getMaintenancePage(): Promise<StrapiResponse<MaintenanceCo
 
         // Essayer d'obtenir les données depuis Strapi
         return await fetchAPI<StrapiResponse<MaintenanceContent>>(
-            'maintenance-page?populate=*'
+            'maintenance?populate=*'
         )
 }
 
