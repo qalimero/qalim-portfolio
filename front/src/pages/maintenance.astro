@@ -4,22 +4,37 @@ import { getMaintenancePage } from '../lib/api/strapi';
 import MarkdownContent from '../components/MarkdownContent.astro';
 import type { MaintenanceContent } from '../interfaces/strapi';
 
-// Récupération des données de la page de maintenance depuis Strapi
-let maintenanceData: MaintenanceContent;
-const response = await getMaintenancePage();
-maintenanceData = response.data.attributes;
+// Valeurs par défaut
+let title = "";
+let message = "";
 
-// Formatage des données
+try {
+    // Tentative de récupération des données depuis Strapi
+    const response = await getMaintenancePage();
+
+    // Débogage - console log pour voir la structure exacte
+    console.log("Réponse API maintenance:", JSON.stringify(response, null, 2));
+
+    // Vérifier que la structure est correcte
+    if (response && response.data && response.data.attributes) {
+        title = response.data.attributes.title || title;
+        message = response.data.attributes.message || message;
+    } else {
+        console.error("Structure de données incorrecte:", response);
+    }
+} catch (error) {
+    console.error("Erreur lors de la récupération des données de maintenance:", error);
+}
 
 ---
 
-<BaseLayout title={maintenanceData.title}>
+<BaseLayout title={title}>
     <div class="maintenance container">
         <div class="maintenance-text">
-            <h1>{maintenanceData.title}</h1>
+            <h1>{title}</h1>
 
             <div class="maintenance-message">
-                <MarkdownContent content={maintenanceData.message} />
+                <MarkdownContent content={message} />
             </div>
         </div>
     </div>

@@ -45,11 +45,13 @@ export async function fetchAPI<T>(
  * Récupère les données de la page de maintenance
  */
 export async function getMaintenancePage(): Promise<StrapiResponse<MaintenanceContent>> {
-
-        // Essayer d'obtenir les données depuis Strapi
+    try {
         return await fetchAPI<StrapiResponse<MaintenanceContent>>(
             'maintenance?populate=*'
-        )
+        );
+    } catch (error) {
+        console.error(`Erreur lors de la récupération de la page de maintenance: ${error}`);
+    }
 }
 
 // Autres fonctions...
