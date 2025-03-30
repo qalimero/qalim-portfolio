@@ -1,0 +1,23 @@
+{
+  "name": "front",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.5.2",
+    "isomorphic-dompurify": "^2.22.0",
+    "marked": "^15.0.7",
+    "rehype-external-links": "^3.0.0",
+    "remark-gfm": "^4.0.1",
+    "shiki": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/dompurify": "^3.0.5",
+    "@types/marked": "^5.0.2"
+  }
+}
