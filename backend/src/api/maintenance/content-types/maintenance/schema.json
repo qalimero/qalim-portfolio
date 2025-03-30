@@ -21,21 +21,6 @@
     },
     "message": {
       "type": "richtext"
-    },
-    "image": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
-    },
-    "isMaintenance": {
-      "type": "boolean",
-      "default": false
     }
   }
 }

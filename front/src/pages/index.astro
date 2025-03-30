@@ -1,21 +1,10 @@
 ---
 import BaseLayout from '../layouts/Layout.astro';
 import MaintenanceContent from '../pages/maintenance.astro';
-import siteConfig from '../config/siteConfig';
 
 // Extraire les informations de configuration
-const { maintenanceMode, siteName } = siteConfig;
 ---
 
-<BaseLayout title={siteName}>
-        {maintenanceMode ? (
-                <MaintenanceContent />
-        ) : (
-                <div class="home-content">
-                    <h1>Bienvenue sur notre site</h1>
-                    <p>Ceci est le contenu réel de la page d'accueil.</p>
+<BaseLayout>
 
-                    <!-- Autre contenu... -->
-                </div>
-        )}
 </BaseLayout>

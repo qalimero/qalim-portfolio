@@ -1,25 +1,26 @@
 ---
 import BaseLayout from '../layouts/Layout.astro';
-import { getMaintenancePage, getStrapiMedia } from '../lib/strapi';
+import { getMaintenancePage } from '../lib/api/strapi';
 import MarkdownContent from '../components/MarkdownContent.astro';
 import type { MaintenanceContent } from '../interfaces/strapi';
 
 // Récupération des données de la page de maintenance depuis Strapi
+let maintenanceData: MaintenanceContent;
 const response = await getMaintenancePage();
-const maintenanceData: MaintenanceContent = response.data.attributes;
+maintenanceData = response.data.attributes;
 
 // Formatage des données
 const title = maintenanceData.title;
-
 ---
-<BaseLayout title={title}>
-<div class="maintenance container">
-    <div class="maintenance-text">
-        <h1>{maintenanceData.title}</h1>
 
-        <div class="maintenance-message">
-            <MarkdownContent content={maintenanceData.message} />
+<BaseLayout title={title}>
+    <div class="maintenance container">
+        <div class="maintenance-text">
+            <h1>{maintenanceData.title}</h1>
+
+            <div class="maintenance-message">
+                <MarkdownContent content={maintenanceData.message} />
+            </div>
         </div>
     </div>
-</div>
 </BaseLayout>
