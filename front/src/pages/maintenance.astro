@@ -10,11 +10,10 @@ const response = await getMaintenancePage();
 maintenanceData = response.data.attributes;
 
 // Formatage des données
-const title = maintenanceData.title;
-console.log(title);
+
 ---
 
-<BaseLayout title={title}>
+<BaseLayout title={maintenanceData.title}>
     <div class="maintenance container">
         <div class="maintenance-text">
             <h1>{maintenanceData.title}</h1>

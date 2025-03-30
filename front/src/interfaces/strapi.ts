@@ -100,8 +100,6 @@ export interface SocialLink {
 export interface MaintenanceContent extends StrapiBaseContent {
     title: string;
     message: string; // Contenu richtext (Markdown)
-    image: StrapiRelation<StrapiMedia>;
-    isMaintenance: boolean;
 }
 
 // Type pour un article de blog (comme exemple d'extension)
