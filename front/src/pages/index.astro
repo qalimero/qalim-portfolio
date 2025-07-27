@@ -1,10 +1,32 @@
 ---
+import { getMaintenancePage } from '../lib/api/strapi';
+import type { MaintenanceContent } from '../interfaces/strapi';
+import MarkdownContent from '../components/MarkdownContent.astro';
 import BaseLayout from '../layouts/Layout.astro';
-import MaintenanceContent from '../pages/maintenance.astro';
 
-// Extraire les informations de configuration
+// Valeurs par défaut
+let title = "";
+let message = "";
+
+
+export async function get() {
+    return {
+        status: 302,
+        headers: {
+            Location: '/maintenance',
+        },
+    };
+}
 ---
 
-<BaseLayout>
+<BaseLayout title={title}>
+    <div class="maintenance container">
+        <div class="maintenance-text">
+            <h1 class="heading-1">Page d'accueil</h1>
 
+            <div class="maintenance-message">
+                <MarkdownContent content={message} />
+            </div>
+        </div>
+    </div>
 </BaseLayout>

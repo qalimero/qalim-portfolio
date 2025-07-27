@@ -1,5 +1,5 @@
 ---
-// src/layouts/BaseLayout.astro
+import '../styles/main.scss';
 //import { ViewTransitions } from 'astro:transitions';
 
 interface Props {
@@ -11,8 +11,8 @@ interface Props {
 }
 
 const {
-	title = "Mon Site",
-	description = "Description par défaut du site",
+	title = "Qalim",
+	description = "Une histoire en ruine",
 	image = "/images/default-og-image.jpg",
 	canonicalURL = Astro.url.toString(),
 	bodyClass = "",

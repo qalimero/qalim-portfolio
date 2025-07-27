@@ -9,17 +9,26 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/react": "^4.3.0",
+    "@react-three/drei": "^9.56.0",
+    "@react-three/fiber": "^8.9.1",
+    "@splinetool/loader": "^1.10.37",
     "astro": "^5.5.2",
     "isomorphic-dompurify": "^2.22.0",
     "marked": "^15.0.7",
     "prismjs": "^1.30.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "rehype-external-links": "^3.0.0",
     "remark-gfm": "^4.0.1",
-    "shiki": "^3.2.1"
+    "shiki": "^3.2.1",
+    "three": "^0.152.0"
   },
   "devDependencies": {
     "@types/dompurify": "^3.0.5",
     "@types/marked": "^5.0.2",
-    "@types/prismjs": "^1.26.5"
+    "@types/prismjs": "^1.26.5",
+    "@types/three": "^0.175.0",
+    "sass": "^1.86.0"
   }
 }
