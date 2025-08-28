@@ -34,6 +34,8 @@ export function loadCard(scene: THREE.Scene, camera: THREE.PerspectiveCamera) {
 // Positionner la caméra de façon à regarder le centre
         camera.position.set(center.x, center.y, center.z + distance * 1.5);
         camera.lookAt(center);
+        // Forcer la carte à être rendue après le background
+        card.renderOrder = 1;
 
         // Optionnel : rotation douce
         gsap.to(card.rotation, {

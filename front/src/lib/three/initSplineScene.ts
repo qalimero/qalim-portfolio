@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { createCamera } from './createCamera';
 import { createRenderer } from './createRenderer';
+import { createAnimatedBackground } from './createAnimatedBackground';
 import { loadCard } from './loadCard';
-
 
 export function initSplineScene(containerId: string) {
     const container = document.getElementById(containerId);
@@ -14,17 +14,16 @@ export function initSplineScene(containerId: string) {
     const camera = createCamera();
     const renderer = createRenderer(container);
 
+    // Ajout du background (derrière)
+    const background = createAnimatedBackground();
+    scene.add(background);
+
+    // Chargement et ajout de la carte (devant)
     loadCard(scene, camera);
 
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
-    });
+    // Ajuster la caméra pour centrer la carte
+    // (à faire dans loadCard ou ici selon ton implémentation)
 
-
-    // Resize handling
     window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
@@ -33,6 +32,8 @@ export function initSplineScene(containerId: string) {
     });
 
     function animate() {
+        background.material.uniforms.time.value += 0.0001;
+        console.log('time:', background.material.uniforms.time.value);
         renderer.render(scene, camera);
     }
 
