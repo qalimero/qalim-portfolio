@@ -1,6 +1,6 @@
 ---
 import { getMaintenancePage } from '../lib/api/strapi';
-import type { MaintenanceContent } from '../interfaces/strapi';
+import type { StrapiResponse, MaintenanceContent } from '../interfaces/strapi';
 import MarkdownContent from '../components/MarkdownContent.astro';
 import BaseLayout from '../layouts/Layout.astro';
 
@@ -8,6 +8,16 @@ import BaseLayout from '../layouts/Layout.astro';
 let title = "";
 let message = "";
 
+let maintenance: StrapiResponse<MaintenanceContent> | null = null;
+try {
+    maintenance = await getMaintenancePage();
+    if (maintenance) {
+        title = maintenance.data.attributes.title;
+        message = maintenance.data.attributes.message;
+    }
+} catch (error) {
+    console.error('Erreur lors de la récupération de la page de maintenance:', error);
+}
 
 export async function get() {
     return {
