@@ -23,9 +23,6 @@ export function loadCard(scene: THREE.Scene, camera: THREE.PerspectiveCamera) {
         const center = box.getCenter(new THREE.Vector3());
         const size = box.getSize(new THREE.Vector3());
 
-
-        console.log('Position locale de la carte :', card.position);
-
         // Calculer une distance caméra adaptée
         const maxDim = Math.max(size.x, size.y, size.z);
         const fov = camera.fov * (Math.PI / 180);
@@ -36,6 +33,33 @@ export function loadCard(scene: THREE.Scene, camera: THREE.PerspectiveCamera) {
         camera.lookAt(center);
         // Forcer la carte à être rendue après le background
         card.renderOrder = 1;
+
+
+        // 🎯 Fonction pour ajuster la caméra
+        const fitCamera = () => {
+            const box = new THREE.Box3().setFromObject(card);
+            const sphere = box.getBoundingSphere(new THREE.Sphere());
+
+            const aspect = camera.aspect || 1;
+            const vFov = THREE.MathUtils.degToRad(camera.fov);
+            const hFov = 2 * Math.atan(Math.tan(vFov/2) * aspect);
+
+            const distV = sphere.radius / Math.sin(vFov/5);
+            const distH = sphere.radius / Math.sin(hFov/5);
+            const dist  = Math.max(distV, distH) * 0.4; // marge
+
+            camera.position.set(sphere.center.x, sphere.center.y, sphere.center.z + dist);
+            camera.near = Math.max(6, dist - sphere.radius*2);
+            camera.far  = dist + sphere.radius*2.9;
+            camera.updateProjectionMatrix();
+            camera.lookAt(sphere.center);
+        };
+
+        // Premier fit
+        fitCamera();
+
+        // Réfit automatique au resize
+        window.addEventListener('resize', fitCamera);
 
         // Optionnel : rotation douce
         gsap.to(card.rotation, {

@@ -9,14 +9,10 @@ export function initSplineScene(containerId: string) {
     if (!container) return;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color('#1e1b4b');
+
 
     const camera = createCamera();
     const renderer = createRenderer(container);
-
-    // Ajout du background (derrière)
-    const background = createAnimatedBackground();
-    scene.add(background);
 
     // Chargement et ajout de la carte (devant)
     loadCard(scene, camera);
@@ -32,8 +28,7 @@ export function initSplineScene(containerId: string) {
     });
 
     function animate() {
-        background.material.uniforms.time.value += 0.0001;
-        console.log('time:', background.material.uniforms.time.value);
+
         renderer.render(scene, camera);
     }
 

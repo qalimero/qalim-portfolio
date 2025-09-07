@@ -4,6 +4,21 @@ import ThreeScene from '../components/ThreeScene.jsx';
 
 ---
 
-<BaseLayout>
-    <ThreeScene client:only="react" />
+<BaseLayout
+        title="Maintenance — Qalim"
+        description="Retour très bientôt."
+        bodyClass="page-maintenance">
+<section class="stage">
+    <div class="bg-anim" aria-hidden="true"></div>
+
+    <!-- Variante A (wrap) : on enveloppe le composant pour lui donner la classe .canvas-host -->
+    <div class="canvas-host">
+        <ThreeScene client:only="react" />
+    </div>
+
+    <!-- Texte au-dessus du canvas sans bloquer les clics -->
+    <div class="overlay">
+        <p>Le site revient très vite.</p>
+    </div>
+</section>
 </BaseLayout>
