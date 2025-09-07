@@ -1,41 +1,24 @@
 ---
 import BaseLayout from '../layouts/Layout.astro';
-import { getMaintenancePage } from '../lib/api/strapi';
-import MarkdownContent from '../components/MarkdownContent.astro';
-import type { MaintenanceContent } from '../interfaces/strapi';
-
-// Valeurs par défaut
-let title = "";
-let message = "";
-
-try {
-    // Tentative de récupération des données depuis Strapi
-    const response = await getMaintenancePage();
-
-    // Débogage - console log pour voir la structure exacte
-    console.log("Réponse API maintenance:", JSON.stringify(response, null, 2));
-
-    // Vérifier que la structure est correcte
-    if (response && response.data && response.data.attributes) {
-        title = response.data.attributes.title || title;
-        message = response.data.attributes.message || message;
-    } else {
-        console.error("Structure de données incorrecte:", response);
-    }
-} catch (error) {
-    console.error("Erreur lors de la récupération des données de maintenance:", error);
-}
+import ThreeScene from '../components/ThreeScene.jsx';
 
 ---
 
-<BaseLayout title={title}>
-    <div class="maintenance container">
-        <div class="maintenance-text">
-            <h1>{title}</h1>
+<BaseLayout
+        title="Maintenance — Qalim"
+        description="Retour très bientôt."
+        bodyClass="page-maintenance">
+<section class="stage">
+    <div class="bg-anim" aria-hidden="true"></div>
 
-            <div class="maintenance-message">
-                <MarkdownContent content={message} />
-            </div>
-        </div>
+    <!-- Variante A (wrap) : on enveloppe le composant pour lui donner la classe .canvas-host -->
+    <div class="canvas-host">
+        <ThreeScene client:only="react" />
     </div>
+
+    <!-- Texte au-dessus du canvas sans bloquer les clics -->
+    <div class="overlay">
+        <p>Le site revient très vite.</p>
+    </div>
+</section>
 </BaseLayout>

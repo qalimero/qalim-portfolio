@@ -1,0 +1,13 @@
+// Responsive breakpoints
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == small {
+    @media (max-width: $breakpoint-sm) { @content; }
+  } @else if $breakpoint == medium {
+    @media (max-width: $breakpoint-md) { @content; }
+  } @else if $breakpoint == large {
+    @media (max-width: $breakpoint-lg) { @content; }
+  } @else if $breakpoint == xlarge {
+    @media (max-width: $breakpoint-xl) { @content; }
+  }
+}
+
