@@ -1,11 +1,10 @@
-// front/style-dictionary.config.mjs
 import StyleDictionary from 'style-dictionary';
-import { registerTransforms } from '@tokens-studio/sd-transforms';
+import { register } from '@tokens-studio/sd-transforms';
 
-registerTransforms(StyleDictionary);
+await register(StyleDictionary);
 
 export default {
-    source: ['src/styles/tokens.json'],
+    source: ['src/styles/data-tokens/**/*.json'], // prend tous les JSON du dossier tokens
     platforms: {
         tailwind: {
             transformGroup: 'tokens-studio',
