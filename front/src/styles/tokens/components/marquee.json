@@ -1,0 +1,42 @@
+{
+  "marquee": {
+    "font-size": {
+      "mobile": {
+        "$value": "{font-size.xs}",
+        "$type": "fontSizes",
+        "$description": ""
+      },
+      "desktop": {
+        "$value": "{font-size.sm}",
+        "$type": "fontSizes",
+        "$description": ""
+      }
+    },
+    "background-color": {
+      "brand": {
+        "$value": "{powerfull-blue}",
+        "$type": "color",
+        "$description": "branding bg-color"
+      }
+    },
+    "font-color": {
+      "brand": {
+        "$value": "{white}",
+        "$type": "color",
+        "$description": ""
+      }
+    },
+    "border-radius": {
+      "desktop": {
+        "$value": "{border-radius.md}",
+        "$type": "borderRadius",
+        "$description": ""
+      },
+      "mobile": {
+        "$value": "{border-radius.sm}",
+        "$type": "borderRadius",
+        "$description": ""
+      }
+    }
+  }
+}
