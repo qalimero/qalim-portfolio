@@ -1,0 +1,34 @@
+{
+  "font-size": {
+    "xs": {
+      "$value": "16px",
+      "$type": "fontSizes",
+      "$description": ""
+    },
+    "sm": {
+      "$value": "{font-size.xs}*1.618",
+      "$type": "fontSizes",
+      "$description": ""
+    },
+    "xxs": {
+      "$value": "{font-size.xs}/1.618",
+      "$type": "fontSizes",
+      "$description": ""
+    },
+    "md": {
+      "$value": "{font-size.sm}*1.618",
+      "$type": "fontSizes",
+      "$description": ""
+    },
+    "lg": {
+      "$value": "{font-size.md}*1.618",
+      "$type": "fontSizes",
+      "$description": "for creative title"
+    },
+    "xl": {
+      "$value": "{font-size.lg}*1.618",
+      "$type": "fontSizes",
+      "$description": "for creative title"
+    }
+  }
+}

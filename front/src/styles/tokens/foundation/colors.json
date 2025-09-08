@@ -1,0 +1,22 @@
+{
+  "powerfull-orange": {
+    "$value": "#ff602f",
+    "$type": "color",
+    "$description": ""
+  },
+  "dark": {
+    "$value": "#232121",
+    "$type": "color",
+    "$description": ""
+  },
+  "white": {
+    "$value": "#fff",
+    "$type": "color",
+    "$description": ""
+  },
+  "powerfull-blue": {
+    "$value": "#3200f2",
+    "$type": "color",
+    "$description": ""
+  }
+}

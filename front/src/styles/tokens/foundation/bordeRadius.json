@@ -1,0 +1,14 @@
+{
+  "border-radius": {
+    "md": {
+      "$value": "40",
+      "$type": "borderRadius",
+      "$description": ""
+    },
+    "sm": {
+      "$value": "16",
+      "$type": "borderRadius",
+      "$description": ""
+    }
+  }
+}

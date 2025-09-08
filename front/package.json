@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "build:tokens": "style-dictionary build --config style-dictionary.config.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -13,6 +14,8 @@
     "@react-three/drei": "^9.56.0",
     "@react-three/fiber": "^8.9.1",
     "@splinetool/loader": "^1.10.37",
+    "@tailwindcss/vite": "^4.1.13",
+    "@tokens-studio/sd-transforms": "^2.0.1",
     "astro": "^5.5.2",
     "isomorphic-dompurify": "^2.22.0",
     "marked": "^15.0.7",
@@ -22,6 +25,8 @@
     "rehype-external-links": "^3.0.0",
     "remark-gfm": "^4.0.1",
     "shiki": "^3.2.1",
+    "style-dictionary": "^5.0.4",
+    "tailwindcss": "^4.1.13",
     "three": "^0.152.0"
   },
   "devDependencies": {

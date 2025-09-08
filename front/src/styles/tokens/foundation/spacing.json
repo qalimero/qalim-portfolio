@@ -1,0 +1,52 @@
+{
+  "xs": {
+    "$value": "{xxs}*2",
+    "$type": "spacing",
+    "$description": ""
+  },
+  "md": {
+    "$value": "{xs}*2",
+    "$type": "spacing",
+    "$description": ""
+  },
+  "3xl": {
+    "$value": "{lg}*2",
+    "$type": "spacing",
+    "$description": ""
+  },
+  "4xl": {
+    "$value": "{xl}*2",
+    "$type": "spacing",
+    "$description": ""
+  },
+  "2xl": {
+    "$value": "{lg}*1.5 + {xxs}",
+    "$type": "spacing",
+    "$description": ""
+  },
+  "lg": {
+    "$value": "{sm}*2",
+    "$type": "spacing",
+    "$description": ""
+  },
+  "xxs": {
+    "$value": "4px",
+    "$type": "spacing",
+    "$description": ""
+  },
+  "xl": {
+    "$value": "{md}*2",
+    "$type": "spacing",
+    "$description": ""
+  },
+  "5xl": {
+    "$value": "{2xl}*2",
+    "$type": "spacing",
+    "$description": ""
+  },
+  "sm": {
+    "$value": "{xs}*1.5",
+    "$type": "spacing",
+    "$description": ""
+  }
+}
