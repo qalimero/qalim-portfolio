@@ -3,3 +3,10 @@
 @use 'components';
 @use 'layouts';
 @use 'pages';
+
+/* dépendance tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
