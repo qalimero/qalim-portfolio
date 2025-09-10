@@ -4,14 +4,19 @@ import { register } from '@tokens-studio/sd-transforms';
 await register(StyleDictionary);
 
 export default {
-    source: ['src/styles/data-tokens/**/*.json'], // prend tous les JSON du dossier tokens
+    source: ['src/styles/design-system/data-tokens/**/*.json'],
     platforms: {
-        tailwind: {
+        css: {
             transformGroup: 'tokens-studio',
-            buildPath: 'src/tokens/',
+            buildPath: 'src/styles/design-system/tokens/',
             files: [
-                { destination: 'tailwind-tokens.mjs', format: 'javascript/module' },
-                { destination: '_tokens.scss', format: 'scss/variables' }
+                { 
+                    destination: 'design-tokens.css', 
+                    format: 'css/variables',
+                    options: {
+                        selector: ':root'
+                    }
+                }
             ]
         }
     }
