@@ -1,0 +1,34 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --marquee-font-sizeMobile: 1.0000rem;
+  --marquee-font-sizeDesktop: 1.6180rem;
+  --marquee-background-colorBrand: #3200f2; /** branding bg-color */
+  --marquee-font-colorBrand: #ffffff;
+  --marquee-border-radiusDesktop: 2.5000rem;
+  --marquee-border-radiusMobile: 1.0000rem;
+  --border-radius-md: 2.5000rem;
+  --border-radius-sm: 1.0000rem;
+  --color-powerfull-orange: #ff602f;
+  --color-dark: #232121;
+  --color-white: #ffffff;
+  --color-powerfull-blue: #3200f2;
+  --font-size-xs: 1.0000rem;
+  --font-size-sm: 1.6180rem;
+  --font-size-xxs: 0.6180rem;
+  --font-size-md: 2.6179rem;
+  --font-size-lg: 4.2358rem; /** for creative title */
+  --font-size-xl: 6.8535rem; /** for creative title */
+  --spacing-xs: 0.5000rem;
+  --spacing-md: 1.0000rem;
+  --spacing-3xl: 3.0000rem;
+  --spacing-4xl: 4.0000rem;
+  --spacing-2xl: 2.5000rem;
+  --spacing-lg: 1.5000rem;
+  --spacing-xxs: 0.2500rem;
+  --spacing-xl: 2.0000rem;
+  --spacing-5xl: 5.0000rem;
+  --spacing-sm: 0.7500rem;
+}

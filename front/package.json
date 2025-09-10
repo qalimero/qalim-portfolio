@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "build:tokens": "style-dictionary build --config style-dictionary.config.mjs",
+    "tokens": "node scripts/generate-tokens.js",
     "preview": "astro preview",
     "astro": "astro"
   },

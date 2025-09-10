@@ -4,9 +4,10 @@
 @use 'layouts';
 @use 'pages';
 
+/* Design tokens - Available globally in all SCSS files */
+@import './design-system/tokens/design-tokens.css';
+
 /* dépendance tailwind */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-
