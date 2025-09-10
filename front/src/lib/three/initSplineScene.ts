@@ -35,6 +35,9 @@ export function initSplineScene(containerId: string): SplineSceneInstance | null
         if (card) {
             // Initial camera fitting
             fitCameraToCard(card, camera);
+            
+            // Add click interaction for LinkedIn link
+            addCardClickInteraction(card, camera, renderer);
         }
     });
 
@@ -108,6 +111,12 @@ export function initSplineScene(containerId: string): SplineSceneInstance | null
         window.removeEventListener('resize', handleResize);
         clearTimeout(resizeTimeout);
         
+        // Remove click event listeners
+        if (renderer.domElement) {
+            renderer.domElement.removeEventListener('click', () => {});
+            renderer.domElement.removeEventListener('mousemove', () => {});
+        }
+        
         // Dispose of geometries and materials
         scene.traverse((object) => {
             if (object instanceof THREE.Mesh) {
@@ -169,5 +178,54 @@ function fitCameraToCard(card: THREE.Object3D, camera: THREE.PerspectiveCamera) 
     console.log('Camera positioned at:', camera.position);
     console.log('Camera distance:', finalDistance);
     console.log('Screen size:', screenSize, 'Mobile multiplier:', mobileMultiplier);
+}
+
+// Add click interaction to open LinkedIn profile
+function addCardClickInteraction(card: THREE.Object3D, camera: THREE.PerspectiveCamera, renderer: THREE.WebGLRenderer) {
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    
+    // LinkedIn profile URL
+    const LINKEDIN_URL = 'https://www.linkedin.com/in/quentin-serda/';
+    
+    const handleClick = (event: MouseEvent) => {
+        // Calculate mouse position in normalized device coordinates (-1 to +1)
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        
+        // Update the raycaster with the camera and mouse position
+        raycaster.setFromCamera(mouse, camera);
+        
+        // Calculate objects intersecting the ray
+        const intersects = raycaster.intersectObject(card, true);
+        
+        if (intersects.length > 0) {
+            console.log('Card clicked! Opening LinkedIn profile...');
+            window.open(LINKEDIN_URL, '_blank');
+        }
+    };
+    
+    // Add click event listener
+    renderer.domElement.addEventListener('click', handleClick);
+    
+    // Add visual feedback on hover
+    const handleMouseMove = (event: MouseEvent) => {
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObject(card, true);
+        
+        // Change cursor style based on hover
+        if (intersects.length > 0) {
+            renderer.domElement.style.cursor = 'pointer';
+        } else {
+            renderer.domElement.style.cursor = 'default';
+        }
+    };
+    
+    renderer.domElement.addEventListener('mousemove', handleMouseMove);
+    
+    console.log('Card click interaction added - click to open LinkedIn profile');
 }
 
