@@ -4,12 +4,11 @@ import type { MiddlewareHandler } from 'astro';
 const maintenanceMode = import.meta.env.PUBLIC_MAINTENANCE_MODE === 'true';
 
 export const onRequest: MiddlewareHandler = async ({ redirect, url }, next) => {
-    const isMaintenancePage = url.pathname === '/maintenance';
+  const isMaintenancePage = url.pathname === '/maintenance';
 
-    if (maintenanceMode && !isMaintenancePage) {
-        return redirect('/maintenance');
-    }
+  if (maintenanceMode && !isMaintenancePage) {
+    return redirect('/maintenance');
+  }
 
-    return next();
+  return next();
 };
-

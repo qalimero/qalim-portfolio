@@ -3,21 +3,21 @@
 /* -----------------------------
    Variables
 ------------------------------ */
-$bg-primary: #1e1b4b;  // coin haut-gauche
-$bg-mid:     #0b0729;  // centre
-$bg-deep:    #08051b;  // coin bas-droit
+$bg-primary: #1e1b4b; // coin haut-gauche
+$bg-mid: #0b0729; // centre
+$bg-deep: #08051b; // coin bas-droit
 
-$bg-speed:   12s;      // vitesse anim du dégradé
-$bg-zoom-a:  1.02;
-$bg-zoom-b:  1.04;
+$bg-speed: 12s; // vitesse anim du dégradé
+$bg-zoom-a: 1.02;
+$bg-zoom-b: 1.04;
 
-$grain-opacity: .12;   // intensité du grain (0..1)
-$grain-size:    220px; // plus petit = plus fin
-$grain-speed:   7s;    // vitesse anim du grain
+$grain-opacity: 0.12; // intensité du grain (0..1)
+$grain-size: 220px; // plus petit = plus fin
+$grain-speed: 7s; // vitesse anim du grain
 
-$z-bg:       0;
-$z-canvas:   1;
-$z-overlay:  2;
+$z-bg: 0;
+$z-canvas: 1;
+$z-overlay: 2;
 
 /* -----------------------------
    Helpers
@@ -32,14 +32,16 @@ $z-overlay:  2;
 ------------------------------ */
 .page-maintenance {
   /* Thème sombre pour les UA/composants natifs */
-  :root { color-scheme: dark; }
+  :root {
+    color-scheme: dark;
+  }
 
   /* Scène plein écran (mobile-friendly) */
   .stage {
     position: relative;
     width: 100vw;
-    min-height: 100vh;   /* fallback */
-    min-height: 100svh;  /* iOS/mobile correct */
+    min-height: 100vh; /* fallback */
+    min-height: 100svh; /* iOS/mobile correct */
     overflow: hidden;
   }
 
@@ -49,7 +51,12 @@ $z-overlay:  2;
     z-index: $z-bg;
 
     /* Dégradé “profondeur violette” */
-    background: radial-gradient(120% 120% at 0% 0%, $bg-primary 0%, $bg-mid 60%, $bg-deep 100%);
+    background: radial-gradient(
+      120% 120% at 0% 0%,
+      $bg-primary 0%,
+      $bg-mid 60%,
+      $bg-deep 100%
+    );
     filter: saturate(1.1) contrast(1.05);
 
     /* Mouvement doux (GPU-friendly) */
@@ -59,7 +66,7 @@ $z-overlay:  2;
 
     /* Grain subtil au-dessus du dégradé */
     &::after {
-      content: "";
+      content: '';
       @include abs-fill;
       pointer-events: none;
       z-index: $z-bg + 1;
@@ -100,13 +107,17 @@ $z-overlay:  2;
     color: #e9e7ff;
     text-align: center;
     font-size: clamp(0.95rem, 1vw + 0.5rem, 1.25rem);
-    text-shadow: 0 1px 2px rgba(0,0,0,.35);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
   }
 
   /* Accessibilité : réduit ou coupe les animations si demandé */
   @media (prefers-reduced-motion: reduce) {
-    .bg-anim { animation: none; }
-    .bg-anim::after { animation: none; }
+    .bg-anim {
+      animation: none;
+    }
+    .bg-anim::after {
+      animation: none;
+    }
   }
 }
 
@@ -114,15 +125,31 @@ $z-overlay:  2;
    Keyframes (global, réutilisables)
 ------------------------------ */
 @keyframes bg-shift {
-  0%   { transform: translate3d(-2%, -2%, 0) scale($bg-zoom-a); }
-  100% { transform: translate3d( 2%,  2%, 0) scale($bg-zoom-b); }
+  0% {
+    transform: translate3d(-2%, -2%, 0) scale($bg-zoom-a);
+  }
+  100% {
+    transform: translate3d(2%, 2%, 0) scale($bg-zoom-b);
+  }
 }
 
 @keyframes grain-move {
-  0%   { transform: translate3d(0, 0, 0); }
-  20%  { transform: translate3d(-2%, -1%, 0); }
-  40%  { transform: translate3d(1%, -2%, 0); }
-  60%  { transform: translate3d(2%, 1%, 0); }
-  80%  { transform: translate3d(-1%, 2%, 0); }
-  100% { transform: translate3d(0, 0, 0); }
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  20% {
+    transform: translate3d(-2%, -1%, 0);
+  }
+  40% {
+    transform: translate3d(1%, -2%, 0);
+  }
+  60% {
+    transform: translate3d(2%, 1%, 0);
+  }
+  80% {
+    transform: translate3d(-1%, 2%, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
 }

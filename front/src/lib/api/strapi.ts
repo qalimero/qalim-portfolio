@@ -1,61 +1,69 @@
 // src/lib/strapi.ts
-import type { StrapiResponse, MaintenanceContent } from '../../interfaces/strapi';
+import type {
+  StrapiResponse,
+  MaintenanceContent,
+} from '../../interfaces/strapi';
 
 const STRAPI_URL = import.meta.env.STRAPI_URL || 'http://localhost:1337';
 
 // Options des requêtes API
 interface FetchOptions extends RequestInit {
-    headers?: HeadersInit;
+  headers?: HeadersInit;
 }
 
 /**
  * Fonction générique pour les appels à l'API Strapi
  */
 export async function fetchAPI<T>(
-    endpoint: string,
-    options: FetchOptions = {}
+  endpoint: string,
+  options: FetchOptions = {}
 ): Promise<T> {
-    const defaultOptions: FetchOptions = {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    };
+  const defaultOptions: FetchOptions = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
 
-    const mergedOptions = {
-        ...defaultOptions,
-        ...options,
-    };
+  const mergedOptions = {
+    ...defaultOptions,
+    ...options,
+  };
 
-    try {
-        const response = await fetch(`${STRAPI_URL}/api/${endpoint}`, mergedOptions);
+  try {
+    const response = await fetch(
+      `${STRAPI_URL}/api/${endpoint}`,
+      mergedOptions
+    );
 
-        if (!response.ok) {
-            throw new Error(`Une erreur est survenue: ${response.status}`);
-        }
-
-        const data = await response.json();
-        return data as T;
-    } catch (error) {
-        console.error(`Erreur lors de l'appel API: ${error}`);
-        throw error;
+    if (!response.ok) {
+      throw new Error(`Une erreur est survenue: ${response.status}`);
     }
+
+    const data = await response.json();
+    return data as T;
+  } catch (error) {
+    console.error(`Erreur lors de l'appel API: ${error}`);
+    throw error;
+  }
 }
 
 /**
  * Récupère les données de la page de maintenance
  */
 export async function getMaintenancePage(): Promise<StrapiResponse<MaintenanceContent> | null> {
-    try {
-        return await fetchAPI<StrapiResponse<MaintenanceContent>>(
-            'maintenance?populate=*'
-        );
-    } catch (error) {
-        console.error(`Erreur lors de la récupération de la page de maintenance: ${error}`);
-        if (error instanceof Error && error.message.includes('404')) {
-            return null;
-        }
-        throw error;
+  try {
+    return await fetchAPI<StrapiResponse<MaintenanceContent>>(
+      'maintenance?populate=*'
+    );
+  } catch (error) {
+    console.error(
+      `Erreur lors de la récupération de la page de maintenance: ${error}`
+    );
+    if (error instanceof Error && error.message.includes('404')) {
+      return null;
     }
+    throw error;
+  }
 }
 
 // Autres fonctions...

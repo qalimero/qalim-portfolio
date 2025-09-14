@@ -2,17 +2,17 @@ import * as THREE from 'three';
 import { vertexShader, fragmentShader } from './shaders/animatedGradientShader';
 
 export function createAnimatedBackground(): THREE.Mesh {
-    const uniforms = {
-        time: { value: 0 },
-        color1: { value: new THREE.Color('#08ed0f') },
-        color2: { value: new THREE.Color('#001bb3') },
-        color3: { value: new THREE.Color('#600f41') },
-    };
+  const uniforms = {
+    time: { value: 0 },
+    color1: { value: new THREE.Color('#08ed0f') },
+    color2: { value: new THREE.Color('#001bb3') },
+    color3: { value: new THREE.Color('#600f41') },
+  };
 
-    const material = new THREE.ShaderMaterial({
-        uniforms,
-        vertexShader,
-        fragmentShader: `
+  const material = new THREE.ShaderMaterial({
+    uniforms,
+    vertexShader,
+    fragmentShader: `
             uniform float time;
             uniform vec3 color1;
             uniform vec3 color2;
@@ -35,19 +35,19 @@ export function createAnimatedBackground(): THREE.Mesh {
                 gl_FragColor = vec4(color, 0.9);
             }
         `,
-        transparent: true,
-        depthWrite: false,
-        depthTest: false, // Disable depth test for background
-        side: THREE.DoubleSide,
-    });
+    transparent: true,
+    depthWrite: false,
+    depthTest: false, // Disable depth test for background
+    side: THREE.DoubleSide,
+  });
 
-    // Create a large plane that covers the entire viewport
-    const geometry = new THREE.PlaneGeometry(8000, 6000);
-    const mesh = new THREE.Mesh(geometry, material);
+  // Create a large plane that covers the entire viewport
+  const geometry = new THREE.PlaneGeometry(8000, 6000);
+  const mesh = new THREE.Mesh(geometry, material);
 
-    // Position far behind everything
-    mesh.position.set(0, 0, -1000);
-    mesh.renderOrder = -1; // Render first (behind everything)
+  // Position far behind everything
+  mesh.position.set(0, 0, -1000);
+  mesh.renderOrder = -1; // Render first (behind everything)
 
-    return mesh;
+  return mesh;
 }
