@@ -37,6 +37,13 @@
         "$type": "borderRadius",
         "$description": ""
       }
+    },
+    "item": {
+      "gap": {
+        "$value": "{md}",
+        "$type": "spacing",
+        "$description": ""
+      }
     }
   }
 }

@@ -1,19 +1,54 @@
 ---
 import BaseLayout from '../layouts/Layout.astro';
-import ThreeScene from '../components/ThreeScene.jsx';
+import ThreeScene from '../components/scenes/ThreeScene.jsx';
+import Marquee from '../components/ui/Marquee.astro';
+import { getMaintenancePage } from '../lib/api/strapi';
+
+// Fetch maintenance page data from Strapi
+let maintenanceData = null;
+try {
+  maintenanceData = await getMaintenancePage();
+} catch (error) {
+  console.error('Error fetching maintenance data:', error);
+}
+
+// Process maintenance data for display
+const marqueeComponents = maintenanceData?.data?.attributes?.marquee 
+  ? maintenanceData.data.attributes.marquee.filter(marquee => marquee.items?.trim())
+  : [];
 
 ---
 
 <BaseLayout
-        title="Maintenance — Qalim"
+        title={maintenanceData?.data?.attributes?.title || "Maintenance — Qalim"}
         description="Retour très bientôt."
         bodyClass="page-maintenance">
-<section class="stage">
+<section class="maintenance">
     <div class="bg-anim" aria-hidden="true"></div>
+    
 
-    <!-- Variante A (wrap) : on enveloppe le composant pour lui donner la classe .canvas-host -->
+    <!-- Display marquees from maintenance page data -->
+    {marqueeComponents.length > 0 ? (
+      marqueeComponents.map((marquee: any, index: number) => (
+        <Marquee 
+          text={marquee.items}
+          className={` marquee-${index + 1}`}
+          speed={1 + (index * 0.3)}
+          direction={index % 2 === 0 ? 'left' : 'right'}
+        />
+      ))
+    ) : (
+      <Marquee 
+        text="Retour très bientôt..."
+        speed={1}
+        direction="left"
+      />
+    )}
+
+    <!-- Three.js Scene Container -->
     <div class="canvas-host">
         <ThreeScene client:only="react" />
     </div>
 </section>
 </BaseLayout>
+

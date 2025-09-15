@@ -66,4 +66,3 @@ export async function getMaintenancePage(): Promise<StrapiResponse<MaintenanceCo
   }
 }
 
-// Autres fonctions...

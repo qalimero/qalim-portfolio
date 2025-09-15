@@ -100,29 +100,11 @@ export interface SocialLink {
 export interface MaintenanceContent extends StrapiBaseContent {
   title: string;
   message: string; // Contenu richtext (Markdown)
+  marquee: MarqueeContent[]; // Array of marquee components
 }
 
-// Type pour un article de blog (comme exemple d'extension)
-export interface ArticleContent extends StrapiBaseContent {
-  title: string;
-  slug: string;
-  content: string; // Contenu richtext (Markdown)
-  excerpt?: string;
-  coverImage: StrapiRelation<StrapiMedia>;
-  categories?: StrapiArrayRelation<CategoryContent>;
-  author?: StrapiRelation<AuthorContent>;
-  seo?: StrapiSeo;
+// Type pour le composant marquee
+export interface MarqueeContent extends StrapiBaseContent {
+  items: string;
 }
 
-// Types additionnels pour compléter les relations
-export interface CategoryContent extends StrapiBaseContent {
-  name: string;
-  slug: string;
-  description?: string;
-}
-
-export interface AuthorContent extends StrapiBaseContent {
-  name: string;
-  bio?: string;
-  avatar?: StrapiRelation<StrapiMedia>;
-}

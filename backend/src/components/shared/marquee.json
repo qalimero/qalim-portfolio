@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_shared_marquees",
+  "info": {
+    "displayName": "marquee",
+    "icon": "bulletList"
+  },
+  "options": {},
+  "attributes": {
+    "items": {
+      "type": "string"
+    }
+  }
+}

@@ -1,13 +1,25 @@
-@use 'abstracts';
-@use 'base';
-@use 'components';
-@use 'layouts';
-@use 'pages';
+// Main SCSS Entry Point
+// Uses modern @use syntax for proper concatenation and BEM methodology
 
-/* Design tokens - Available globally in all SCSS files */
-@import './design-system/tokens/design-tokens.css';
+// 1. Abstracts - Variables, mixins, functions (foundation layer)
+@use 'abstracts' as *;
 
-/* dépendance tailwind */
+// 2. Base - Reset, typography, base elements
+@use 'base' as *;
+
+// 3. Components - Reusable UI components (BEM methodology)
+@use 'components' as *;
+
+// 4. Layouts - Page layout components
+@use 'layouts' as *;
+
+// 5. Pages - Page-specific styles
+@use 'pages' as *;
+
+// Design tokens - Available globally in all SCSS files
+@import './tokens/tokens.css';
+
+// Tailwind CSS dependencies
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

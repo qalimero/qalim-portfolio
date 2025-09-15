@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { initSplineScene } from '../lib/three/initSplineScene';
+import { initSplineScene } from '../../lib/three/initSplineScene';
 
 export default function ThreeScene() {
   const sceneInstanceRef = useRef(null);

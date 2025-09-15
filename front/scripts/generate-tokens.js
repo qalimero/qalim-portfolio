@@ -26,7 +26,7 @@ try {
   // Post-process the CSS to fix naming
   const cssPath = path.join(
     projectRoot,
-    'src/styles/design-system/tokens/design-tokens.css'
+    'src/styles/tokens/tokens.css'
   );
   let cssContent = fs.readFileSync(cssPath, 'utf8');
 
@@ -127,6 +127,14 @@ try {
             return `--marquee-font-size${name}: ${remValue}rem`;
           }
         )
+        // Convert marquee item gap values to rem
+        .replace(
+          /--marquee-item-gap:\s*(\d+(?:\.\d+)?)px/g,
+          (match, value) => {
+            const remValue = (parseFloat(value) / 16).toFixed(4);
+            return `--marquee-item-gap: ${remValue}rem`;
+          }
+        )
     );
   }
 
@@ -137,7 +145,7 @@ try {
   fs.writeFileSync(cssPath, cssContent);
 
   console.log('✅ Design tokens generated successfully!');
-  console.log('📁 Output: src/styles/design-system/tokens/design-tokens.css');
+  console.log('📁 Output: src/styles/tokens/tokens.css');
   console.log(
     '🔄 Converted spacing, font-size, and border-radius to rem units'
   );

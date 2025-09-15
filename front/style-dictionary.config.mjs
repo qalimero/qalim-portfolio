@@ -8,10 +8,10 @@ export default {
   platforms: {
     css: {
       transformGroup: 'tokens-studio',
-      buildPath: 'src/styles/design-system/tokens/',
+      buildPath: 'src/styles/tokens/',
       files: [
         {
-          destination: 'design-tokens.css',
+          destination: 'tokens.css',
           format: 'css/variables',
           options: {
             selector: ':root',

@@ -19,8 +19,11 @@
     "title": {
       "type": "string"
     },
-    "message": {
-      "type": "richtext"
+    "marquee": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.marquee",
+      "required": true
     }
   }
 }

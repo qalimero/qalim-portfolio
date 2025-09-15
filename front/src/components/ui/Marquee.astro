@@ -1,0 +1,21 @@
+---
+export interface Props {
+  text: string;
+  className?: string;
+  speed?: number;
+  direction?: 'left' | 'right';
+}
+
+const { text, className = '', speed = 1, direction = 'left' } = Astro.props;
+const repeatedText = Array(3).fill(text);
+---
+
+<div class={`marquee${className}`} data-direction={direction} data-speed={speed}>
+  <ul class="marquee__content">
+    {repeatedText.map((item) => (
+      <li class="marquee__content-item">{item}</li>
+    ))}
+  </ul>
+</div>
+
+
