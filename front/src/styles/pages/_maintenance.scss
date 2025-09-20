@@ -48,9 +48,8 @@ $z-overlay: 2;
   /* --- Background animé (derrière) --- */
   .bg-anim {
     @include abs-fill;
-    z-index: $z-bg;
 
-    /* Dégradé “profondeur violette” */
+    /* Dégradé "profondeur violette" */
     background: radial-gradient(
       120% 120% at 0% 0%,
       $bg-primary 0%,
@@ -69,7 +68,8 @@ $z-overlay: 2;
       content: '';
       @include abs-fill;
       pointer-events: none;
-      z-index: $z-bg + 1;
+      /* Remove z-index to let Tailwind handle it */
+      /* z-index: $z-bg + 1; */
 
       /* SVG fractalNoise encodé en data URI (léger) */
       background-image: url("data:image/svg+xml;utf8,\
@@ -92,7 +92,8 @@ $z-overlay: 2;
   /* Canvas Three (au-dessus) */
   .canvas-host {
     @include abs-fill;
-    z-index: $z-canvas;
+    /* Use Tailwind z-index utility instead of SCSS variable */
+    /* z-index: $z-canvas; */
   }
 
   /* Overlay texte (ne bloque pas les clics) */

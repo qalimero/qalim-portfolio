@@ -18,7 +18,6 @@
   "dependencies": {
     "@astrojs/react": "^4.3.0",
     "@splinetool/loader": "^1.10.37",
-    "@tailwindcss/vite": "^4.1.13",
     "@tokens-studio/sd-transforms": "^2.0.1",
     "astro": "^5.5.2",
     "gsap": "^3.13.0",
@@ -31,7 +30,6 @@
     "remark-gfm": "^4.0.1",
     "shiki": "^3.2.1",
     "style-dictionary": "^5.0.4",
-    "tailwindcss": "^4.1.13",
     "three": "^0.152.0"
   },
   "devDependencies": {

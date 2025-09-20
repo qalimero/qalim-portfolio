@@ -149,3 +149,4 @@ Assets work seamlessly with the design system:
 
 **Last Updated**: December 2024  
 **Maintained by**: Development Team
+

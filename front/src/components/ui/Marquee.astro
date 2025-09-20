@@ -10,10 +10,10 @@ const { text, className = '', speed = 1, direction = 'left' } = Astro.props;
 const repeatedText = Array(3).fill(text);
 ---
 
-<div class={`marquee${className}`} data-direction={direction} data-speed={speed}>
-  <ul class="marquee__content">
+<div class={`marquee${className} relative overflow-hidden whitespace-nowrap`} data-direction={direction} data-speed={speed}>
+  <ul class="marquee__content inline-block">
     {repeatedText.map((item) => (
-      <li class="marquee__content-item">{item}</li>
+      <li class="marquee__content-item inline-block mr-8 font-medium">{item}</li>
     ))}
   </ul>
 </div>

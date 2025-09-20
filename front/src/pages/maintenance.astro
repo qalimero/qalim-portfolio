@@ -20,32 +20,37 @@ const marqueeComponents = maintenanceData?.data?.attributes?.marquee
 ---
 
 <BaseLayout
-        title={maintenanceData?.data?.attributes?.title || "Maintenance — Qalim"}
-        description="Retour très bientôt."
-        bodyClass="page-maintenance">
-<section class="maintenance">
+    title={maintenanceData?.data?.attributes?.title || "Maintenance — Qalim"}
+    description="Retour très bientôt."
+    bodyClass="page-maintenance"
+    >
+
+    <section class="maintenance">
+    <!-- Background animation (behind everything) -->
     <div class="bg-anim" aria-hidden="true"></div>
     
-
-    <!-- Display marquees from maintenance page data -->
-    {marqueeComponents.length > 0 ? (
-      marqueeComponents.map((marquee: any, index: number) => (
-        <Marquee 
-          text={marquee.items}
-          className={` marquee-${index + 1}`}
-          speed={1 + (index * 0.3)}
-          direction={index % 2 === 0 ? 'left' : 'right'}
+    <!-- Marquee content (above background) -->
+    <div>
+      <!-- Display marquees from maintenance page data -->
+      {marqueeComponents.length > 0 ? (
+        marqueeComponents.map((marquee: any, index: number) => (
+          <Marquee 
+            text={marquee.items}
+            className={` marquee-${index + 1}`}
+            speed={marquee.speed ?? 1 + (index * 0.3)}
+            direction={marquee.direction ?? (index % 2 === 0 ? 'left' : 'right')}
+          />
+        ))
+      ) : (
+        <Marquee
+          text="Retour très bientôt..."
+          speed={1}
+          direction="left"
         />
-      ))
-    ) : (
-      <Marquee 
-        text="Retour très bientôt..."
-        speed={1}
-        direction="left"
-      />
-    )}
+      )}
+    </div>
 
-    <!-- Three.js Scene Container -->
+    <!-- Three.js Scene Container (above marquee) -->
     <div class="canvas-host">
         <ThreeScene client:only="react" />
     </div>
