@@ -20,7 +20,7 @@ export function createRenderer(container: HTMLElement): THREE.WebGLRenderer {
   renderer.toneMappingExposure = 1.0;
 
   // Enable smooth rendering
-  renderer.physicallyCorrectLights = true;
+  // renderer.physicallyCorrectLights = true; // This property doesn't exist in current Three.js version
 
   container.appendChild(renderer.domElement);
   return renderer;

@@ -9,7 +9,7 @@ interface SplineSceneInstance {
   camera: THREE.PerspectiveCamera;
   renderer: THREE.WebGLRenderer;
   background: THREE.Mesh;
-  animationId: number;
+  animationId: void;
   cleanup: () => void;
 }
 

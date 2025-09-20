@@ -5,7 +5,7 @@ import Marquee from '../components/ui/Marquee.astro';
 import { getMaintenancePage } from '../lib/api/strapi';
 
 // Fetch maintenance page data from Strapi
-let maintenanceData = null;
+let maintenanceData: any = null;
 try {
   maintenanceData = await getMaintenancePage();
 } catch (error) {
@@ -14,7 +14,7 @@ try {
 
 // Process maintenance data for display
 const marqueeComponents = maintenanceData?.data?.attributes?.marquee 
-  ? maintenanceData.data.attributes.marquee.filter(marquee => marquee.items?.trim())
+  ? maintenanceData.data.attributes.marquee.filter((marquee: any) => marquee.items?.trim())
   : [];
 
 ---
