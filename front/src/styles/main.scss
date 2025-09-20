@@ -1,10 +1,6 @@
 // Main SCSS Entry Point
 // Uses modern @use syntax for proper concatenation and BEM methodology
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 // 1. Abstracts - Variables, mixins, functions (foundation layer)
 @use 'abstracts';
 
@@ -19,6 +15,10 @@
 
 // 5. Pages - Page-specific styles
 @use 'pages';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 // Design tokens - Available globally in all SCSS files
 @import './tokens/tokens.css';
