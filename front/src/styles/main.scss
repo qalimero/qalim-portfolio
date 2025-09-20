@@ -6,19 +6,20 @@
 @tailwind utilities;
 
 // 1. Abstracts - Variables, mixins, functions (foundation layer)
-@use 'abstracts' as *;
+@use 'abstracts';
 
 // 2. Base - Reset, typography, base elements
-@use 'base' as *;
+@use 'base';
 
 // 3. Components - Reusable UI components (BEM methodology)
-@use 'components' as *;
+@use 'components';
 
 // 4. Layouts - Page layout components
-@use 'layouts' as *;
+@use 'layouts';
 
 // 5. Pages - Page-specific styles
-@use 'pages' as *;
+@use 'pages';
 
 // Design tokens - Available globally in all SCSS files
 @import './tokens/tokens.css';
+
