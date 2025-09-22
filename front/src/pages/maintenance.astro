@@ -17,6 +17,7 @@ const marqueeComponents = maintenanceData?.data?.attributes?.marquee
   ? maintenanceData.data.attributes.marquee.filter((marquee: any) => marquee.items?.trim())
   : [];
 
+
 ---
 
 <BaseLayout
@@ -38,13 +39,7 @@ const marqueeComponents = maintenanceData?.data?.attributes?.marquee
                 direction={marquee.direction ?? (index % 2 === 0 ? 'left' : 'right')}
               />
             ))
-          ) : (
-            <Marquee
-              text="Retour très bientôt..."
-              speed={1}
-              direction="left"
-            />
-          )}
+          ) : null}
         </div>
 
         <!-- Three.js Scene Container (above marquee) -->

@@ -106,5 +106,7 @@ export interface MaintenanceContent extends StrapiBaseContent {
 // Type pour le composant marquee
 export interface MarqueeContent extends StrapiBaseContent {
   items: string;
+  speed?: number;
+  direction?: 'left' | 'right';
 }
 

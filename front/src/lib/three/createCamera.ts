@@ -4,7 +4,7 @@ export function createCamera(): THREE.PerspectiveCamera {
   const camera = new THREE.PerspectiveCamera(
     50, // FOV - slightly wider for better viewing
     window.innerWidth / window.innerHeight,
-    0.1, // Near plane - much closer for better precision
+    0.001, // Near plane - much closer for better precision
     1000 // Far plane - reasonable distance
   );
 

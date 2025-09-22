@@ -20,6 +20,13 @@ export function initSplineScene(
     return null;
   }
 
+  // Check if there's already a canvas in the container
+  const existingCanvas = container.querySelector('canvas');
+  if (existingCanvas) {
+    console.warn('Canvas already exists in container, removing it first');
+    existingCanvas.remove();
+  }
+
   const scene = new THREE.Scene();
   const camera = createCamera();
   const renderer = createRenderer(container);

@@ -5,16 +5,26 @@ export default function ThreeScene() {
   const sceneInstanceRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const isInitializedRef = useRef(false);
 
   useEffect(() => {
     const initScene = async () => {
+      // Prevent multiple initializations
+      if (isInitializedRef.current) {
+        console.log('Scene already initialized, skipping...');
+        return;
+      }
+
       try {
         setIsLoading(true);
         setError(null);
+        console.log('Initializing Three.js scene...');
 
         const instance = initSplineScene('three-container');
         if (instance) {
+          console.log('Three.js scene initialized successfully');
           sceneInstanceRef.current = instance;
+          isInitializedRef.current = true;
           setIsLoading(false);
         } else {
           throw new Error('Failed to initialize Three.js scene');
@@ -26,13 +36,16 @@ export default function ThreeScene() {
       }
     };
 
-    initScene();
+    // Add a small delay to ensure the container is mounted
+    const timer = setTimeout(initScene, 100);
 
     // Cleanup on unmount
     return () => {
+      clearTimeout(timer);
       if (sceneInstanceRef.current) {
         sceneInstanceRef.current.cleanup();
         sceneInstanceRef.current = null;
+        isInitializedRef.current = false;
       }
     };
   }, []);
