@@ -27,9 +27,7 @@ export function loadCard(
         try {
           const card = splineScene.getObjectByName(CARD_NAME);
           if (!card) {
-            console.warn(
-              `Card object "${CARD_NAME}" not found in Spline scene`
-            );
+     
             resolve(null);
             return;
           }
@@ -52,22 +50,16 @@ export function loadCard(
           // Add smooth rotation animation
           addCardAnimation(card);
 
-          console.log('Spline card loaded successfully');
           resolve(card);
         } catch (error) {
-          console.error('Error processing Spline scene:', error);
           reject(error);
         }
       },
       progress => {
-        console.log(
-          'Loading progress:',
-          (progress.loaded / progress.total) * 100 + '%'
-        );
+
       },
       error => {
         clearTimeout(timeout);
-        console.error('Failed to load Spline scene:', error);
         reject(error);
       }
     );

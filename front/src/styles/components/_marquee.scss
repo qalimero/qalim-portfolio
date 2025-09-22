@@ -3,6 +3,7 @@
 
 // Block: marquee
 .marquee {
+  z-index: 1;
   overflow: hidden;
   white-space: nowrap;
   width: 100%;

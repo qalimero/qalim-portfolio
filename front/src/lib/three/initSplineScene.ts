@@ -1,19 +1,12 @@
 import * as THREE from 'three';
 import { createCamera } from './createCamera';
 import { createRenderer } from './createRenderer';
-import { createAnimatedBackground } from './createAnimatedBackground';
-import {
-  MAX_CLICKS,
-  type BayerDitherUniforms,
-} from './shaders/bayerDitherShader';
 import { loadCard } from './loadCard';
 
 interface SplineSceneInstance {
   scene: THREE.Scene;
   camera: THREE.PerspectiveCamera;
   renderer: THREE.WebGLRenderer;
-  background: THREE.Mesh;
-  backgroundUniforms: BayerDitherUniforms;
   animationId: void;
   cleanup: () => void;
 }
@@ -30,37 +23,6 @@ export function initSplineScene(
   const scene = new THREE.Scene();
   const camera = createCamera();
   const renderer = createRenderer(container);
-
-  // Add animated background
-  const { mesh: background, uniforms: backgroundUniforms } = createAnimatedBackground();
-  scene.add(background);
-
-  const updateBackgroundResolution = () => {
-    const { width, height } = renderer.domElement;
-    backgroundUniforms.uResolution.value.set(width, height);
-  };
-
-  updateBackgroundResolution();
-
-  const clock = new THREE.Clock();
-
-  let clickIndex = 0;
-  const handlePointerDown = (event: PointerEvent) => {
-    const rect = renderer.domElement.getBoundingClientRect();
-    const canvasWidth = renderer.domElement.width;
-    const canvasHeight = renderer.domElement.height;
-
-    const fx = (event.clientX - rect.left) * (canvasWidth / rect.width);
-    const fy = (rect.height - (event.clientY - rect.top)) * (canvasHeight / rect.height);
-
-    backgroundUniforms.uClickPos.value[clickIndex].set(fx, fy);
-    backgroundUniforms.uClickTimes.value[clickIndex] = backgroundUniforms.uTime.value;
-    backgroundUniforms.uMouse.value.set(fx, fy, canvasWidth, canvasHeight);
-
-    clickIndex = (clickIndex + 1) % MAX_CLICKS;
-  };
-
-  renderer.domElement.addEventListener('pointerdown', handlePointerDown);
 
   // Load Spline card and store reference for resize handling
   let cardObject: THREE.Object3D | null = null;
@@ -92,7 +54,6 @@ export function initSplineScene(
     // Immediate renderer update for responsive feel
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    updateBackgroundResolution();
 
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
@@ -107,8 +68,6 @@ export function initSplineScene(
 
   // Animation loop with smooth rendering and perfect centering
   function animate() {
-    // Update background animation
-    backgroundUniforms.uTime.value = clock.getElapsedTime();
 
     // Continue smooth aspect ratio interpolation during resize
     if (isResizing) {
@@ -143,10 +102,7 @@ export function initSplineScene(
     window.removeEventListener('resize', handleResize);
     clearTimeout(resizeTimeout);
 
-    // Remove click event listeners
-    if (renderer.domElement) {
-      renderer.domElement.removeEventListener('pointerdown', handlePointerDown);
-    }
+    // Background click event listeners removed
 
     if (disposeCardInteraction) {
       disposeCardInteraction();
@@ -173,8 +129,6 @@ export function initSplineScene(
     scene,
     camera,
     renderer,
-    background,
-    backgroundUniforms,
     animationId,
     cleanup,
   };

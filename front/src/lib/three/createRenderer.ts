@@ -24,7 +24,7 @@ export function createRenderer(container: HTMLElement): THREE.WebGLRenderer {
 
   renderer.setSize(container.clientWidth, container.clientHeight, false);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  renderer.setClearColor(0x000000, 0); // ⬅️ transparent (montre le CSS derrière)
+  renderer.setClearColor(0x0d1030, 1); // Dark blue background
 
   // Optimize for smooth rendering
   renderer.shadowMap.enabled = true;
