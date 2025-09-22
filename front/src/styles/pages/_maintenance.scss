@@ -3,11 +3,11 @@
 /* -----------------------------
    Variables
 ------------------------------ */
-$bg-primary: #1e1b4b; // coin haut-gauche
+$bg-primary: #0d0b2a; // coin haut-gauche
 $bg-mid: #0b0729; // centre
 $bg-deep: #08051b; // coin bas-droit
 
-$bg-speed: 12s; // vitesse anim du dégradé
+$bg-speed: 10s; // vitesse anim du dégradé
 $bg-zoom-a: 1.02;
 $bg-zoom-b: 1.04;
 
@@ -31,6 +31,18 @@ $z-overlay: 2;
    Scope page maintenance
 ------------------------------ */
 .page-maintenance {
+  /* Prevent horizontal scrolling */
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+  
+  /* Ensure body and html don't overflow */
+  body, html {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+  }
+  
   /* Thème sombre pour les UA/composants natifs */
   :root {
     color-scheme: dark;
@@ -39,7 +51,7 @@ $z-overlay: 2;
   /* Scène plein écran (mobile-friendly) */
   .stage {
     position: relative;
-    width: 100vw;
+    width: 100%;
     min-height: 100vh; /* fallback */
     min-height: 100svh; /* iOS/mobile correct */
     overflow: hidden;
@@ -89,6 +101,15 @@ $z-overlay: 2;
     }
   }
 
+  /* Marquee container */
+  .marquee-container {
+    position: relative;
+    z-index: $z-overlay;
+    width: 100%;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
   /* Canvas Three (au-dessus) */
   .canvas-host {
     @include abs-fill;
@@ -116,7 +137,9 @@ $z-overlay: 2;
     .bg-anim {
       animation: none;
     }
+
     .bg-anim::after {
+
       animation: none;
     }
   }
@@ -154,3 +177,4 @@ $z-overlay: 2;
     transform: translate3d(0, 0, 0);
   }
 }
+

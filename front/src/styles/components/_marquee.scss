@@ -9,17 +9,17 @@
   background-color: var(--marquee-background-colorBrand);
   color: var(--marquee-font-colorBrand);
   padding: var(--spacing-md);
-  border-radius: var(--marquee-border-radiusDesktop);
-  margin: var(--spacing-md) 0;
+  border-bottom-left-radius: var(--marquee-border-radiusDesktop);
+  border-bottom-right-radius: var(--marquee-border-radiusDesktop);
 
+  
   // Element: marquee__content
   &__content {
     display: inline-block;
     animation: marquee-scroll linear infinite;
-    animation-duration: calc(20s / var(--speed, 1));
+    animation-duration: calc(15s / var(--speed, 1));
     list-style: none;
-    margin: 0;
-    padding: 0;
+
 
     // Element: marquee__item
     &-item {
@@ -30,42 +30,16 @@
     }
   }
 
-  // Modifier: marquee--direction-right
-  &--direction-right &__content {
-    animation-direction: reverse;
-  }
-
-  // Multiple marquee instances with different configurations
-  &-1 {
-    opacity: 0.9;
-  }
-
-  &-2 {
-    opacity: 0.8;
-    transform: translateY(-10px);
-  }
-
-  &-3 {
-    opacity: 0.7;
-    transform: translateY(-20px);
-  }
-
+ 
   // Modifier: marquee--mobile (responsive)
   @media (max-width: 768px) {
-    border-radius: var(--marquee-border-radiusMobile);
+    border-bottom-left-radius: var(--marquee-border-radiusMobile);
+    border-bottom-right-radius: var(--marquee-border-radiusMobile);
 
     &__content-item {
       font-size: var(--marquee-font-sizeMobile);
     }
 
-    // Adjust multiple marquee positioning on mobile
-    &-2 {
-      transform: translateY(-5px);
-    }
-
-    &-3 {
-      transform: translateY(-10px);
-    }
   }
 }
 

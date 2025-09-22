@@ -9,10 +9,6 @@
     "tokens": "node scripts/generate-tokens.js",
     "preview": "astro preview",
     "astro": "astro",
-    "lint": "eslint . --ext .js,.jsx",
-    "lint:fix": "eslint . --ext .js,.jsx --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
     "type-check": "astro check"
   },
   "dependencies": {
@@ -36,7 +32,6 @@
     "typescript": "^5.9.2"
   },
   "devDependencies": {
-    "@eslint/js": "^9.35.0",
     "@types/dompurify": "^3.0.5",
     "@types/marked": "^5.0.2",
     "@types/node": "^24.4.0",
@@ -44,20 +39,8 @@
     "@types/three": "^0.175.0",
     "autoprefixer": "^10.4.20",
     "daisyui": "^4.12.10",
-    "eslint": "^9.35.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-prettier": "^5.5.4",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.20",
     "postcss": "^8.4.49",
-    "prettier": "^3.6.2",
     "sass": "^1.86.0",
-    "autoprefixer": "^10.4.20",
-    "daisyui": "^4.12.10",
-    "postcss": "^8.4.49",
-
     "tailwindcss": "^3.4.15"
   }
 }
