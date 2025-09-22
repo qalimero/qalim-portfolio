@@ -2,6 +2,10 @@ import * as THREE from 'three';
 import { createCamera } from './createCamera';
 import { createRenderer } from './createRenderer';
 import { createAnimatedBackground } from './createAnimatedBackground';
+import {
+  MAX_CLICKS,
+  type BayerDitherUniforms,
+} from './shaders/bayerDitherShader';
 import { loadCard } from './loadCard';
 
 interface SplineSceneInstance {
@@ -9,6 +13,7 @@ interface SplineSceneInstance {
   camera: THREE.PerspectiveCamera;
   renderer: THREE.WebGLRenderer;
   background: THREE.Mesh;
+  backgroundUniforms: BayerDitherUniforms;
   animationId: void;
   cleanup: () => void;
 }
@@ -27,11 +32,39 @@ export function initSplineScene(
   const renderer = createRenderer(container);
 
   // Add animated background
-  const background = createAnimatedBackground();
+  const { mesh: background, uniforms: backgroundUniforms } = createAnimatedBackground();
   scene.add(background);
+
+  const updateBackgroundResolution = () => {
+    const { width, height } = renderer.domElement;
+    backgroundUniforms.uResolution.value.set(width, height);
+  };
+
+  updateBackgroundResolution();
+
+  const clock = new THREE.Clock();
+
+  let clickIndex = 0;
+  const handlePointerDown = (event: PointerEvent) => {
+    const rect = renderer.domElement.getBoundingClientRect();
+    const canvasWidth = renderer.domElement.width;
+    const canvasHeight = renderer.domElement.height;
+
+    const fx = (event.clientX - rect.left) * (canvasWidth / rect.width);
+    const fy = (rect.height - (event.clientY - rect.top)) * (canvasHeight / rect.height);
+
+    backgroundUniforms.uClickPos.value[clickIndex].set(fx, fy);
+    backgroundUniforms.uClickTimes.value[clickIndex] = backgroundUniforms.uTime.value;
+    backgroundUniforms.uMouse.value.set(fx, fy, canvasWidth, canvasHeight);
+
+    clickIndex = (clickIndex + 1) % MAX_CLICKS;
+  };
+
+  renderer.domElement.addEventListener('pointerdown', handlePointerDown);
 
   // Load Spline card and store reference for resize handling
   let cardObject: THREE.Object3D | null = null;
+  let disposeCardInteraction: (() => void) | null = null;
   loadCard(scene, camera, renderer).then(card => {
     cardObject = card;
     if (card) {
@@ -39,14 +72,13 @@ export function initSplineScene(
       fitCameraToCard(card, camera);
 
       // Add click interaction for LinkedIn link
-      addCardClickInteraction(card, camera, renderer);
+      disposeCardInteraction = addCardClickInteraction(card, camera, renderer);
     }
   });
 
   // Smooth resize handling with coherent rendering
   let resizeTimeout: NodeJS.Timeout;
   let isResizing = false;
-  let resizeStartTime = 0;
   let lastResizeTime = 0;
 
   const handleResize = () => {
@@ -55,12 +87,12 @@ export function initSplineScene(
 
     if (!isResizing) {
       isResizing = true;
-      resizeStartTime = now;
     }
 
     // Immediate renderer update for responsive feel
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    updateBackgroundResolution();
 
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
@@ -76,9 +108,7 @@ export function initSplineScene(
   // Animation loop with smooth rendering and perfect centering
   function animate() {
     // Update background animation
-    if (background.material instanceof THREE.ShaderMaterial) {
-      background.material.uniforms.time.value = performance.now() * 0.001;
-    }
+    backgroundUniforms.uTime.value = clock.getElapsedTime();
 
     // Continue smooth aspect ratio interpolation during resize
     if (isResizing) {
@@ -115,8 +145,12 @@ export function initSplineScene(
 
     // Remove click event listeners
     if (renderer.domElement) {
-      renderer.domElement.removeEventListener('click', () => {});
-      renderer.domElement.removeEventListener('mousemove', () => {});
+      renderer.domElement.removeEventListener('pointerdown', handlePointerDown);
+    }
+
+    if (disposeCardInteraction) {
+      disposeCardInteraction();
+      disposeCardInteraction = null;
     }
 
     // Dispose of geometries and materials
@@ -140,6 +174,7 @@ export function initSplineScene(
     camera,
     renderer,
     background,
+    backgroundUniforms,
     animationId,
     cleanup,
   };
@@ -183,15 +218,6 @@ function fitCameraToCard(
   camera.far = finalDistance + sphere.radius * 3;
   camera.updateProjectionMatrix();
 
-  console.log('Card center:', sphere.center);
-  console.log('Camera positioned at:', camera.position);
-  console.log('Camera distance:', finalDistance);
-  console.log(
-    'Screen size:',
-    screenSize,
-    'Mobile multiplier:',
-    mobileMultiplier
-  );
 }
 
 // Add click interaction to open LinkedIn profile
@@ -199,7 +225,7 @@ function addCardClickInteraction(
   card: THREE.Object3D,
   camera: THREE.PerspectiveCamera,
   renderer: THREE.WebGLRenderer
-) {
+): () => void {
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
 
@@ -218,7 +244,6 @@ function addCardClickInteraction(
     const intersects = raycaster.intersectObject(card, true);
 
     if (intersects.length > 0) {
-      console.log('Card clicked! Opening LinkedIn profile...');
       window.open(LINKEDIN_URL, '_blank');
     }
   };
@@ -244,5 +269,11 @@ function addCardClickInteraction(
 
   renderer.domElement.addEventListener('mousemove', handleMouseMove);
 
-  console.log('Card click interaction added - click to open LinkedIn profile');
+  const cleanup = () => {
+    renderer.domElement.removeEventListener('click', handleClick);
+    renderer.domElement.removeEventListener('mousemove', handleMouseMove);
+    renderer.domElement.style.cursor = '';
+  };
+
+  return cleanup;
 }

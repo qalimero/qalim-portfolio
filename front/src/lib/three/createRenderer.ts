@@ -1,7 +1,21 @@
 import * as THREE from 'three';
 
 export function createRenderer(container: HTMLElement): THREE.WebGLRenderer {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('webgl2', {
+    antialias: true,
+    alpha: true,
+    powerPreference: 'high-performance',
+    preserveDrawingBuffer: false,
+  });
+
+  if (!context) {
+    throw new Error('WebGL2 not supported in this browser');
+  }
+
   const renderer = new THREE.WebGLRenderer({
+    canvas,
+    context,
     antialias: true,
     alpha: true,
     powerPreference: 'high-performance',
