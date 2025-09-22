@@ -25,11 +25,7 @@ const marqueeComponents = maintenanceData?.data?.attributes?.marquee
     bodyClass="page-maintenance"
     >
 
-    <section class="maintenance">
-      <div class="stage">
-        <!-- Background animation (behind everything) -->
-        <div class="bg-anim" aria-hidden="true"></div>
-        
+    <section class="maintenance">        
         <!-- Marquee content (above background) -->
         <div class="marquee-container">
           <!-- Display marquees from maintenance page data -->
@@ -55,7 +51,6 @@ const marqueeComponents = maintenanceData?.data?.attributes?.marquee
         <div class="canvas-host">
             <ThreeScene client:only="react" />
         </div>
-      </div>
     </section>
 </BaseLayout>
 
