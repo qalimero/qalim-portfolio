@@ -1,4 +1,5 @@
 // src/lib/strapi.ts
+import { strapi } from '@strapi/client';
 import type {
   StrapiResponse,
   MaintenanceContent,
@@ -6,63 +7,44 @@ import type {
 
 const STRAPI_URL = import.meta.env.STRAPI_URL || 'http://localhost:1337';
 
-// Options des requêtes API
-interface FetchOptions extends RequestInit {
-  headers?: HeadersInit;
-}
+// Initialize the official Strapi client
+export const strapiClient = strapi({ 
+  baseURL: `${STRAPI_URL}/api` 
+});
 
 /**
- * Fonction générique pour les appels à l'API Strapi
+ * Utility functions for common Strapi operations
  */
-export async function fetchAPI<T>(
-  endpoint: string,
-  options: FetchOptions = {}
-): Promise<T> {
-  const defaultOptions: FetchOptions = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
 
-  const mergedOptions = {
-    ...defaultOptions,
-    ...options,
-  };
-
+// Get maintenance page data using the official client
+export async function getMaintenancePage() {
   try {
-    const response = await fetch(
-      `${STRAPI_URL}/api/${endpoint}`,
-      mergedOptions
-    );
-
-    if (!response.ok) {
-      throw new Error(`Une erreur est survenue: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data as T;
+    return await strapiClient.single('maintenance').find();
   } catch (error) {
-    console.error(`Erreur lors de l'appel API: ${error}`);
+    console.error('Error fetching maintenance data:', error);
     throw error;
   }
 }
 
-/**
- * Récupère les données de la page de maintenance
- */
-export async function getMaintenancePage(): Promise<StrapiResponse<MaintenanceContent> | null> {
+// Test connection to Strapi backend
+export async function testStrapiConnection(): Promise<boolean> {
   try {
-    return await fetchAPI<StrapiResponse<MaintenanceContent>>(
-      'maintenance?populate=*'
-    );
+    await strapiClient.single('maintenance').find();
+    return true;
   } catch (error) {
-    console.error(
-      `Erreur lors de la récupération de la page de maintenance: ${error}`
-    );
-    if (error instanceof Error && error.message.includes('404')) {
-      return null;
-    }
+    console.error('Strapi connection test failed:', error);
+    return false;
+  }
+}
+
+// Generic fetch function using the official client
+export async function fetchStrapiData(endpoint: string, options: any = {}) {
+  try {
+    return await strapiClient.fetch(endpoint, options);
+  } catch (error) {
+    console.error(`Error fetching data from ${endpoint}:`, error);
     throw error;
   }
 }
+
 

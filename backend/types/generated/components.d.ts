@@ -3,11 +3,11 @@ import type { Schema, Struct } from '@strapi/strapi';
 export interface SharedMarquee extends Struct.ComponentSchema {
   collectionName: 'components_shared_marquees';
   info: {
+    description: '';
     displayName: 'marquee';
-    icon: 'bulletList';
   };
   attributes: {
-    items: Schema.Attribute.String;
+    listItem: Schema.Attribute.String;
   };
 }
 

@@ -2,26 +2,36 @@
 import BaseLayout from '../layouts/Layout.astro';
 import ThreeScene from '../components/scenes/ThreeScene.jsx';
 import Marquee from '../components/ui/Marquee.astro';
-import { getMaintenancePage } from '../lib/api/strapi';
+import { strapiClient } from '../lib/api/strapi';
 
-// Fetch maintenance page data from Strapi
+// Utiliser le client Strapi officiel pour récupérer les données
 let maintenanceData: any = null;
 try {
-  maintenanceData = await getMaintenancePage();
+  // Utiliser la méthode single() pour récupérer les données de maintenance
+  maintenanceData = await strapiClient.single('maintenance').find({populate: '*'});
 } catch (error) {
   console.error('Error fetching maintenance data:', error);
+  // Fallback data si l'API échoue
+  maintenanceData = {
+    data: {
+      attributes: {
+        title: "Maintenance — Qalim",
+        marquee: []
+      }
+    }
+  };
 }
 
-// Process maintenance data for display
-const marqueeComponents = maintenanceData?.data?.attributes?.marquee 
-  ? maintenanceData.data.attributes.marquee.filter((marquee: any) => marquee.items?.trim())
-  : [];
 
+// Process maintenance data for display
+const marqueeComponents = maintenanceData.data.marquees;
+
+console.log(marqueeComponents);
 
 ---
 
 <BaseLayout
-    title={maintenanceData?.data?.attributes?.title || "Maintenance — Qalim"}
+    title={maintenanceData?.data?.title || "Maintenance — Qalim"}
     description="Retour très bientôt."
     bodyClass="page-maintenance"
     >
@@ -30,16 +40,7 @@ const marqueeComponents = maintenanceData?.data?.attributes?.marquee
         <!-- Marquee content (above background) -->
         <div class="marquee-container">
           <!-- Display marquees from maintenance page data -->
-          {marqueeComponents.length > 0 ? (
-            marqueeComponents.map((marquee: any, index: number) => (
-              <Marquee 
-                text={marquee.items}
-                className={` marquee-${index + 1}`}
-                speed={marquee.speed ?? 1 + (index * 0.3)}
-                direction={marquee.direction ?? (index % 2 === 0 ? 'left' : 'right')}
-              />
-            ))
-          ) : null}
+          <Marquee text={marqueeComponents} />
         </div>
 
         <!-- Three.js Scene Container (above marquee) -->

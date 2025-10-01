@@ -22,8 +22,7 @@
     "marquee": {
       "type": "component",
       "repeatable": true,
-      "component": "shared.marquee",
-      "required": true
+      "component": "shared.marquee"
     }
   }
 }

@@ -2,11 +2,11 @@
   "collectionName": "components_shared_marquees",
   "info": {
     "displayName": "marquee",
-    "icon": "bulletList"
+    "description": ""
   },
   "options": {},
   "attributes": {
-    "items": {
+    "listItem": {
       "type": "string"
     }
   }

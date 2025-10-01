@@ -559,8 +559,7 @@ export interface ApiMaintenanceMaintenance extends Struct.SingleTypeSchema {
       'oneToMany',
       'api::maintenance.maintenance'
     >;
-    marquee: Schema.Attribute.Component<'shared.marquee', true> &
-      Schema.Attribute.Required;
+    marquee: Schema.Attribute.Component<'shared.marquee', true>;
     publishedAt: Schema.Attribute.DateTime;
     title: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;

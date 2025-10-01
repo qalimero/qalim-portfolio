@@ -28,15 +28,14 @@
 }
 
 .marquee-container {
-  position: relative;
-  z-index: 20; // Above the 3D scene
+  position: absolute;
+  top: 0;
+  z-index: 1; // Above the 3D scene
   width: 100%;
-  margin-bottom: 2rem;
 }
 
 .canvas-host {
   position: relative;
-  z-index: 15; // Above background but below marquee
   width: 100%;
   height: 100vh;
   overflow: hidden;
@@ -67,9 +66,4 @@
     font-size: clamp(1.5rem, 4vw, 2.5rem);
   }
   
-
-  
-  .marquee-container {
-    margin-bottom: 1rem;
-  }
 }

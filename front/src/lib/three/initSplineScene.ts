@@ -73,6 +73,10 @@ export function initSplineScene(
 
   window.addEventListener('resize', handleResize);
 
+  // Cache pour éviter les calculs répétitifs
+  let cardCenter: THREE.Vector3 | null = null;
+  let lastCardUpdate = 0;
+
   // Animation loop with smooth rendering and perfect centering
   function animate() {
 
@@ -91,11 +95,17 @@ export function initSplineScene(
       }
     }
 
-    // Ensure camera always looks at the card center for perfect centering
+    // Optimiser le calcul du centre de la carte (seulement si nécessaire)
     if (cardObject) {
-      const box = new THREE.Box3().setFromObject(cardObject);
-      const sphere = box.getBoundingSphere(new THREE.Sphere());
-      camera.lookAt(sphere.center);
+      const now = performance.now();
+      // Recalculer le centre seulement toutes les 100ms au lieu de chaque frame
+      if (!cardCenter || now - lastCardUpdate > 100) {
+        const box = new THREE.Box3().setFromObject(cardObject);
+        const sphere = box.getBoundingSphere(new THREE.Sphere());
+        cardCenter = sphere.center.clone();
+        lastCardUpdate = now;
+      }
+      camera.lookAt(cardCenter);
     }
 
     renderer.render(scene, camera);
