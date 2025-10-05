@@ -4,11 +4,12 @@ import ThreeScene from '../components/scenes/ThreeScene.jsx';
 import Marquee from '../components/ui/Marquee.astro';
 import { strapiClient } from '../lib/api/strapi';
 
-// Utiliser le client Strapi officiel pour récupérer les données
+// Utiliser le client Strapi avec cache
 let maintenanceData: any = null;
 try {
-  // Utiliser la méthode single() pour récupérer les données de maintenance
-  maintenanceData = await strapiClient.single('maintenance').find({populate: '*'});
+  // Utiliser la fonction avec cache pour de meilleures performances
+  maintenanceData = await import('../lib/api/strapi')
+    .then(m => m.getMaintenancePage());
 } catch (error) {
   console.error('Error fetching maintenance data:', error);
   // Fallback data si l'API échoue
@@ -42,8 +43,9 @@ console.log('Marquee items:', marqueeItems);
         </div>
 
         <!-- Three.js Scene Container (above marquee) -->
+        <!-- Use client:idle for better initial page load performance -->
         <div class="canvas-host">
-            <ThreeScene client:only="react" />
+            <ThreeScene client:idle />
         </div>
     </section>
 </BaseLayout>

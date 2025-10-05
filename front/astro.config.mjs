@@ -10,10 +10,51 @@ export default defineConfig({
   adapter: node({
     mode: 'standalone'
   }),
-  integrations: [react(), tailwind({
-    applyBaseStyles: false,
-  })],
+  integrations: [
+    react(),
+    tailwind({
+      applyBaseStyles: false,
+    })
+  ],
   devToolbar: {
     enabled: false,
+  },
+  vite: {
+    build: {
+      // Code splitting for better performance
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'three': ['three'],
+            'gsap': ['gsap'],
+            'spline': ['@splinetool/loader'],
+          },
+        },
+      },
+      // Optimize chunk size
+      chunkSizeWarningLimit: 600,
+      // Enable CSS code splitting
+      cssCodeSplit: true,
+    },
+    // Optimize dependencies
+    optimizeDeps: {
+      include: ['react', 'react-dom'],
+      exclude: ['@splinetool/loader'],
+    },
+    // Performance optimizations
+    server: {
+      warmup: {
+        clientFiles: [
+          './src/components/**/*.{jsx,tsx}',
+          './src/pages/**/*.astro',
+        ],
+      },
+    },
+  },
+  // Image optimization
+  image: {
+    service: {
+      entrypoint: 'astro/assets/services/sharp',
+    },
   },
 });

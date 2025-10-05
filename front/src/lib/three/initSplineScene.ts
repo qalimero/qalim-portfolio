@@ -77,8 +77,21 @@ export function initSplineScene(
   let cardCenter: THREE.Vector3 | null = null;
   let lastCardUpdate = 0;
 
+  // Performance monitoring
+  let frameCount = 0;
+  let lastTime = performance.now();
+  let fps = 60;
+
   // Animation loop with smooth rendering and perfect centering
   function animate() {
+    // Simple FPS counter for adaptive quality
+    frameCount++;
+    const currentTime = performance.now();
+    if (currentTime >= lastTime + 1000) {
+      fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
+      frameCount = 0;
+      lastTime = currentTime;
+    }
 
     // Continue smooth aspect ratio interpolation during resize
     if (isResizing) {
@@ -109,6 +122,12 @@ export function initSplineScene(
     }
 
     renderer.render(scene, camera);
+
+    // Adaptive quality: if FPS drops below 30, reduce pixel ratio
+    if (fps < 30 && renderer.getPixelRatio() > 1) {
+      renderer.setPixelRatio(1);
+      console.warn('Low FPS detected, reducing pixel ratio for better performance');
+    }
   }
 
   const animationId = renderer.setAnimationLoop(animate);

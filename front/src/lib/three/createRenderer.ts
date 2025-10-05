@@ -2,11 +2,18 @@ import * as THREE from 'three';
 
 export function createRenderer(container: HTMLElement): THREE.WebGLRenderer {
   const canvas = document.createElement('canvas');
+
+  // Check device capabilities for optimal settings
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const hasHighDPI = window.devicePixelRatio > 1;
+
   const context = canvas.getContext('webgl2', {
-    antialias: true,
+    antialias: !isMobile && hasHighDPI, // Disable AA on mobile for performance
     alpha: true,
     powerPreference: 'high-performance',
     preserveDrawingBuffer: false,
+    stencil: false, // Disable stencil buffer if not needed
+    depth: true,
   });
 
   if (!context) {
@@ -16,25 +23,24 @@ export function createRenderer(container: HTMLElement): THREE.WebGLRenderer {
   const renderer = new THREE.WebGLRenderer({
     canvas,
     context,
-    antialias: true,
+    antialias: !isMobile && hasHighDPI,
     alpha: true,
     powerPreference: 'high-performance',
     preserveDrawingBuffer: false,
   });
 
   renderer.setSize(container.clientWidth, container.clientHeight, false);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  renderer.setClearColor(0x0d1030, 1); // Dark blue background
 
-  // Optimize for smooth rendering
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFShadowMap;
+  // Cap pixel ratio for better performance
+  const pixelRatio = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 2);
+  renderer.setPixelRatio(pixelRatio);
+  renderer.setClearColor(0x0d1030, 1);
+
+  // Optimize rendering settings
+  renderer.shadowMap.enabled = false; // Disable shadows for better performance
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.0;
-
-  // Enable smooth rendering
-  // renderer.physicallyCorrectLights = true; // This property doesn't exist in current Three.js version
 
   container.appendChild(renderer.domElement);
   return renderer;

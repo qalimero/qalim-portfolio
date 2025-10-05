@@ -4,22 +4,35 @@ import type {
   StrapiResponse,
   MaintenanceContent,
 } from '../../interfaces/strapi';
+import { apiCache } from './cache';
 
 const STRAPI_URL = import.meta.env.STRAPI_URL || 'http://localhost:1337';
 
 // Initialize the official Strapi client
-export const strapiClient = strapi({ 
-  baseURL: `${STRAPI_URL}/api` 
+export const strapiClient = strapi({
+  baseURL: `${STRAPI_URL}/api`
 });
 
 /**
  * Utility functions for common Strapi operations
  */
 
-// Get maintenance page data using the official client
+// Get maintenance page data using the official client with caching
 export async function getMaintenancePage() {
+  const cacheKey = 'maintenance-page';
+
+  // Try to get from cache first
+  const cached = apiCache.get(cacheKey);
+  if (cached) {
+    console.log('Returning cached maintenance data');
+    return cached;
+  }
+
   try {
-    return await strapiClient.single('maintenance').find();
+    const data = await strapiClient.single('maintenance').find({ populate: '*' });
+    // Cache for 5 minutes
+    apiCache.set(cacheKey, data, 5 * 60 * 1000);
+    return data;
   } catch (error) {
     console.error('Error fetching maintenance data:', error);
     throw error;
