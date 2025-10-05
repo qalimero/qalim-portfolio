@@ -7,6 +7,7 @@ export interface SharedMarquee extends Struct.ComponentSchema {
     displayName: 'marquee';
   };
   attributes: {
+    linkItem: Schema.Attribute.String;
     listItem: Schema.Attribute.String;
   };
 }
