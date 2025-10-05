@@ -1,18 +1,26 @@
 ---
+export interface MarqueeItem {
+  listItem: string;
+}
+
 export interface Props {
-  text: string;
+  items?: MarqueeItem[];
+  text?: string;
   className?: string;
   speed?: number;
   direction?: 'left' | 'right';
 }
 
-const { text, className = '', speed = 1, direction = 'left' } = Astro.props;
-const repeatedText = Array(3).fill(text);
+const { items, text, className = '', speed = 1, direction = 'left' } = Astro.props;
+
+// Support both new items format and legacy text format
+const displayItems = items?.map(item => item.listItem) || (text ? [text] : []);
+const repeatedItems = Array(3).fill(displayItems).flat();
 ---
 
 <div class={`marquee${className} sticky overflow-hidden whitespace-nowrap`} data-direction={direction} data-speed={speed}>
   <ul class="marquee__content inline-block">
-    {repeatedText.map((item) => (
+    {repeatedItems.map((item) => (
       <li class="marquee__content-item inline-block mr-8 font-medium">{item}</li>
     ))}
   </ul>

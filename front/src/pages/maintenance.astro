@@ -14,33 +14,31 @@ try {
   // Fallback data si l'API échoue
   maintenanceData = {
     data: {
-      attributes: {
-        title: "Maintenance — Qalim",
-        marquee: []
-      }
+      title: "Maintenance — Qalim",
+      marquee: []
     }
   };
 }
 
+// Extract marquee items from the response
+const marqueeItems = maintenanceData?.data?.marquee || [];
+const pageTitle = maintenanceData?.data?.title || "Maintenance — Qalim";
 
-// Process maintenance data for display
-const marqueeComponents = maintenanceData.data.marquees;
-
-console.log(marqueeComponents);
+console.log('Marquee items:', marqueeItems);
 
 ---
 
 <BaseLayout
-    title={maintenanceData?.data?.title || "Maintenance — Qalim"}
+    title={pageTitle}
     description="Retour très bientôt."
     bodyClass="page-maintenance"
     >
 
-    <section class="maintenance">        
+    <section class="maintenance">
         <!-- Marquee content (above background) -->
         <div class="marquee-container">
           <!-- Display marquees from maintenance page data -->
-          <Marquee text={marqueeComponents} />
+          <Marquee items={marqueeItems} />
         </div>
 
         <!-- Three.js Scene Container (above marquee) -->
