@@ -22,10 +22,11 @@
     width: fit-content;
     // Force hardware acceleration for ultra-smooth animation
     will-change: transform;
-    transform: translateZ(0);
+    transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
-    // Pure CSS infinite animation
-    animation: marquee-scroll calc(20s / var(--marquee-speed, 1)) linear infinite;
+    // Pure CSS infinite animation - moves by exactly 50%
+    // Using translate3d for better performance
+    animation: marquee-scroll calc(30s / var(--marquee-speed, 1)) linear infinite;
 
     // Pause animation on hover
     &:hover {
@@ -80,12 +81,15 @@
   }
 }
 
-// Keyframes for seamless infinite marquee animation
+// Keyframes for truly seamless infinite marquee animation
+// Key: Animation moves exactly 50% (one content width)
+// When it completes, the duplicate is perfectly positioned at the start
+// This creates a perfect loop with ZERO visible reset
 @keyframes marquee-scroll {
-  0% {
-    transform: translateX(0);
+  from {
+    transform: translate3d(0, 0, 0);
   }
-  100% {
-    transform: translateX(-33.333%); // Move by 1/3 since items repeat 3 times
+  to {
+    transform: translate3d(-50%, 0, 0);
   }
 }
