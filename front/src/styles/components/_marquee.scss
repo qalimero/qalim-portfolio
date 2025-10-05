@@ -19,14 +19,13 @@
   // Element: marquee__track (container for seamless loop)
   &__track {
     display: flex;
-    width: max-content;
-    will-change: transform;
-    animation: marquee-scroll linear infinite;
-    animation-duration: calc(30s / var(--speed, 1));
+    width: fit-content;
     // Force hardware acceleration for ultra-smooth animation
+    will-change: transform;
     transform: translateZ(0);
     backface-visibility: hidden;
-    perspective: 1000px;
+    // Pure CSS infinite animation
+    animation: marquee-scroll calc(20s / var(--marquee-speed, 1)) linear infinite;
 
     // Pause animation on hover
     &:hover {
@@ -36,7 +35,7 @@
 
   // Element: marquee__content
   &__content {
-    display: inline-flex;
+    display: flex;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -46,11 +45,13 @@
 
     // Element: marquee__item
     &-item {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
       margin-right: var(--marquee-item-gap);
       font-size: var(--marquee-font-sizeDesktop);
       font-weight: 500;
       flex-shrink: 0;
+      white-space: nowrap;
       // Prevent text from becoming blurry during animation
       transform: translateZ(0);
 

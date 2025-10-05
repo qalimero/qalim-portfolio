@@ -19,13 +19,13 @@ const { items, text, className = '', speed = 1, direction = 'left' } = Astro.pro
 const displayItems = items || (text ? [{ listItem: text, linkItem: null }] : []);
 ---
 
-<div class={`marquee${className} sticky overflow-hidden whitespace-nowrap`} data-direction={direction} data-speed={speed}>
-  <div class="marquee__track" data-marquee-track>
-    <ul class="marquee__content inline-block">
+<div class={`marquee${className} sticky overflow-hidden whitespace-nowrap`} data-direction={direction} style={`--marquee-speed: ${speed};`}>
+  <div class="marquee__track">
+    <ul class="marquee__content">
       {displayItems.map((item) => (
-        <li class="marquee__content-item inline-block mr-8 font-medium">
+        <li class="marquee__content-item">
           {item.linkItem ? (
-            <a href={item.linkItem} target="_blank" rel="noopener noreferrer" class="hover:underline">
+            <a href={item.linkItem} target="_blank" rel="noopener noreferrer">
               {item.listItem}
             </a>
           ) : (
@@ -35,11 +35,11 @@ const displayItems = items || (text ? [{ listItem: text, linkItem: null }] : [])
       ))}
     </ul>
     <!-- Duplicate for seamless loop -->
-    <ul class="marquee__content inline-block" aria-hidden="true">
+    <ul class="marquee__content" aria-hidden="true">
       {displayItems.map((item) => (
-        <li class="marquee__content-item inline-block mr-8 font-medium">
+        <li class="marquee__content-item">
           {item.linkItem ? (
-            <a href={item.linkItem} target="_blank" rel="noopener noreferrer" class="hover:underline">
+            <a href={item.linkItem} target="_blank" rel="noopener noreferrer">
               {item.listItem}
             </a>
           ) : (
@@ -50,45 +50,5 @@ const displayItems = items || (text ? [{ listItem: text, linkItem: null }] : [])
     </ul>
   </div>
 </div>
-
-<script>
-  // Ultra-smooth marquee animation with dynamic speed calculation
-  function initMarquee() {
-    const tracks = document.querySelectorAll('[data-marquee-track]');
-
-    tracks.forEach((track) => {
-      const container = track.closest('.marquee');
-      if (!container) return;
-
-      const speed = parseFloat(container.getAttribute('data-speed') || '1');
-      const content = track.querySelector('.marquee__content');
-
-      if (!content) return;
-
-      // Calculate optimal animation duration based on content width
-      // This ensures consistent speed regardless of content length
-      const contentWidth = content.offsetWidth;
-      const pixelsPerSecond = 50 * speed; // Adjust base speed here
-      const duration = contentWidth / pixelsPerSecond;
-
-      // Apply the calculated duration
-      track.style.animationDuration = `${duration}s`;
-    });
-  }
-
-  // Initialize on load and handle dynamic content
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMarquee);
-  } else {
-    initMarquee();
-  }
-
-  // Reinitialize on window resize for responsive behavior
-  let resizeTimeout: NodeJS.Timeout;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(initMarquee, 150);
-  });
-</script>
 
 
