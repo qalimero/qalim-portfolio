@@ -13,14 +13,26 @@
   border-bottom-left-radius: var(--marquee-border-radiusDesktop);
   border-bottom-right-radius: var(--marquee-border-radiusDesktop);
 
-  
+  // Element: marquee__track (container for seamless loop)
+  &__track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+    animation: marquee-scroll linear infinite;
+    animation-duration: calc(20s / var(--speed, 2));
+
+    // Pause animation on hover
+    &:hover {
+      animation-play-state: paused;
+    }
+  }
+
   // Element: marquee__content
   &__content {
-    display: inline-block;
-    animation: marquee-scroll linear infinite;
-    animation-duration: calc(15s / var(--speed, 1));
+    display: inline-flex;
     list-style: none;
-
+    padding: 0;
+    margin: 0;
 
     // Element: marquee__item
     &-item {
@@ -28,10 +40,21 @@
       margin-right: var(--marquee-item-gap);
       font-size: var(--marquee-font-sizeDesktop);
       font-weight: 500;
+      flex-shrink: 0;
+
+      a {
+        color: inherit;
+        text-decoration: none;
+        transition: opacity 0.2s ease;
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
     }
   }
 
- 
+
   // Modifier: marquee--mobile (responsive)
   @media (max-width: 768px) {
     border-bottom-left-radius: var(--marquee-border-radiusMobile);
@@ -44,12 +67,12 @@
   }
 }
 
-// Keyframes for marquee animation
+// Keyframes for seamless infinite marquee animation
 @keyframes marquee-scroll {
   0% {
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-100%);
+    transform: translateX(-50%); // Move by 50% since we have 2 identical copies
   }
 }

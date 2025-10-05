@@ -17,23 +17,38 @@ const { items, text, className = '', speed = 1, direction = 'left' } = Astro.pro
 // Support both new items format and legacy text format
 // Keep the full item objects instead of just the text
 const displayItems = items || (text ? [{ listItem: text, linkItem: null }] : []);
-const repeatedItems = Array(3).fill(displayItems).flat();
 ---
 
 <div class={`marquee${className} sticky overflow-hidden whitespace-nowrap`} data-direction={direction} data-speed={speed}>
-  <ul class="marquee__content inline-block">
-    {repeatedItems.map((item) => (
-      <li class="marquee__content-item inline-block mr-8 font-medium">
-        {item.linkItem ? (
-          <a href={item.linkItem} target="_blank" rel="noopener noreferrer" class="hover:underline">
-            {item.listItem}
-          </a>
-        ) : (
-          item.listItem
-        )}
-      </li>
-    ))}
-  </ul>
+  <div class="marquee__track">
+    <ul class="marquee__content inline-block">
+      {displayItems.map((item) => (
+        <li class="marquee__content-item inline-block mr-8 font-medium">
+          {item.linkItem ? (
+            <a href={item.linkItem} target="_blank" rel="noopener noreferrer" class="hover:underline">
+              {item.listItem}
+            </a>
+          ) : (
+            item.listItem
+          )}
+        </li>
+      ))}
+    </ul>
+    <!-- Duplicate for seamless loop -->
+    <ul class="marquee__content inline-block" aria-hidden="true">
+      {displayItems.map((item) => (
+        <li class="marquee__content-item inline-block mr-8 font-medium">
+          {item.linkItem ? (
+            <a href={item.linkItem} target="_blank" rel="noopener noreferrer" class="hover:underline">
+              {item.listItem}
+            </a>
+          ) : (
+            item.listItem
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
 </div>
 
 
