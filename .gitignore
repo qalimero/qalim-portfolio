@@ -104,9 +104,6 @@ coverage/
 # Nuxt.js
 .nuxt/
 
-# Gatsby
-public/
-
 # Storybook
 .out/
 .storybook-out/
@@ -121,12 +118,6 @@ backend/.strapi/
 backend/.strapi-updater.json
 backend/.strapi-cloud.json
 license.txt
-
-# ===========================================
-# DESIGN SYSTEM & TOKENS
-# ===========================================
-src/styles/tokens/
-style-dictionary-output/
 
 # ===========================================
 # TEMPORARY FILES
@@ -199,7 +190,6 @@ $RECYCLE.BIN/
 # ===========================================
 *#
 ssl/
-public/uploads/*
-!public/uploads/.gitkeep
+backend/public/uploads/*
+!backend/public/uploads/.gitkeep
 .local
-project-files.txt
