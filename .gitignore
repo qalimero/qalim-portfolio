@@ -104,9 +104,6 @@ coverage/
 # Nuxt.js
 .nuxt/
 
-# Gatsby
-public/
-
 # Storybook
 .out/
 .storybook-out/
@@ -199,7 +196,6 @@ $RECYCLE.BIN/
 # ===========================================
 *#
 ssl/
-public/uploads/*
-!public/uploads/.gitkeep
+backend/public/uploads/*
+!backend/public/uploads/.gitkeep
 .local
-project-files.txt
