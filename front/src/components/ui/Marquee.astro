@@ -17,27 +17,17 @@ const { items, text, className = '', speed = 1, direction = 'left' } = Astro.pro
 // Support both new items format and legacy text format
 // Keep the full item objects instead of just the text
 const displayItems = items || (text ? [{ listItem: text, linkItem: null }] : []);
+
+// Calculate how many times we need to repeat to fill screen + buffer for smooth loop
+// Repeat enough times to ensure continuous scroll
+const minRepeats = 3; // Minimum repeats to ensure seamless loop
 ---
 
 <div class={`marquee${className} sticky overflow-hidden whitespace-nowrap`} data-direction={direction} style={`--marquee-speed: ${speed};`}>
   <div class="marquee__track">
     <ul class="marquee__content">
-      {displayItems.map((item) => (
-        <li class="marquee__content-item">
-          {item.linkItem ? (
-            <a href={item.linkItem} target="_blank" rel="noopener noreferrer">
-              {item.listItem}
-            </a>
-          ) : (
-            item.listItem
-          )}
-        </li>
-      ))}
-    </ul>
-    <!-- Duplicate for seamless loop -->
-    <ul class="marquee__content" aria-hidden="true">
-      {displayItems.map((item) => (
-        <li class="marquee__content-item">
+      {Array(minRepeats).fill(displayItems).flat().map((item, index) => (
+        <li class="marquee__content-item" key={index}>
           {item.linkItem ? (
             <a href={item.linkItem} target="_blank" rel="noopener noreferrer">
               {item.listItem}
