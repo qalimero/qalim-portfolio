@@ -7,37 +7,31 @@ import { strapiClient } from '../lib/api/strapi';
 // Utiliser le client Strapi officiel pour récupérer les données
 let maintenanceData: any = null;
 try {
-  maintenanceData = await strapiClient.single('maintenance').find({
-    populate: {
-      marquee: {
-        populate: '*' // Populer tous les champs du component marquee
-      }
-    }
-  });
+  // Utiliser la méthode single() pour récupérer les données de maintenance
+  maintenanceData = await strapiClient.single('maintenance').find({populate: '*'});
 } catch (error) {
   console.error('Error fetching maintenance data:', error);
+  // Fallback data si l'API échoue
   maintenanceData = {
     data: {
-      title: "Maintenance — Qalim",
-      marquee: []
+      attributes: {
+        title: "Maintenance — Qalim",
+        marquee: []
+      }
     }
   };
 }
 
 
-// Extraire les données du marquee depuis la réponse
-const pageTitle = maintenanceData?.data?.title;
-const marqueeItems = maintenanceData?.data?.marquee;
+// Process maintenance data for display
+const marqueeComponents = maintenanceData.data.marquees;
 
-// Combiner tous les listItems en une seule chaîne séparée par des séparateurs
-const marqueeText = marqueeItems.map((item: any) => item.listItem).join(' • ');
-
-console.log(marqueeText);
+console.log(marqueeComponents);
 
 ---
 
 <BaseLayout
-    title={pageTitle}
+    title={maintenanceData?.data?.title || "Maintenance — Qalim"}
     description="Retour très bientôt."
     bodyClass="page-maintenance"
     >
@@ -46,7 +40,7 @@ console.log(marqueeText);
         <!-- Marquee content (above background) -->
         <div class="marquee-container">
           <!-- Display marquees from maintenance page data -->
-          <Marquee text={marqueeText} />
+          <Marquee text={marqueeComponents} />
         </div>
 
         <!-- Three.js Scene Container (above marquee) -->
