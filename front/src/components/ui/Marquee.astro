@@ -1,10 +1,12 @@
 ---
-import { Icon } from 'astro-icon/components'
-export interface MarqueeItem {
-  listItem: string;
-  linkItem?: string | null;
-}
+/**
+ * Marquee Component - Infinite scrolling marquee with rotating icons
+ * Type-safe props without runtime validation to avoid SSR/client issues
+ */
+import { Icon } from 'astro-icon/components';
+import type { MarqueeItem } from '../../lib/schemas/strapi.schema';
 
+// Props interface (type-only, no runtime validation)
 export interface Props {
   items?: MarqueeItem[];
   text?: string;
@@ -13,11 +15,23 @@ export interface Props {
   direction?: 'left' | 'right';
 }
 
-const { items, text, className = '', speed = 1, direction = 'left' } = Astro.props;
+// Get props with defaults
+const {
+  items,
+  text,
+  className = '',
+  speed = 1,
+  direction = 'left'
+} = Astro.props as Props;
 
 // Support both new items format and legacy text format
 // Keep the full item objects instead of just the text
-const displayItems = items || (text ? [{ listItem: text, linkItem: null }] : []);
+const displayItems: MarqueeItem[] = items || (text ? [{ listItem: text, linkItem: null }] : []);
+
+// Validate display items (development only)
+if (import.meta.env.DEV && displayItems.length === 0) {
+  console.warn('Marquee: No items to display');
+}
 ---
 
 <div class={`marquee ${className} sticky overflow-hidden whitespace-nowrap w-full box-border relative z-[1]`} data-direction={direction} style={`--marquee-speed: ${speed};`}>

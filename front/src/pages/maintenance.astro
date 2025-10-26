@@ -1,32 +1,47 @@
 ---
+/**
+ * Maintenance page - Displays maintenance message with animated marquee
+ * Uses type-safe Strapi API with Zod validation
+ */
 import BaseLayout from '../layouts/Layout.astro';
 import ThreeScene from '../components/scenes/ThreeScene.jsx';
 import Marquee from '../components/ui/Marquee.astro';
-import { strapiClient } from '../lib/api/strapi';
+import { getMaintenancePage } from '../lib/api/strapi';
+import type { MaintenancePageResponse, MarqueeItem } from '../lib/schemas/strapi.schema';
 
-// Utiliser le client Strapi avec cache
-let maintenanceData: any = null;
+// Fallback data with proper typing
+const FALLBACK_DATA: MaintenancePageResponse = {
+  data: {
+    title: "Maintenance — Qalim",
+    message: "Nous revenons bientôt",
+    marquee: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    publishedAt: new Date().toISOString(),
+  }
+};
+
+// Fetch maintenance data with type safety and validation
+let maintenanceData: MaintenancePageResponse;
 try {
-  // Utiliser la fonction avec cache pour de meilleures performances
-  maintenanceData = await import('../lib/api/strapi')
-    .then(m => m.getMaintenancePage());
+  maintenanceData = await getMaintenancePage();
+  console.log('✓ Maintenance data fetched and validated');
 } catch (error) {
-  console.error('Error fetching maintenance data:', error);
-  // Fallback data si l'API échoue
-  maintenanceData = {
-    data: {
-      title: "Maintenance — Qalim",
-      marquee: []
-    }
-  };
+  console.error('✗ Error fetching maintenance data:', error);
+  // Use fallback data if API fails
+  maintenanceData = FALLBACK_DATA;
 }
 
-// Extract marquee items from the response
-const marqueeItems = maintenanceData?.data?.marquee || [];
-const pageTitle = maintenanceData?.data?.title || "Maintenance — Qalim";
+// Extract marquee items and page title with type safety
+const marqueeItems: MarqueeItem[] = maintenanceData.data.marquee;
+const pageTitle: string = maintenanceData.data.title;
+const message: string | undefined = maintenanceData.data.message;
 
-console.log('Marquee items:', marqueeItems);
-
+// Log for debugging (only in development)
+if (import.meta.env.DEV) {
+  console.log('Marquee items:', marqueeItems);
+  console.log('Page title:', pageTitle);
+}
 ---
 
 <BaseLayout

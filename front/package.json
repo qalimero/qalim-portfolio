@@ -29,7 +29,8 @@
     "shiki": "^3.2.1",
     "style-dictionary": "^5.0.4",
     "three": "^0.152.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.4",
