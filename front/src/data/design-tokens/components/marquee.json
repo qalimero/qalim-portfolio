@@ -44,6 +44,81 @@
         "$type": "spacing",
         "$description": ""
       }
+    },
+    "link": {
+      "background-color": {
+        "hover": {
+          "$value": "{powerfull-orange}",
+          "$type": "color",
+          "$description": ""
+        }
+      },
+      "border-radius": {
+        "hover": {
+          "desktop": {
+            "$value": "{border-radius.md}",
+            "$type": "borderRadius",
+            "$description": ""
+          },
+          "mobile": {
+            "$value": "{border-radius.sm}",
+            "$type": "borderRadius",
+            "$description": ""
+          }
+        }
+      },
+      "paddingV": {
+        "hover": {
+          "mobile": {
+            "$value": "{xxs}",
+            "$type": "spacing",
+            "$description": ""
+          },
+          "desktop": {
+            "$value": "{xs}",
+            "$type": "spacing",
+            "$description": ""
+          }
+        }
+      },
+      "paddingH": {
+        "hover": {
+          "mobile": {
+            "$value": "{xs}",
+            "$type": "spacing",
+            "$description": ""
+          },
+          "desktop": {
+            "$value": "{md}",
+            "$type": "spacing",
+            "$description": ""
+          }
+        }
+      }
+    },
+    "paddingH": {
+      "desktop": {
+        "$value": "{lg}",
+        "$type": "spacing",
+        "$description": ""
+      },
+      "mobile": {
+        "$value": "{md}",
+        "$type": "spacing",
+        "$description": ""
+      }
+    },
+    "paddingV": {
+      "desktop": {
+        "$value": "{md}",
+        "$type": "spacing",
+        "$description": ""
+      },
+      "mobile": {
+        "$value": "{xs}",
+        "$type": "spacing",
+        "$description": ""
+      }
     }
   }
 }

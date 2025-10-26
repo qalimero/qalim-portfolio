@@ -10,18 +10,31 @@
   --marquee-border-radiusDesktop: 2.5000rem;
   --marquee-border-radiusMobile: 1.0000rem;
   --marquee-item-gap: 1.0000rem;
+  --marquee-link-backgroundColorHover: #ff602f;
+  --marquee-link-borderRadiusHoverDesktop: 2.5000rem;
+  --marquee-link-borderRadiusHoverMobile: 1.0000rem;
+  --marquee-link-paddingVHoverMobile: 0.2500rem;
+  --marquee-link-paddingVHoverDesktop: 0.5000rem;
+  --marquee-link-paddingHHoverMobile: 0.5000rem;
+  --marquee-link-paddingHHoverDesktop: 1.0000rem;
+  --marquee-padding-hDesktop: 1.5000rem;
+  --marquee-padding-hMobile: 1.0000rem;
+  --marquee-padding-vDesktop: 1.0000rem;
+  --marquee-padding-vMobile: 0.5000rem;
   --border-radius-md: 2.5000rem;
   --border-radius-sm: 1.0000rem;
   --color-powerfull-orange: #ff602f;
   --color-dark: #232121;
   --color-white: #ffffff;
   --color-powerfull-blue: #3200f2;
+  --mono: PP Fraktion Mono; /** Have special type text */
   --font-size-xs: 1.0000rem;
   --font-size-sm: 1.6180rem;
   --font-size-xxs: 0.6180rem;
   --font-size-md: 2.6179rem;
   --font-size-lg: 4.2358rem; /** for creative title */
   --font-size-xl: 6.8535rem; /** for creative title */
+  --font-family-mono: PP Fraktion Mono; /** font for mono display text like chatbot robotic style */
   --spacing-xs: 0.5000rem;
   --spacing-md: 1.0000rem;
   --spacing-3xl: 3.0000rem;

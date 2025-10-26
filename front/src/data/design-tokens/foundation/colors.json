@@ -18,5 +18,12 @@
     "$value": "#3200f2",
     "$type": "color",
     "$description": ""
+  },
+  "mono": {
+    "$value": [
+      "PP Fraktion Mono"
+    ],
+    "$type": "fontFamilies",
+    "$description": "Have special type text"
   }
 }

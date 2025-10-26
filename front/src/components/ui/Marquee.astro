@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components'
 export interface MarqueeItem {
   listItem: string;
   linkItem?: string | null;
@@ -19,37 +20,27 @@ const { items, text, className = '', speed = 1, direction = 'left' } = Astro.pro
 const displayItems = items || (text ? [{ listItem: text, linkItem: null }] : []);
 ---
 
-<div class={`marquee${className} sticky overflow-hidden whitespace-nowrap`} data-direction={direction} style={`--marquee-speed: ${speed};`}>
-  <div class="marquee__track">
-    <!-- First copy -->
-    <ul class="marquee__content">
-      {displayItems.map((item, index) => (
-        <li class="marquee__content-item" key={`first-${index}`}>
-          {item.linkItem ? (
-            <a href={item.linkItem} target="_blank" rel="noopener noreferrer">
-              {item.listItem}
-            </a>
-          ) : (
-            item.listItem
-          )}
-        </li>
-      ))}
-    </ul>
-    <!-- Second copy for seamless loop -->
-    <ul class="marquee__content" aria-hidden="true">
-      {displayItems.map((item, index) => (
-        <li class="marquee__content-item" key={`second-${index}`}>
-          {item.linkItem ? (
-            <a href={item.linkItem} target="_blank" rel="noopener noreferrer">
-              {item.listItem}
-            </a>
-          ) : (
-            item.listItem
-          )}
-        </li>
-      ))}
-    </ul>
-  </div>
+<div class={`marquee ${className} sticky overflow-hidden whitespace-nowrap w-full box-border relative z-[1]`} data-direction={direction} style={`--marquee-speed: ${speed};`}>
+  <ul class="marquee__content inline-block pl-full list-none m-0 antialiased">
+    {displayItems.map((item, index) => (
+      <li class="inline-flex shrink-0 whitespace-nowrap marquee__content__item" key={`${index}`}>
+        {item.linkItem ? (
+          <a
+            href={item.linkItem}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="marquee__link inline-flex items-center gap-2 uppercase text-inherit underline transition-all duration-300 ease-in-out"
+          >
+            <Icon class="shrink-0 marquee__content__item__icon" name="shuriken"/>
+            <span class="tracking-tighter">{item.listItem}</span>
+          </a>
+        ) : (
+          <span class="marquee__text inline-flex items-center gap-2 uppercase">
+            <Icon class=" shrink-0 marquee__content__item__icon" name="shuriken"/>
+            <span class="tracking-tighter">{item.listItem}</span>
+          </span>
+        )}
+      </li>
+    ))}
+  </ul>
 </div>
-
-

@@ -1,32 +1,20 @@
-// Marquee Component Styles - BEM Methodology
-// Uses design tokens for consistent styling
+// Marquee Component Styles
+// Only styles that cannot be done with Tailwind utilities
 
-// Block: marquee
 .marquee {
-  z-index: 1;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 100%;
   background-color: var(--marquee-background-colorBrand);
   color: var(--marquee-font-colorBrand);
-  padding: var(--spacing-md);
+  padding: var(--marquee-padding-vDesktop) var(--marquee-padding-hDesktop);
   border-bottom-left-radius: var(--marquee-border-radiusDesktop);
   border-bottom-right-radius: var(--marquee-border-radiusDesktop);
-  // Enable sub-pixel rendering for ultra-smooth animation
-  contain: layout style;
-  isolation: isolate;
 
-  // Element: marquee__track (container for seamless loop)
-  &__track {
-    display: flex;
-    width: fit-content;
-    // Force hardware acceleration for ultra-smooth animation
-    will-change: transform;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    // Pure CSS infinite animation - moves by exactly 50%
-    // Using translate3d for better performance
-    animation: marquee-scroll calc(30s / var(--marquee-speed, 1)) linear infinite;
+  // Element: marquee__content
+  &__content {
+    // Infinite scroll animation
+    animation: marquee-scroll calc(20s / var(--marquee-speed, 1)) linear infinite;
+    font-family: var(--font-family-mono);
+    font-weight: bold;
+    font-size: var(--marquee-font-sizeDesktop);
 
     // Pause animation on hover
     &:hover {
@@ -34,62 +22,66 @@
     }
   }
 
-  // Element: marquee__content
-  &__content {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    // Anti-aliasing for crisp text during animation
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-
-    // Element: marquee__item
-    &-item {
-      display: inline-flex;
-      align-items: center;
-      margin-right: var(--marquee-item-gap);
-      font-size: var(--marquee-font-sizeDesktop);
-      font-weight: 500;
-      flex-shrink: 0;
-      white-space: nowrap;
-      // Prevent text from becoming blurry during animation
-      transform: translateZ(0);
-
-      a {
-        color: inherit;
-        text-decoration: none;
-        transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-        &:hover {
-          opacity: 0.7;
-        }
-      }
-    }
+  // Link and text styles
+  &__link,
+  &__text {
+    padding: var(--marquee-link-paddingVHoverDesktop) var(--marquee-link-paddingHHoverDesktop);
+    border-radius: var(--marquee-link-borderRadiusHoverDesktop);
   }
 
+  &__link:hover,
+  &__link:focus {
+    background-color: var(--marquee-link-backgroundColorHover);
+  }
+
+  // Icon rotation animation
+  &__content__item__icon {
+    animation: icon-rotate 8s linear infinite;
+  }
 
   // Modifier: marquee--mobile (responsive)
   @media (max-width: 768px) {
+    padding: var(--marquee-padding-vMobile) var(--marquee-padding-hMobile);
     border-bottom-left-radius: var(--marquee-border-radiusMobile);
     border-bottom-right-radius: var(--marquee-border-radiusMobile);
 
-    &__content-item {
+    &__content {
       font-size: var(--marquee-font-sizeMobile);
+      &__item {
+        &__icon {
+          font-size: var(--marquee-font-sizeMobile);
+        }
+      }
     }
 
+    &__link,
+    &__text {
+      padding: var(--marquee-link-paddingVHoverMobile) var(--marquee-link-paddingHHoverMobile);
+      border-radius: var(--marquee-link-borderRadiusHoverMobile);
+    }
   }
 }
 
 // Keyframes for truly seamless infinite marquee animation
-// Key: Animation moves exactly 50% (one content width)
-// When it completes, the duplicate is perfectly positioned at the start
-// This creates a perfect loop with ZERO visible reset
+// Key: Animation moves from 0% to -100%
+// Content starts from right (padding-left: 100%) and scrolls completely off screen to the left
+// This creates a continuous infinite scroll effect
 @keyframes marquee-scroll {
-  from {
-    transform: translate3d(0, 0, 0);
+  0% {
+    transform: translateX(0%);
   }
-  to {
-    transform: translate3d(-50%, 0, 0);
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+// Keyframes for icon rotation (counter-clockwise)
+// Rotates slowly in the opposite direction of clock hands for dynamic effect
+@keyframes icon-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
   }
 }

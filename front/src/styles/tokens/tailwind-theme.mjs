@@ -7,28 +7,28 @@ export const tailwindTheme = {
     "powerfull-blue": "#3200f2"
   },
   "spacing": {
-    "xs": "0.5rem",
-    "md": "1rem",
-    "3xl": "3rem",
-    "4xl": "4rem",
-    "2xl": "2.5rem",
-    "lg": "1.5rem",
-    "xxs": "0.25rem",
-    "xl": "2rem",
-    "5xl": "5rem",
-    "sm": "0.75rem"
+    "xs": "0.5000rem",
+    "md": "1.0000rem",
+    "3xl": "3.0000rem",
+    "4xl": "4.0000rem",
+    "2xl": "2.5000rem",
+    "lg": "1.5000rem",
+    "xxs": "0.2500rem",
+    "xl": "2.0000rem",
+    "5xl": "5.0000rem",
+    "sm": "0.7500rem"
   },
   "fontSize": {
-    "xs": "1rem",
-    "sm": "1.618rem",
-    "xxs": "0.618rem",
+    "xs": "1.0000rem",
+    "sm": "1.6180rem",
+    "xxs": "0.6180rem",
     "md": "2.6179rem",
     "lg": "4.2358rem",
     "xl": "6.8535rem"
   },
   "borderRadius": {
-    "md": "2.5rem",
-    "sm": "1rem"
+    "md": "2.5000rem",
+    "sm": "1.0000rem"
   }
 };
 
@@ -50,9 +50,9 @@ export const daisyThemes = [
       "success": "#3200f2",
       "warning": "#ff602f",
       "error": "#ff602f",
-      "--rounded-box": "2.5rem",
-      "--rounded-btn": "1rem",
-      "--rounded-badge": "1rem"
+      "--rounded-box": "2.5000rem",
+      "--rounded-btn": "1.0000rem",
+      "--rounded-badge": "1.0000rem"
     }
   }
 ];

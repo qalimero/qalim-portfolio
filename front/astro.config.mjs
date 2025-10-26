@@ -4,18 +4,19 @@ import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import node from '@astrojs/node';
 
+import icon from 'astro-icon';
+
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
   adapter: node({
     mode: 'standalone'
   }),
-  integrations: [
-    react(),
-    tailwind({
-      applyBaseStyles: false,
-    })
-  ],
+  integrations: [react(), tailwind({
+    applyBaseStyles: false,
+  }), icon({
+    iconDir: 'src/assets/icons',
+  })],
   devToolbar: {
     enabled: false,
   },

@@ -1,12 +1,12 @@
 {
   "border-radius": {
     "md": {
-      "$value": "40",
+      "$value": "40px",
       "$type": "borderRadius",
       "$description": ""
     },
     "sm": {
-      "$value": "16",
+      "$value": "16px",
       "$type": "borderRadius",
       "$description": ""
     }
