@@ -1,0 +1,74 @@
+.popin {
+  width: 100%;
+  
+  // Hide native backdrop
+  &::backdrop {
+    display: none;
+  }
+
+  // Variant: Brand (default, uses design tokens)
+  &--brand {
+    .popin__container {
+      background: var(--popin-background-colorBrand);
+      color: var(--popin-text-colorBrand);
+    }
+  }
+
+  // Header (applies design token)
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  // Close button
+  &__close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  // Container (applies design tokens)
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--popin-gap-y);
+    padding: var(--popin-padding-xy);
+  }
+
+  // Title (applies design token)
+  &__title {
+    font-size: var(--popin-text-size);
+  }
+
+  // Content (applies design token)
+  &__content {
+    font-size: var(--popin-text-size);
+  }
+
+  // Backdrop (for closing)
+  &__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    opacity: 0;
+  }
+
+  // State: open (show backdrop)
+  &[open] {
+    .popin__backdrop {
+      opacity: 1;
+    }
+  }
+}
+
+// Prevent body scroll when popin is open
+body:has(.popin[open]) {
+  overflow: hidden;
+}

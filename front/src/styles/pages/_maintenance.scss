@@ -1,13 +1,17 @@
 // Maintenance page specific styles
+@use '../abstracts/variables' as vars;
+
+// Grid system simple : 12 par défaut, 8 à partir de md
+
+
 .maintenance {
-  position: relative;
-  z-index: 10; // Above the background
+  z-index: 1; // Above the background
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
+
 
 .title-container {
   position: relative;
@@ -66,4 +70,8 @@
     font-size: clamp(1.5rem, 4vw, 2.5rem);
   }
   
+}
+.popin {
+  max-width: max-content;
+}
 }

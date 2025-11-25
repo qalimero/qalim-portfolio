@@ -1,0 +1,103 @@
+---
+/**
+ * Popin Component (Modal/Dialog)
+ * Simple popin with text content and optional close button
+ */
+import { Icon } from 'astro-icon/components';
+
+export interface Props {
+  id: string;
+  title?: string;
+  closeable?: boolean;
+  autoOpen?: boolean;
+}
+
+const {
+  id,
+  title,
+  closeable = true,
+  autoOpen = false,
+} = Astro.props;
+---
+
+<dialog
+  id={id}
+  class="popin popin--brand"
+  aria-labelledby={title ? `${id}-title` : undefined}
+  aria-modal="true"
+  data-auto-open={autoOpen}
+>
+  <div class="popin__container">
+    <!-- Header with optional close button -->
+    {(title || closeable) && (
+      <div class="popin__header">
+        {title && (
+          <h2 id={`${id}-title`} class="popin__title sr-only">
+            {title}
+          </h2>
+        )}
+        {closeable && (
+          <button
+            type="button"
+            class="popin__close"
+            aria-label="Fermer la fenêtre"
+            data-popin-close
+          >
+            <Icon name="close" />
+          </button>
+        )}
+      </div>
+    )}
+
+    <!-- Content -->
+    <div class="popin__content">
+      <slot />
+    </div>
+  </div>
+
+  <!-- Backdrop -->
+  <div class="popin__backdrop" data-popin-backdrop></div>
+</dialog>
+
+<script>
+  // Initialize popin functionality
+  function initPopins() {
+    document.querySelectorAll<HTMLDialogElement>('.popin').forEach((dialog) => {
+      // Close button and backdrop listeners
+      const closeButton = dialog.querySelector<HTMLButtonElement>('[data-popin-close]');
+      const backdrop = dialog.querySelector<HTMLElement>('[data-popin-backdrop]');
+
+      closeButton?.addEventListener('click', () => dialog.close());
+      backdrop?.addEventListener('click', () => dialog.close());
+
+      // Auto-open if data-auto-open is true
+      const autoOpen = dialog.getAttribute('data-auto-open') === 'true';
+      if (autoOpen) {
+        // Use setTimeout to ensure DOM is fully ready
+        setTimeout(() => {
+          dialog.showModal();
+        }, 100);
+      }
+    });
+  }
+
+  // Global API
+  (window as any).Popin = {
+    open: (id: string) => {
+      (document.getElementById(id) as HTMLDialogElement)?.showModal();
+    },
+    close: (id: string) => {
+      (document.getElementById(id) as HTMLDialogElement)?.close();
+    },
+  };
+
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPopins);
+  } else {
+    initPopins();
+  }
+
+  // Re-initialize on View Transitions navigation (if enabled)
+  document.addEventListener('astro:page-load', initPopins);
+</script>
