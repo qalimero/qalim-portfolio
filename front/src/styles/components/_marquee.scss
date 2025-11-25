@@ -1,5 +1,6 @@
 // Marquee Component Styles
 // Only styles that cannot be done with Tailwind utilities
+@use '../abstracts/mixins' as mix;
 
 .marquee {
   background-color: var(--marquee-background-colorBrand);
@@ -40,7 +41,7 @@
   }
 
   // Modifier: marquee--mobile (responsive)
-  @media (max-width: 768px) {
+  @include mix.respond-to(medium) {
     padding: var(--marquee-padding-vMobile) var(--marquee-padding-hMobile);
     border-bottom-left-radius: var(--marquee-border-radiusMobile);
     border-bottom-right-radius: var(--marquee-border-radiusMobile);

@@ -21,6 +21,11 @@
   --marquee-padding-hMobile: 1.0000rem;
   --marquee-padding-vDesktop: 1.0000rem;
   --marquee-padding-vMobile: 0.5000rem;
+  --popin-background-colorBrand: #232121; /** Popin background color for brand variant */
+  --popin-text-colorBrand: #ffffff; /** Popin text color for brand variant */
+  --popin-gap-y: 1.0000rem; /** Vertical gap between popin elements */
+  --popin-padding-xy: 1.5000rem; /** Padding for popin container */
+  --popin-text-size: 1.6180rem; /** Base text size for popin content */
   --border-radius-md: 2.5000rem;
   --border-radius-sm: 1.0000rem;
   --color-powerfull-orange: #ff602f;

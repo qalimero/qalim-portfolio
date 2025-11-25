@@ -1,0 +1,33 @@
+{
+  "popin": {
+    "background-color": {
+      "brand": {
+        "$value": "{dark}",
+        "$type": "color",
+        "$description": "Popin background color for brand variant"
+      }
+    },
+    "text-color": {
+      "brand": {
+        "$value": "{white}",
+        "$type": "color",
+        "$description": "Popin text color for brand variant"
+      }
+    },
+    "gap-y": {
+      "$value": "{md}",
+      "$type": "spacing",
+      "$description": "Vertical gap between popin elements"
+    },
+    "padding-xy": {
+      "$value": "{lg}",
+      "$type": "spacing",
+      "$description": "Padding for popin container"
+    },
+    "text-size": {
+      "$value": "{font-size.sm}",
+      "$type": "fontSizes",
+      "$description": "Base text size for popin content"
+    }
+  }
+}
