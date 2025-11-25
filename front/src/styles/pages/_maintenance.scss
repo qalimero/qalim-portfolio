@@ -1,5 +1,6 @@
 // Maintenance page specific styles
 @use '../abstracts/variables' as vars;
+@use '../abstracts/mixins' as mix;
 
 // Grid system simple : 12 par défaut, 8 à partir de md
 
@@ -59,9 +60,7 @@
 }
 
 // Responsive adjustments
-@media (max-width: 768px) {
-
-  
+@include mix.respond-to(medium) {
   .title-container {
     margin-bottom: 1.5rem;
   }
@@ -69,9 +68,5 @@
   .maintenance-title {
     font-size: clamp(1.5rem, 4vw, 2.5rem);
   }
-  
-}
-.popin {
-  max-width: max-content;
 }
 }

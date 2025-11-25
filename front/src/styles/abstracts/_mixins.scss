@@ -1,4 +1,6 @@
 // Responsive breakpoints
+@use 'variables' as *;
+
 @mixin respond-to($breakpoint) {
   @if $breakpoint == small {
     @media (max-width: $breakpoint-sm) {
