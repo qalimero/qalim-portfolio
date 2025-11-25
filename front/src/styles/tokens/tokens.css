@@ -1,8 +1,5 @@
-/**
- * Do not edit directly, this file was auto-generated.
- */
-
 :root {
+<<<<<<< Updated upstream
   --marquee-font-sizeMobile: 1.0000rem;
   --marquee-font-sizeDesktop: 1.6180rem;
   --marquee-background-colorBrand: #3200f2; /** branding bg-color */
@@ -26,20 +23,57 @@
   --popin-gap-y: 1.0000rem; /** Vertical gap between popin elements */
   --popin-padding-xy: 1.5000rem; /** Padding for popin container */
   --popin-text-size: 1.6180rem; /** Base text size for popin content */
+=======
+  /* Marquee Component - camelCase (compatibilité SCSS) */
+  --marquee-font-sizeMobile: var(--font-size-xs);
+  --marquee-font-sizeDesktop: var(--font-size-sm);
+  --marquee-background-colorBrand: var(--color-powerfull-blue);
+  --marquee-font-colorBrand: var(--color-white);
+  --marquee-link-backgroundColorHover: var(--color-powerfull-orange);
+  --marquee-link-borderRadiusHoverDesktop: var(--border-radius-md);
+  --marquee-link-borderRadiusHoverMobile: var(--border-radius-sm);
+  --marquee-link-paddingVHoverMobile: var(--spacing-xxs);
+  --marquee-link-paddingVHoverDesktop: var(--spacing-xs);
+  --marquee-link-paddingHHoverMobile: var(--spacing-xs);
+  --marquee-link-paddingHHoverDesktop: var(--spacing-md);
+  --marquee-padding-hDesktop: var(--spacing-lg);
+  --marquee-padding-hMobile: var(--spacing-md);
+  --marquee-padding-vDesktop: var(--spacing-md);
+  --marquee-padding-vMobile: var(--spacing-xs);
+  --marquee-border-radiusDesktop: var(--border-radius-md);
+  --marquee-border-radiusMobile: var(--border-radius-sm);
+  
+  /* Popin Component - camelCase (compatibilité SCSS) */
+  --popin-background-colorBrand: var(--color-powerfull-blue);
+  --popin-text-colorBrand: var(--color-white);
+  --popin-text-size: var(--font-size-xs);
+  --popin-padding-xy: var(--spacing-md);
+  --popin-gap-y: var(--spacing-xs);
+  
+  /* Border Radius */
+>>>>>>> Stashed changes
   --border-radius-md: 2.5000rem;
   --border-radius-sm: 1.0000rem;
+  
+  /* Colors */
   --color-powerfull-orange: #ff602f;
   --color-dark: #232121;
   --color-white: #ffffff;
   --color-powerfull-blue: #3200f2;
-  --mono: PP Fraktion Mono; /** Have special type text */
+  
+  /* Font Families */
+  --font-family-mono: PP Fraktion Mono; /** Have special type text */
+  --font-family-base: Satoshi; /** le corps de texte */
+  
+  /* Font Sizes */
   --font-size-xs: 1.0000rem;
-  --font-size-sm: 1.6180rem;
-  --font-size-xxs: 0.6180rem;
-  --font-size-md: 2.6179rem;
-  --font-size-lg: 4.2358rem; /** for creative title */
-  --font-size-xl: 6.8535rem; /** for creative title */
-  --font-family-mono: PP Fraktion Mono; /** font for mono display text like chatbot robotic style */
+  --font-size-sm: 1.6250rem;
+  --font-size-xxs: 0.6250rem;
+  --font-size-md: 2.6250rem;
+  --font-size-lg: 4.2500rem; /** for creative title */
+  --font-size-xl: 6.8750rem; /** for creative title */
+  
+  /* Spacing */
   --spacing-xs: 0.5000rem;
   --spacing-md: 1.0000rem;
   --spacing-3xl: 3.0000rem;

@@ -1,7 +1,9 @@
-// PPFraktionMono Font Face Declarations
+// Font Families Custom Properties
+// Utilisez ces custom properties dans votre code: var(--font-family-mono) ou var(--font-family-base)
 
+// PPFraktionMono Font Face Declarations
 @font-face {
-  font-family: 'PP Fraktion Mono';
+  font-family: var(--font-family-mono);
   src: url('/src/assets/fonts/ppFraktionMono/PPFraktionMono-Regular.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
@@ -9,7 +11,7 @@
 }
 
 @font-face {
-  font-family: 'PP Fraktion Mono';
+  font-family: var(--font-family-mono);
   src: url('/src/assets/fonts/ppFraktionMono/PPFraktionMono-RegularItalic.otf') format('opentype');
   font-weight: 400;
   font-style: italic;
@@ -17,7 +19,7 @@
 }
 
 @font-face {
-  font-family: 'PP Fraktion Mono';
+  font-family: var(--font-family-mono);
   src: url('/src/assets/fonts/ppFraktionMono/PPFraktionMono-Bold.otf') format('opentype');
   font-weight: 700;
   font-style: normal;
@@ -25,9 +27,90 @@
 }
 
 @font-face {
-  font-family: 'PP Fraktion Mono';
+  font-family: var(--font-family-mono);
   src: url('/src/assets/fonts/ppFraktionMono/PPFraktionMono-BoldItalic.ttf') format('truetype');
   font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+// Satoshi Font Face Declarations
+@font-face {
+  font-family: var(--font-family-base);
+  src: url('/src/assets/fonts/satoshi/Satoshi-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: var(--font-family-base);
+  src: url('/src/assets/fonts/satoshi/Satoshi-LightItalic.woff') format('woff');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: var(--font-family-base);
+  src: url('/src/assets/fonts/satoshi/Satoshi-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: var(--font-family-base);
+  src: url('/src/assets/fonts/satoshi/Satoshi-Italic.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: var(--font-family-base);
+  src: url('/src/assets/fonts/satoshi/Satoshi-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: var(--font-family-base);
+  src: url('/src/assets/fonts/satoshi/Satoshi-MediumItalic.woff') format('woff');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: var(--font-family-base);
+  src: url('/src/assets/fonts/satoshi/Satoshi-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: var(--font-family-base);
+  src: url('/src/assets/fonts/satoshi/Satoshi-BoldItalic.woff') format('woff');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: var(--font-family-base);
+  src: url('/src/assets/fonts/satoshi/Satoshi-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: var(--font-family-base);
+  src: url('/src/assets/fonts/satoshi/Satoshi-BlackItalic.woff') format('woff');
+  font-weight: 900;
   font-style: italic;
   font-display: swap;
 }

@@ -16,14 +16,18 @@ export function initSplineScene(
 ): SplineSceneInstance | null {
   const container = document.getElementById(containerId);
   if (!container) {
-    console.error(`Container with id "${containerId}" not found`);
+    if (import.meta.env.DEV) {
+      console.error(`Container with id "${containerId}" not found`);
+    }
     return null;
   }
 
   // Check if there's already a canvas in the container
   const existingCanvas = container.querySelector('canvas');
   if (existingCanvas) {
-    console.warn('Canvas already exists in container, removing it first');
+    if (import.meta.env.DEV) {
+      console.warn('Canvas already exists in container, removing it first');
+    }
     existingCanvas.remove();
   }
 
@@ -58,9 +62,22 @@ export function initSplineScene(
       isResizing = true;
     }
 
+    // FIX: Use container dimensions instead of window
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
     // Immediate renderer update for responsive feel
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(width, height, false);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+    // FIX: Update camera aspect ratio immediately
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+
+    // FIX: Refit camera to card on resize to maintain proper framing
+    if (cardObject) {
+      fitCameraToCard(cardObject, camera);
+    }
 
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
@@ -75,14 +92,13 @@ export function initSplineScene(
 
   // Cache pour éviter les calculs répétitifs
   let cardCenter: THREE.Vector3 | null = null;
-  let lastCardUpdate = 0;
 
   // Performance monitoring
   let frameCount = 0;
   let lastTime = performance.now();
   let fps = 60;
 
-  // Animation loop with smooth rendering and perfect centering
+  // Animation loop with optimized rendering
   function animate() {
     // Simple FPS counter for adaptive quality
     frameCount++;
@@ -93,40 +109,24 @@ export function initSplineScene(
       lastTime = currentTime;
     }
 
-    // Continue smooth aspect ratio interpolation during resize
-    if (isResizing) {
-      const targetAspect = window.innerWidth / window.innerHeight;
-      const currentAspect = camera.aspect;
-
-      if (Math.abs(currentAspect - targetAspect) > 0.001) {
-        camera.aspect = THREE.MathUtils.lerp(currentAspect, targetAspect, 0.15);
-        camera.updateProjectionMatrix();
-      } else {
-        camera.aspect = targetAspect;
-        camera.updateProjectionMatrix();
-        isResizing = false;
-      }
+    // Calculate card center only once when card is loaded
+    if (cardObject && !cardCenter) {
+      const box = new THREE.Box3().setFromObject(cardObject);
+      const sphere = box.getBoundingSphere(new THREE.Sphere());
+      cardCenter = sphere.center.clone();
     }
 
-    // Optimiser le calcul du centre de la carte (seulement si nécessaire)
-    if (cardObject) {
-      const now = performance.now();
-      // Recalculer le centre seulement toutes les 100ms au lieu de chaque frame
-      if (!cardCenter || now - lastCardUpdate > 100) {
-        const box = new THREE.Box3().setFromObject(cardObject);
-        const sphere = box.getBoundingSphere(new THREE.Sphere());
-        cardCenter = sphere.center.clone();
-        lastCardUpdate = now;
-      }
-      camera.lookAt(cardCenter);
-    }
+    // Camera already looks at card center via fitCameraToCard
+    // No need to update every frame
 
     renderer.render(scene, camera);
 
     // Adaptive quality: if FPS drops below 30, reduce pixel ratio
     if (fps < 30 && renderer.getPixelRatio() > 1) {
       renderer.setPixelRatio(1);
-      console.warn('Low FPS detected, reducing pixel ratio for better performance');
+      if (import.meta.env.DEV) {
+        console.warn('Low FPS detected, reducing pixel ratio for better performance');
+      }
     }
   }
 

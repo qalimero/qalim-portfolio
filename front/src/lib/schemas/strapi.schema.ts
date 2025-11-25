@@ -133,12 +133,49 @@ export const marqueeSchema = z.object({
 });
 
 /**
+ * Strapi RichText block schema
+ */
+export const strapiRichTextBlockSchema = z.object({
+  type: z.string(),
+  children: z.array(z.any()).optional(),
+  text: z.string().optional(),
+  bold: z.boolean().optional(),
+  italic: z.boolean().optional(),
+  underline: z.boolean().optional(),
+  url: z.string().optional(),
+}).passthrough(); // Allow additional properties
+
+/**
+ * Popin component schema (shared.popin)
+ * This is a Strapi component, not a content-type
+ */
+export const popinComponentSchema = z.preprocess(
+  (data: any) => ({
+    ...data,
+    closable: data.closable ?? true, // Default to true if null or undefined
+  }),
+  z.object({
+    id: z.number(),
+    title: z.string().min(1, 'Title is required'),
+    text: z.array(strapiRichTextBlockSchema), // RichText blocks array
+    closable: z.boolean(),
+  })
+);
+
+/**
  * Maintenance page content schema
  */
-export const maintenanceContentSchema = strapiBaseContentSchema.extend({
+export const maintenanceContentSchema = z.object({
+  id: z.number(),
+  documentId: z.string(),
   title: z.string().min(1, 'Title is required'),
   message: z.string().optional(),
-  marquee: z.array(marqueeItemSchema).default([]),
+  marquee: z.array(marqueeItemSchema),
+  popinInfo: z.array(popinComponentSchema).optional(), // Array of popin components
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+  publishedAt: z.string().datetime().nullable(),
+  locale: z.string(),
 });
 
 /**
@@ -157,6 +194,7 @@ export type StrapiMediaFormat = z.infer<typeof strapiMediaFormatSchema>;
 export type StrapiSeo = z.infer<typeof strapiSeoSchema>;
 export type MarqueeItem = z.infer<typeof marqueeItemSchema>;
 export type Marquee = z.infer<typeof marqueeSchema>;
+export type PopinComponent = z.infer<typeof popinComponentSchema>;
 export type MaintenanceContent = z.infer<typeof maintenanceContentSchema>;
 export type MaintenancePageResponse = z.infer<typeof maintenancePageResponseSchema>;
 

@@ -25,5 +25,12 @@
     ],
     "$type": "fontFamilies",
     "$description": "Have special type text"
+  },
+  "base": {
+    "$value": [
+      "Satoshi"
+    ],
+    "$type": "fontFamilies",
+    "$description": "le corps de texte"
   }
 }

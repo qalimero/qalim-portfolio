@@ -10,7 +10,7 @@ import { isDevelopment } from './lib/env';
  * Type definition for context.locals
  * Add any shared data you want to pass to your pages here
  */
-export interface Locals {
+export interface MiddlewareLocals {
   /** Current request timestamp for performance monitoring */
   requestStartTime: number;
   /** User information if authenticated */
@@ -31,7 +31,7 @@ export interface Locals {
  */
 declare global {
   namespace App {
-    interface Locals extends Locals {}
+    interface Locals extends MiddlewareLocals {}
   }
 }
 
@@ -83,6 +83,13 @@ export const onRequest = defineMiddleware(
         `[${context.locals.requestId}] ${method} ${pathname} - ${response.status} (${duration}ms)`
       );
     }
+
+    // Add security headers (production and development)
+    response.headers.set('X-Content-Type-Options', 'nosniff');
+    response.headers.set('X-Frame-Options', 'DENY');
+    response.headers.set('X-XSS-Protection', '1; mode=block');
+    response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+    response.headers.set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
 
     // Add performance headers in development
     if (isDevelopment()) {

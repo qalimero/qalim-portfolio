@@ -23,6 +23,11 @@
       "type": "component",
       "repeatable": true,
       "component": "shared.marquee"
+    },
+    "popinInfo": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.popin"
     }
   }
 }

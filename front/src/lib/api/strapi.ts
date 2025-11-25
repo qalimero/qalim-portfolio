@@ -8,6 +8,7 @@ import {
   maintenancePageResponseSchema,
   type MaintenancePageResponse,
   type MaintenanceContent,
+  type PopinComponent,
 } from '../schemas/strapi.schema';
 import { apiCache } from './cache';
 import { env } from '../env';
@@ -33,7 +34,9 @@ async function fetchWithValidation<T>(
   // Try to get from cache first
   const cached = apiCache.get(key);
   if (cached) {
-    console.log(`Returning cached data for: ${key}`);
+    if (import.meta.env.DEV) {
+      console.log(`Returning cached data for: ${key}`);
+    }
     // Validate cached data to ensure type safety
     return schema.parse(cached);
   }
@@ -61,12 +64,18 @@ async function fetchWithValidation<T>(
 
 /**
  * Get maintenance page data with validation
+ * Populates the popinInfo component
  * Returns type-safe and validated data
  */
 export async function getMaintenancePage(): Promise<MaintenancePageResponse> {
   return fetchWithValidation(
     'maintenance-page',
-    () => strapiClient.single('maintenance').find({ populate: '*' }),
+    () => strapiClient.single('maintenance').find({
+      populate: {
+        marquee: true,
+        popinInfo: true, // Populate the popin component
+      }
+    }),
     maintenancePageResponseSchema,
     5 * 60 * 1000 // 5 minutes cache
   );
@@ -123,10 +132,14 @@ export async function fetchStrapiData<T = unknown>(
 export function clearStrapiCache(key?: string): void {
   if (key) {
     apiCache.delete(key);
-    console.log(`Cache cleared for: ${key}`);
+    if (import.meta.env.DEV) {
+      console.log(`Cache cleared for: ${key}`);
+    }
   } else {
     apiCache.clear();
-    console.log('All Strapi cache cleared');
+    if (import.meta.env.DEV) {
+      console.log('All Strapi cache cleared');
+    }
   }
 }
 
