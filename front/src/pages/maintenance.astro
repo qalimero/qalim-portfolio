@@ -6,18 +6,23 @@
 import BaseLayout from '../layouts/Layout.astro';
 import ThreeScene from '../components/scenes/ThreeScene.jsx';
 import Marquee from '../components/ui/Marquee.astro';
+import Popin from '../components/ui/Popin.astro';
 import { getMaintenancePage } from '../lib/api/strapi';
-import type { MaintenancePageResponse, MarqueeItem } from '../lib/schemas/strapi.schema';
+import { richTextToHtml } from '../lib/utils/richtext';
+import type { MaintenancePageResponse, MarqueeItem, PopinComponent } from '../lib/schemas/strapi.schema';
 
 // Fallback data with proper typing
 const FALLBACK_DATA: MaintenancePageResponse = {
   data: {
+    id: 0,
+    documentId: 'fallback',
     title: "Maintenance — Qalim",
     message: "Nous revenons bientôt",
     marquee: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     publishedAt: new Date().toISOString(),
+    locale: 'en',
   }
 };
 
@@ -25,23 +30,27 @@ const FALLBACK_DATA: MaintenancePageResponse = {
 let maintenanceData: MaintenancePageResponse;
 try {
   maintenanceData = await getMaintenancePage();
-  console.log('✓ Maintenance data fetched and validated');
+  if (import.meta.env.DEV) {
+    console.log('✓ Maintenance data fetched and validated');
+  }
 } catch (error) {
   console.error('✗ Error fetching maintenance data:', error);
   // Use fallback data if API fails
   maintenanceData = FALLBACK_DATA;
 }
 
-// Extract marquee items and page title with type safety
-const marqueeItems: MarqueeItem[] = maintenanceData.data.marquee;
+// Extract data with type safety
+const marqueeItems: MarqueeItem[] = maintenanceData.data.marquee || [];
 const pageTitle: string = maintenanceData.data.title;
-const message: string | undefined = maintenanceData.data.message;
 
-// Log for debugging (only in development)
-if (import.meta.env.DEV) {
-  console.log('Marquee items:', marqueeItems);
-  console.log('Page title:', pageTitle);
-}
+// Extract popin data from maintenance page (first popin in the array)
+const popinData: PopinComponent | undefined = maintenanceData.data.popinInfo?.[0];
+
+// Convert popin text (RichText blocks) to HTML
+const popinContentHtml: string | undefined = popinData?.text
+  ? richTextToHtml(popinData.text)
+  : undefined;
+
 ---
 
 <BaseLayout
@@ -62,6 +71,19 @@ if (import.meta.env.DEV) {
         <div class="canvas-host">
             <ThreeScene client:idle />
         </div>
+     
+            {popinData && popinContentHtml && (
+              <Popin
+                id="maintenance-popin"
+                title={popinData.title}
+                closeable={popinData.closable}
+                autoOpen={true}
+              >
+                <div set:html={popinContentHtml} />
+              </Popin>
+            )}
+
+        
+        
     </section>
 </BaseLayout>
-

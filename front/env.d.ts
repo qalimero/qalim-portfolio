@@ -7,3 +7,11 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+// Popin API on window object
+interface Window {
+  Popin: {
+    open: (id: string) => void;
+    close: (id: string) => void;
+  };
+}

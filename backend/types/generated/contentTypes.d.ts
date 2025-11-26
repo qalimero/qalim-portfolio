@@ -560,6 +560,7 @@ export interface ApiMaintenanceMaintenance extends Struct.SingleTypeSchema {
       'api::maintenance.maintenance'
     >;
     marquee: Schema.Attribute.Component<'shared.marquee', true>;
+    popinInfo: Schema.Attribute.Component<'shared.popin', true>;
     publishedAt: Schema.Attribute.DateTime;
     title: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;

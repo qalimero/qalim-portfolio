@@ -33,10 +33,13 @@ try {
   // Step 2: Normalize variable naming
   cssContent = normalizeVariableNames(cssContent);
 
-  // Step 3: Convert all non-color values to rem
+  // Step 3: Convert component tokens to camelCase for SCSS compatibility
+  cssContent = convertComponentsToCamelCase(cssContent);
+
+  // Step 4: Convert all non-color values to rem
   cssContent = convertToRem(cssContent);
 
-  // Step 4: Write the processed CSS
+  // Step 5: Write the processed CSS
   fs.writeFileSync(cssPath, cssContent);
 
   // Step 5: Extract tokens and generate Tailwind/DaisyUI configs
@@ -77,7 +80,35 @@ function normalizeVariableNames(cssContent) {
     .replace(/--dark(?!-)/g, '--color-dark')
     .replace(/--white(?!-)/g, '--color-white')
     // Prefix spacing values (avoid conflicts with existing prefixes)
-    .replace(/--(?!color-|spacing-|font-|border-|marquee-)(xs|sm|md|lg|xl|2xl|3xl|4xl|5xl|xxs)(?=:)/g, '--spacing-$1');
+    .replace(/--(?!color-|spacing-|font-|border-|marquee-|popin-)(xs|sm|md|lg|xl|2xl|3xl|4xl|5xl|xxs)(?=:)/g, '--spacing-$1');
+}
+
+/**
+ * Convert component tokens (marquee, popin, etc.) to camelCase for SCSS compatibility
+ */
+function convertComponentsToCamelCase(cssContent) {
+  return cssContent
+    // Marquee tokens: kebab-case to camelCase
+    .replace(/--marquee-font-size-mobile/g, '--marquee-font-sizeMobile')
+    .replace(/--marquee-font-size-desktop/g, '--marquee-font-sizeDesktop')
+    .replace(/--marquee-background-color-brand/g, '--marquee-background-colorBrand')
+    .replace(/--marquee-font-color-brand/g, '--marquee-font-colorBrand')
+    .replace(/--marquee-link-background-color-hover/g, '--marquee-link-backgroundColorHover')
+    .replace(/--marquee-link-border-radius-hover-desktop/g, '--marquee-link-borderRadiusHoverDesktop')
+    .replace(/--marquee-link-border-radius-hover-mobile/g, '--marquee-link-borderRadiusHoverMobile')
+    .replace(/--marquee-link-padding-v-hover-mobile/g, '--marquee-link-paddingVHoverMobile')
+    .replace(/--marquee-link-padding-v-hover-desktop/g, '--marquee-link-paddingVHoverDesktop')
+    .replace(/--marquee-link-padding-h-hover-mobile/g, '--marquee-link-paddingHHoverMobile')
+    .replace(/--marquee-link-padding-h-hover-desktop/g, '--marquee-link-paddingHHoverDesktop')
+    .replace(/--marquee-padding-h-desktop/g, '--marquee-padding-hDesktop')
+    .replace(/--marquee-padding-h-mobile/g, '--marquee-padding-hMobile')
+    .replace(/--marquee-padding-v-desktop/g, '--marquee-padding-vDesktop')
+    .replace(/--marquee-padding-v-mobile/g, '--marquee-padding-vMobile')
+    .replace(/--marquee-border-radius-desktop/g, '--marquee-border-radiusDesktop')
+    .replace(/--marquee-border-radius-mobile/g, '--marquee-border-radiusMobile')
+    // Popin tokens: kebab-case to camelCase
+    .replace(/--popin-background-color-brand/g, '--popin-background-colorBrand')
+    .replace(/--popin-text-color-brand/g, '--popin-text-colorBrand');
 }
 
 /**
@@ -85,13 +116,19 @@ function normalizeVariableNames(cssContent) {
  */
 function convertToRem(cssContent) {
   // Universal converter for non-color properties
+  // Skip values that already use var() or have 'rem' unit
   return cssContent.replace(
-    /--((?!.*color)[^:]+):\s*(\d+(?:\.\d+)?)(px)?/g,
+    /--((?!.*color)[^:]+):\s*(\d+(?:\.\d+)?)(px)?\s*;/g,
     (match, propertyName, value, unit) => {
+      // Skip if the value is already in rem or uses var()
+      if (match.includes('rem') || match.includes('var(')) {
+        return match;
+      }
+      
       const numericValue = parseFloat(value);
       if (!Number.isNaN(numericValue)) {
         const remValue = (numericValue / PX_TO_REM_RATIO).toFixed(4);
-        return `--${propertyName}: ${remValue}rem`;
+        return `--${propertyName}: ${remValue}rem;`;
       }
       return match;
     }

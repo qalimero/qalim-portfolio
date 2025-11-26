@@ -23,6 +23,18 @@ export interface SharedMedia extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedPopin extends Struct.ComponentSchema {
+  collectionName: 'components_shared_popins';
+  info: {
+    displayName: 'popin';
+  };
+  attributes: {
+    closable: Schema.Attribute.Boolean;
+    text: Schema.Attribute.Blocks;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface SharedQuote extends Struct.ComponentSchema {
   collectionName: 'components_shared_quotes';
   info: {
@@ -79,6 +91,7 @@ declare module '@strapi/strapi' {
     export interface ComponentSchemas {
       'shared.marquee': SharedMarquee;
       'shared.media': SharedMedia;
+      'shared.popin': SharedPopin;
       'shared.quote': SharedQuote;
       'shared.rich-text': SharedRichText;
       'shared.seo': SharedSeo;

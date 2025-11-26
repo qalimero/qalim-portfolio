@@ -20,11 +20,11 @@ export const tailwindTheme = {
   },
   "fontSize": {
     "xs": "1.0000rem",
-    "sm": "1.6180rem",
-    "xxs": "0.6180rem",
-    "md": "2.6179rem",
-    "lg": "4.2358rem",
-    "xl": "6.8535rem"
+    "sm": "1.6250rem",
+    "xxs": "0.6250rem",
+    "md": "2.6250rem",
+    "lg": "4.2500rem",
+    "xl": "6.8750rem"
   },
   "borderRadius": {
     "md": "2.5000rem",

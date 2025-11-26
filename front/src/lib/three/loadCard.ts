@@ -12,7 +12,9 @@ export function loadCard(
   renderer: THREE.WebGLRenderer
 ): Promise<THREE.Object3D | null> {
   return new Promise((resolve, reject) => {
-    console.log('Loading Spline card from:', SPLINE_URL);
+    if (import.meta.env.DEV) {
+      console.log('Loading Spline card from:', SPLINE_URL);
+    }
     const loader = new SplineLoader();
 
     // Add loading timeout
@@ -25,16 +27,22 @@ export function loadCard(
       SPLINE_URL,
       splineScene => {
         clearTimeout(timeout);
-        console.log('Spline scene loaded successfully');
+        if (import.meta.env.DEV) {
+          console.log('Spline scene loaded successfully');
+        }
 
         try {
           const card = splineScene.getObjectByName(CARD_NAME);
           if (!card) {
-            console.warn(`Card object "${CARD_NAME}" not found in Spline scene`);
+            if (import.meta.env.DEV) {
+              console.warn(`Card object "${CARD_NAME}" not found in Spline scene`);
+            }
             resolve(null);
             return;
           }
-          console.log('Card object found:', card);
+          if (import.meta.env.DEV) {
+            console.log('Card object found:', card);
+          }
 
           // Remove everything except the card
           splineScene.children.forEach(child => {

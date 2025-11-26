@@ -9,7 +9,8 @@
     "tokens": "node scripts/generate-tokens.js",
     "preview": "astro preview",
     "astro": "astro",
-    "type-check": "astro check"
+    "type-check": "astro check",
+    "security:check": "../scripts/check-bundle-security.sh"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

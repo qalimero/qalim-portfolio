@@ -1,10 +1,13 @@
-// Breakpoints
+// Breakpoints (pas de custom properties car utilisées dans @media queries)
 $breakpoint-sm: 576px;
 $breakpoint-md: 768px;
 $breakpoint-lg: 992px;
 $breakpoint-xl: 1200px;
 
-// Typographie
-$font-family-base: 'Inter', sans-serif;
-$font-size-base: 1rem;
-$line-height-base: 1.6;
+// Grid system
+$grid-columns-mobile: 8;
+$grid-columns-desktop: 12;
+$grid-gutter: 1rem; // 16px
+
+// Note: Les valeurs de design (couleurs, fonts, spacing) sont dans tokens/tokens.css
+// Utilisez var(--font-family-base), var(--color-powerfull-blue), etc.

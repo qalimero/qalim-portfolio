@@ -1,22 +1,17 @@
 {
   "font-size": {
-    "xs": {
+    "default": {
       "$value": "16px",
       "$type": "fontSizes",
       "$description": ""
     },
     "sm": {
-      "$value": "{font-size.xs}*1.618",
-      "$type": "fontSizes",
-      "$description": ""
-    },
-    "xxs": {
-      "$value": "{font-size.xs}/1.618",
+      "$value": "{font-size.default}*1.618",
       "$type": "fontSizes",
       "$description": ""
     },
     "md": {
-      "$value": "{font-size.sm}*1.618",
+      "$value": "{font-size.default}*1.618",
       "$type": "fontSizes",
       "$description": ""
     },
@@ -38,6 +33,15 @@
       ],
       "$type": "fontFamilies",
       "$description": "font for mono display text like chatbot robotic style"
+    }
+  },
+  "font": {
+    "size": {
+      "xs": {
+        "$value": "18px",
+        "$type": "fontSizes",
+        "$description": ""
+      }
     }
   }
 }
