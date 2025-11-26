@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_shared_popins",
+  "info": {
+    "displayName": "popin"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "blocks"
+    },
+    "closable": {
+      "type": "boolean"
+    },
+    "title": {
+      "type": "string"
+    }
+  }
+}

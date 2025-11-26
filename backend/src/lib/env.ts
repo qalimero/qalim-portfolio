@@ -11,6 +11,8 @@ const envSchema = z.object({
   JWT_SECRET: z.string(),
   DATABASE_CLIENT: z.enum(['sqlite', 'postgres', 'mysql']).default('sqlite'),
   DATABASE_FILENAME: z.string().optional(),
+  RATE_LIMIT_DURATION: z.coerce.number().default(60000),
+  RATE_LIMIT_MAX: z.coerce.number().default(100),
 });
 
 export type Env = z.infer<typeof envSchema>;
@@ -25,3 +27,5 @@ export function validateEnv(): Env {
 
   return result.data;
 }
+
+export const env = validateEnv();

@@ -19,3 +19,18 @@ export const logger = winston.createLogger({
     }),
   ],
 });
+
+/**
+ * Specialized loggers for different contexts
+ */
+export const loggers = {
+  security: (message: string, metadata?: any) => {
+    logger.warn(`[SECURITY] ${message}`, metadata);
+  },
+  api: (message: string, metadata?: any) => {
+    logger.info(`[API] ${message}`, metadata);
+  },
+  database: (message: string, metadata?: any) => {
+    logger.info(`[DATABASE] ${message}`, metadata);
+  },
+};
