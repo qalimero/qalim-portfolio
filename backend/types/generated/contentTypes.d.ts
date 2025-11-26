@@ -369,13 +369,13 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiMaintenanceMaintenance extends Struct.SingleTypeSchema {
-  collectionName: 'maintenances';
+export interface ApiQyuIsComingQyuIsComing extends Struct.SingleTypeSchema {
+  collectionName: 'qyu_is_comings';
   info: {
-    description: 'Portfolio maintenance page content';
-    displayName: 'Maintenance Page';
-    pluralName: 'maintenances';
-    singularName: 'maintenance';
+    description: 'Portfolio coming soon page';
+    displayName: 'Qyu is Coming';
+    pluralName: 'qyu-is-comings';
+    singularName: 'qyu-is-coming';
   };
   options: {
     draftAndPublish: false;
@@ -387,7 +387,7 @@ export interface ApiMaintenanceMaintenance extends Struct.SingleTypeSchema {
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
-      'api::maintenance.maintenance'
+      'api::qyu-is-coming.qyu-is-coming'
     > &
       Schema.Attribute.Private;
     marquee: Schema.Attribute.Component<'shared.marquee', true> &
@@ -398,6 +398,7 @@ export interface ApiMaintenanceMaintenance extends Struct.SingleTypeSchema {
         },
         number
       >;
+    popinInfo: Schema.Attribute.Component<'shared.popin', true>;
     publishedAt: Schema.Attribute.DateTime;
     title: Schema.Attribute.String &
       Schema.Attribute.Required &
@@ -920,7 +921,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
-      'api::maintenance.maintenance': ApiMaintenanceMaintenance;
+      'api::qyu-is-coming.qyu-is-coming': ApiQyuIsComingQyuIsComing;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

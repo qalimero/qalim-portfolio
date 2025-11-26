@@ -20,12 +20,18 @@ export interface SharedMarquee extends Struct.ComponentSchema {
 export interface SharedPopin extends Struct.ComponentSchema {
   collectionName: 'components_shared_popins';
   info: {
-    displayName: 'popin';
+    description: 'Modal/dialog component with rich text content';
+    displayName: 'Popin';
   };
   attributes: {
-    closable: Schema.Attribute.Boolean;
-    text: Schema.Attribute.Blocks;
-    title: Schema.Attribute.String;
+    closable: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    text: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 200;
+        minLength: 1;
+      }>;
   };
 }
 

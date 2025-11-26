@@ -1,18 +1,24 @@
 {
   "collectionName": "components_shared_popins",
   "info": {
-    "displayName": "popin"
+    "displayName": "Popin",
+    "description": "Modal/dialog component with rich text content"
   },
   "options": {},
   "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "minLength": 1,
+      "maxLength": 200
+    },
     "text": {
-      "type": "blocks"
+      "type": "blocks",
+      "required": true
     },
     "closable": {
-      "type": "boolean"
-    },
-    "title": {
-      "type": "string"
+      "type": "boolean",
+      "default": true
     }
   }
 }
