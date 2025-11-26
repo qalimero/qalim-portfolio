@@ -1,3 +1,5 @@
+import type { StrapiEnv } from '../src/lib/types';
+
 export default ({ env }: { env: StrapiEnv }) => [
   'strapi::logger',
   'strapi::errors',

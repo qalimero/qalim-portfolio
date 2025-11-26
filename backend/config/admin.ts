@@ -1,3 +1,5 @@
+import type { StrapiEnv } from '../src/lib/types';
+
 export default ({ env }: { env: StrapiEnv }) => ({
   auth: {
     secret: env('ADMIN_JWT_SECRET'),

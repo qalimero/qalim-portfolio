@@ -4,30 +4,26 @@
   "info": {
     "singularName": "maintenance",
     "pluralName": "maintenances",
-    "displayName": "maintenance",
-    "description": ""
+    "displayName": "Maintenance Page",
+    "description": "Portfolio maintenance page content"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
-  "pluginOptions": {
-    "i18n": {
-      "localized": true
-    }
-  },
+  "pluginOptions": {},
   "attributes": {
     "title": {
-      "type": "string"
+      "type": "string",
+      "required": true,
+      "minLength": 1,
+      "maxLength": 200
     },
     "marquee": {
       "type": "component",
       "repeatable": true,
-      "component": "shared.marquee"
-    },
-    "popinInfo": {
-      "type": "component",
-      "repeatable": true,
-      "component": "shared.popin"
+      "component": "shared.marquee",
+      "required": true,
+      "min": 1
     }
   }
 }
