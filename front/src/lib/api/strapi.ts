@@ -69,8 +69,8 @@ async function fetchWithValidation<T>(
  */
 export async function getMaintenancePage(): Promise<MaintenancePageResponse> {
   return fetchWithValidation(
-    'maintenance-page',
-    () => strapiClient.single('maintenance').find({
+    'qyu-is-coming-page',
+    () => strapiClient.single('qyu-is-coming').find({
       populate: {
         marquee: true,
         popinInfo: true, // Populate the popin component
@@ -87,7 +87,7 @@ export async function getMaintenancePage(): Promise<MaintenancePageResponse> {
  */
 export async function testStrapiConnection(): Promise<boolean> {
   try {
-    await strapiClient.single('maintenance').find();
+    await strapiClient.single('qyu-is-coming').find();
     return true;
   } catch (error) {
     console.error('Strapi connection test failed:', error);
