@@ -378,7 +378,7 @@ export interface ApiQyuIsComingQyuIsComing extends Struct.SingleTypeSchema {
     singularName: 'qyu-is-coming';
   };
   options: {
-    draftAndPublish: false;
+    draftAndPublish: true;
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;

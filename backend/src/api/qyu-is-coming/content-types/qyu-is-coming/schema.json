@@ -8,7 +8,7 @@
     "description": "Portfolio coming soon page"
   },
   "options": {
-    "draftAndPublish": false
+    "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
