@@ -6,6 +6,7 @@
 
 
 .maintenance {
+  position: relative; // For absolute positioning of children
   z-index: 1; // Above the background
   min-height: 100vh;
   display: flex;
@@ -40,23 +41,20 @@
 }
 
 .canvas-host {
-  position: relative;
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 0; // Behind marquee and popin
 }
 
-// Ensure the 3D scene container has proper positioning
+// Ensure the 3D scene container fills its parent
 #three-container {
-  position: relative;
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 0; // Within the canvas-host
 }
 
 // Responsive adjustments
