@@ -64,17 +64,14 @@ async function fetchWithValidation<T>(
 
 /**
  * Get maintenance page data with validation
- * Populates the popinInfo component
+ * Populates all nested components (marquee, popinInfo)
  * Returns type-safe and validated data
  */
 export async function getMaintenancePage(): Promise<MaintenancePageResponse> {
   return fetchWithValidation(
     'qyu-is-coming-page',
     () => strapiClient.single('qyu-is-coming').find({
-      populate: {
-        marquee: true,
-        popinInfo: true, // Populate the popin component
-      }
+      populate: '*', // Populate all components
     }),
     maintenancePageResponseSchema,
     5 * 60 * 1000 // 5 minutes cache

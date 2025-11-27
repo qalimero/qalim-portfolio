@@ -116,9 +116,10 @@ export const strapiSeoSchema = z.object({
 });
 
 /**
- * Marquee item schema - matches your component props
+ * Marquee item schema - matches Strapi component structure
  */
 export const marqueeItemSchema = z.object({
+  id: z.number(),
   listItem: z.string().min(1, 'List item cannot be empty'),
   linkItem: z.string().url().nullable().optional(),
 });
@@ -169,13 +170,11 @@ export const maintenanceContentSchema = z.object({
   id: z.number(),
   documentId: z.string(),
   title: z.string().min(1, 'Title is required'),
-  message: z.string().optional(),
-  marquee: z.array(marqueeItemSchema),
-  popinInfo: z.array(popinComponentSchema).optional(), // Array of popin components
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
   publishedAt: z.string().datetime().nullable(),
-  locale: z.string(),
+  marquee: z.array(marqueeItemSchema).optional(),
+  popinInfo: z.array(popinComponentSchema).optional(), // Array of popin components
 });
 
 /**
