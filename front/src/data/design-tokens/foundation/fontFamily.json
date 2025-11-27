@@ -1,0 +1,16 @@
+{
+  "font": {
+    "family": {
+      "base": {
+        "$value": ["Satoshi"],
+        "$type": "fontFamily",
+        "$description": "Base font family for body text"
+      },
+      "mono": {
+        "$value": ["PP Fraktion Mono"],
+        "$type": "fontFamily",
+        "$description": "Monospace font for special text"
+      }
+    }
+  }
+}
