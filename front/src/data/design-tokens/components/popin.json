@@ -1,36 +1,38 @@
 {
-  "popin": {
-    "background": {
-      "color": {
-        "$value": "{color.neutral.darkest}",
-        "$type": "color",
-        "$description": "Popin background color"
-      }
-    },
-    "text": {
-      "color": {
-        "$value": "{color.neutral.lightest}",
-        "$type": "color",
-        "$description": "Popin text color"
+  "components": {
+    "popin": {
+      "background": {
+        "color": {
+          "$value": "{foundation.color.neutral.darkest}",
+          "$type": "color",
+          "$description": "Popin background color"
+        }
       },
-      "size": {
-        "$value": "{font.size.xs}",
-        "$type": "fontSizes",
-        "$description": "Base text size for popin content"
-      }
-    },
-    "gap": {
-      "y": {
-        "$value": "{spacing.md}",
-        "$type": "spacing",
-        "$description": "Vertical gap between popin elements"
-      }
-    },
-    "padding": {
-      "xy": {
-        "$value": "{spacing.lg}",
-        "$type": "spacing",
-        "$description": "Padding for popin container"
+      "text": {
+        "color": {
+          "$value": "{foundation.color.neutral.lightest}",
+          "$type": "color",
+          "$description": "Popin text color"
+        },
+        "size": {
+          "$value": "{foundation.font.size.xs}",
+          "$type": "fontSizes",
+          "$description": "Base text size for popin content"
+        }
+      },
+      "gap": {
+        "y": {
+          "$value": "{foundation.spacing.md}",
+          "$type": "spacing",
+          "$description": "Vertical gap between popin elements"
+        }
+      },
+      "padding": {
+        "xy": {
+          "$value": "{foundation.spacing.lg}",
+          "$type": "spacing",
+          "$description": "Padding for popin container"
+        }
       }
     }
   }

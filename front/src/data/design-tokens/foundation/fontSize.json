@@ -1,35 +1,37 @@
 {
-  "font": {
-    "size": {
-      "xxs": {
-        "$value": "10px",
-        "$type": "fontSizes",
-        "$description": "Extra extra small font size"
-      },
-      "xs": {
-        "$value": "16px",
-        "$type": "fontSizes",
-        "$description": "Extra small font size - base size"
-      },
-      "sm": {
-        "$value": "26px",
-        "$type": "fontSizes",
-        "$description": "Small font size"
-      },
-      "md": {
-        "$value": "42px",
-        "$type": "fontSizes",
-        "$description": "Medium font size"
-      },
-      "lg": {
-        "$value": "68px",
-        "$type": "fontSizes",
-        "$description": "Large font size - for creative titles"
-      },
-      "xl": {
-        "$value": "110px",
-        "$type": "fontSizes",
-        "$description": "Extra large font size - for creative titles"
+  "foundation": {
+    "font": {
+      "size": {
+        "xxs": {
+          "$value": "10px",
+          "$type": "fontSizes",
+          "$description": "Extra extra small font size"
+        },
+        "xs": {
+          "$value": "16px",
+          "$type": "fontSizes",
+          "$description": "Extra small font size - base size"
+        },
+        "sm": {
+          "$value": "26px",
+          "$type": "fontSizes",
+          "$description": "Small font size"
+        },
+        "md": {
+          "$value": "42px",
+          "$type": "fontSizes",
+          "$description": "Medium font size"
+        },
+        "lg": {
+          "$value": "68px",
+          "$type": "fontSizes",
+          "$description": "Large font size - for creative titles"
+        },
+        "xl": {
+          "$value": "110px",
+          "$type": "fontSizes",
+          "$description": "Extra large font size - for creative titles"
+        }
       }
     }
   }

@@ -1,27 +1,29 @@
 {
-  "color": {
-    "brand": {
-      "primary": {
-        "$value": "#3200f2",
-        "$type": "color",
-        "$description": "Primary brand color - Powerful blue"
+  "foundation": {
+    "color": {
+      "brand": {
+        "primary": {
+          "$value": "#3200f2",
+          "$type": "color",
+          "$description": "Primary brand color - Powerful blue"
+        },
+        "secondary": {
+          "$value": "#ff602f",
+          "$type": "color",
+          "$description": "Secondary brand color - Powerful orange"
+        }
       },
-      "secondary": {
-        "$value": "#ff602f",
-        "$type": "color",
-        "$description": "Secondary brand color - Powerful orange"
-      }
-    },
-    "neutral": {
-      "darkest": {
-        "$value": "#232121",
-        "$type": "color",
-        "$description": "Darkest neutral - Near black"
-      },
-      "lightest": {
-        "$value": "#ffffff",
-        "$type": "color",
-        "$description": "Lightest neutral - Pure white"
+      "neutral": {
+        "darkest": {
+          "$value": "#232121",
+          "$type": "color",
+          "$description": "Darkest neutral - Near black"
+        },
+        "lightest": {
+          "$value": "#ffffff",
+          "$type": "color",
+          "$description": "Lightest neutral - Pure white"
+        }
       }
     }
   }

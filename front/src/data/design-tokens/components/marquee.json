@@ -1,132 +1,134 @@
 {
-  "marquee": {
-    "font": {
-      "size": {
-        "mobile": {
-          "$value": "{font.size.xs}",
-          "$type": "fontSizes",
-          "$description": "Marquee font size on mobile"
+  "components": {
+    "marquee": {
+      "font": {
+        "size": {
+          "mobile": {
+            "$value": "{foundation.font.size.xs}",
+            "$type": "fontSizes",
+            "$description": "Marquee font size on mobile"
+          },
+          "desktop": {
+            "$value": "{foundation.font.size.sm}",
+            "$type": "fontSizes",
+            "$description": "Marquee font size on desktop"
+          }
         },
-        "desktop": {
-          "$value": "{font.size.sm}",
-          "$type": "fontSizes",
-          "$description": "Marquee font size on desktop"
+        "color": {
+          "$value": "{foundation.color.neutral.lightest}",
+          "$type": "color",
+          "$description": "Marquee text color"
         }
       },
-      "color": {
-        "$value": "{color.neutral.lightest}",
-        "$type": "color",
-        "$description": "Marquee text color"
-      }
-    },
-    "background": {
-      "color": {
-        "$value": "{color.brand.primary}",
-        "$type": "color",
-        "$description": "Marquee background color"
-      }
-    },
-    "border": {
-      "radius": {
-        "mobile": {
-          "$value": "{border.radius.sm}",
-          "$type": "borderRadius",
-          "$description": "Marquee border radius on mobile"
-        },
-        "desktop": {
-          "$value": "{border.radius.md}",
-          "$type": "borderRadius",
-          "$description": "Marquee border radius on desktop"
-        }
-      }
-    },
-    "item": {
-      "gap": {
-        "$value": "{spacing.md}",
-        "$type": "spacing",
-        "$description": "Gap between marquee items"
-      }
-    },
-    "link": {
       "background": {
         "color": {
-          "hover": {
-            "$value": "{color.brand.secondary}",
-            "$type": "color",
-            "$description": "Marquee link background on hover"
-          }
+          "$value": "{foundation.color.brand.primary}",
+          "$type": "color",
+          "$description": "Marquee background color"
         }
       },
       "border": {
         "radius": {
-          "hover": {
-            "mobile": {
-              "$value": "{border.radius.sm}",
-              "$type": "borderRadius",
-              "$description": "Marquee link border radius on hover (mobile)"
-            },
-            "desktop": {
-              "$value": "{border.radius.md}",
-              "$type": "borderRadius",
-              "$description": "Marquee link border radius on hover (desktop)"
+          "mobile": {
+            "$value": "{foundation.border.radius.sm}",
+            "$type": "borderRadius",
+            "$description": "Marquee border radius on mobile"
+          },
+          "desktop": {
+            "$value": "{foundation.border.radius.md}",
+            "$type": "borderRadius",
+            "$description": "Marquee border radius on desktop"
+          }
+        }
+      },
+      "item": {
+        "gap": {
+          "$value": "{foundation.spacing.md}",
+          "$type": "spacing",
+          "$description": "Gap between marquee items"
+        }
+      },
+      "link": {
+        "background": {
+          "color": {
+            "hover": {
+              "$value": "{foundation.color.brand.secondary}",
+              "$type": "color",
+              "$description": "Marquee link background on hover"
+            }
+          }
+        },
+        "border": {
+          "radius": {
+            "hover": {
+              "mobile": {
+                "$value": "{foundation.border.radius.sm}",
+                "$type": "borderRadius",
+                "$description": "Marquee link border radius on hover (mobile)"
+              },
+              "desktop": {
+                "$value": "{foundation.border.radius.md}",
+                "$type": "borderRadius",
+                "$description": "Marquee link border radius on hover (desktop)"
+              }
+            }
+          }
+        },
+        "padding": {
+          "vertical": {
+            "hover": {
+              "mobile": {
+                "$value": "{foundation.spacing.xxs}",
+                "$type": "spacing",
+                "$description": "Marquee link vertical padding on hover (mobile)"
+              },
+              "desktop": {
+                "$value": "{foundation.spacing.xs}",
+                "$type": "spacing",
+                "$description": "Marquee link vertical padding on hover (desktop)"
+              }
+            }
+          },
+          "horizontal": {
+            "hover": {
+              "mobile": {
+                "$value": "{foundation.spacing.xs}",
+                "$type": "spacing",
+                "$description": "Marquee link horizontal padding on hover (mobile)"
+              },
+              "desktop": {
+                "$value": "{foundation.spacing.md}",
+                "$type": "spacing",
+                "$description": "Marquee link horizontal padding on hover (desktop)"
+              }
             }
           }
         }
       },
       "padding": {
-        "vertical": {
-          "hover": {
-            "mobile": {
-              "$value": "{spacing.xxs}",
-              "$type": "spacing",
-              "$description": "Marquee link vertical padding on hover (mobile)"
-            },
-            "desktop": {
-              "$value": "{spacing.xs}",
-              "$type": "spacing",
-              "$description": "Marquee link vertical padding on hover (desktop)"
-            }
-          }
-        },
         "horizontal": {
-          "hover": {
-            "mobile": {
-              "$value": "{spacing.xs}",
-              "$type": "spacing",
-              "$description": "Marquee link horizontal padding on hover (mobile)"
-            },
-            "desktop": {
-              "$value": "{spacing.md}",
-              "$type": "spacing",
-              "$description": "Marquee link horizontal padding on hover (desktop)"
-            }
+          "mobile": {
+            "$value": "{foundation.spacing.md}",
+            "$type": "spacing",
+            "$description": "Marquee horizontal padding (mobile)"
+          },
+          "desktop": {
+            "$value": "{foundation.spacing.lg}",
+            "$type": "spacing",
+            "$description": "Marquee horizontal padding (desktop)"
           }
-        }
-      }
-    },
-    "padding": {
-      "horizontal": {
-        "mobile": {
-          "$value": "{spacing.md}",
-          "$type": "spacing",
-          "$description": "Marquee horizontal padding (mobile)"
         },
-        "desktop": {
-          "$value": "{spacing.lg}",
-          "$type": "spacing",
-          "$description": "Marquee horizontal padding (desktop)"
-        }
-      },
-      "vertical": {
-        "mobile": {
-          "$value": "{spacing.xs}",
-          "$type": "spacing",
-          "$description": "Marquee vertical padding (mobile)"
-        },
-        "desktop": {
-          "$value": "{spacing.md}",
-          "$type": "spacing",
-          "$description": "Marquee vertical padding (desktop)"
+        "vertical": {
+          "mobile": {
+            "$value": "{foundation.spacing.xs}",
+            "$type": "spacing",
+            "$description": "Marquee vertical padding (mobile)"
+          },
+          "desktop": {
+            "$value": "{foundation.spacing.md}",
+            "$type": "spacing",
+            "$description": "Marquee vertical padding (desktop)"
+          }
         }
       }
     }
