@@ -68,7 +68,7 @@
   --marquee-border-radius-desktop: var(--border-radius-md);
 
   /* Popin Component */
-  --popin-background-color: var(--color-neutral-darkest);
+  --popin-background-color: var(--color-brand-primary);
   --popin-text-color: var(--color-neutral-lightest);
   --popin-text-size: var(--font-size-xs);
   --popin-padding-xy: var(--spacing-lg);

@@ -1,52 +1,54 @@
 {
-  "xs": {
-    "$value": "{xxs}*2",
-    "$type": "spacing",
-    "$description": ""
-  },
-  "md": {
-    "$value": "{xs}*2",
-    "$type": "spacing",
-    "$description": ""
-  },
-  "3xl": {
-    "$value": "{lg}*2",
-    "$type": "spacing",
-    "$description": ""
-  },
-  "4xl": {
-    "$value": "{xl}*2",
-    "$type": "spacing",
-    "$description": ""
-  },
-  "2xl": {
-    "$value": "{lg}*1.5 + {xxs}",
-    "$type": "spacing",
-    "$description": ""
-  },
-  "lg": {
-    "$value": "{sm}*2",
-    "$type": "spacing",
-    "$description": ""
-  },
-  "xxs": {
-    "$value": "4px",
-    "$type": "spacing",
-    "$description": ""
-  },
-  "xl": {
-    "$value": "{md}*2",
-    "$type": "spacing",
-    "$description": ""
-  },
-  "5xl": {
-    "$value": "{2xl}*2",
-    "$type": "spacing",
-    "$description": ""
-  },
-  "sm": {
-    "$value": "{xs}*1.5",
-    "$type": "spacing",
-    "$description": ""
+  "spacing": {
+    "xxs": {
+      "$value": "4px",
+      "$type": "spacing",
+      "$description": "Extra extra small spacing"
+    },
+    "xs": {
+      "$value": "8px",
+      "$type": "spacing",
+      "$description": "Extra small spacing"
+    },
+    "sm": {
+      "$value": "12px",
+      "$type": "spacing",
+      "$description": "Small spacing"
+    },
+    "md": {
+      "$value": "16px",
+      "$type": "spacing",
+      "$description": "Medium spacing"
+    },
+    "lg": {
+      "$value": "24px",
+      "$type": "spacing",
+      "$description": "Large spacing"
+    },
+    "xl": {
+      "$value": "32px",
+      "$type": "spacing",
+      "$description": "Extra large spacing"
+    },
+    "2xl": {
+      "$value": "40px",
+      "$type": "spacing",
+      "$description": "2x extra large spacing"
+    },
+    "3xl": {
+      "$value": "48px",
+      "$type": "spacing",
+      "$description": "3x extra large spacing"
+    },
+    "4xl": {
+      "$value": "64px",
+      "$type": "spacing",
+      "$description": "4x extra large spacing"
+    },
+    "5xl": {
+      "$value": "80px",
+      "$type": "spacing",
+      "$description": "5x extra large spacing"
+    }
   }
 }

@@ -1,46 +1,35 @@
 {
-  "font-size": {
-    "default": {
-      "$value": "16px",
-      "$type": "fontSizes",
-      "$description": ""
-    },
-    "sm": {
-      "$value": "{font-size.default}*1.618",
-      "$type": "fontSizes",
-      "$description": ""
-    },
-    "md": {
-      "$value": "{font-size.default}*1.618",
-      "$type": "fontSizes",
-      "$description": ""
-    },
-    "lg": {
-      "$value": "{font-size.md}*1.618",
-      "$type": "fontSizes",
-      "$description": "for creative title"
-    },
-    "xl": {
-      "$value": "{font-size.lg}*1.618",
-      "$type": "fontSizes",
-      "$description": "for creative title"
-    }
-  },
-  "font-family": {
-    "mono": {
-      "$value": [
-        "PP Fraktion Mono"
-      ],
-      "$type": "fontFamilies",
-      "$description": "font for mono display text like chatbot robotic style"
-    }
-  },
   "font": {
     "size": {
-      "xs": {
-        "$value": "18px",
+      "xxs": {
+        "$value": "10px",
         "$type": "fontSizes",
-        "$description": ""
+        "$description": "Extra extra small font size"
+      },
+      "xs": {
+        "$value": "16px",
+        "$type": "fontSizes",
+        "$description": "Extra small font size - base size"
+      },
+      "sm": {
+        "$value": "26px",
+        "$type": "fontSizes",
+        "$description": "Small font size"
+      },
+      "md": {
+        "$value": "42px",
+        "$type": "fontSizes",
+        "$description": "Medium font size"
+      },
+      "lg": {
+        "$value": "68px",
+        "$type": "fontSizes",
+        "$description": "Large font size - for creative titles"
+      },
+      "xl": {
+        "$value": "110px",
+        "$type": "fontSizes",
+        "$description": "Extra large font size - for creative titles"
       }
     }
   }

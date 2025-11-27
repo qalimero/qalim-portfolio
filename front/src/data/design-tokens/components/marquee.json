@@ -1,123 +1,133 @@
 {
   "marquee": {
-    "font-size": {
-      "mobile": {
-        "$value": "{font-size.xs}",
-        "$type": "fontSizes",
-        "$description": ""
+    "font": {
+      "size": {
+        "mobile": {
+          "$value": "{font.size.xs}",
+          "$type": "fontSizes",
+          "$description": "Marquee font size on mobile"
+        },
+        "desktop": {
+          "$value": "{font.size.sm}",
+          "$type": "fontSizes",
+          "$description": "Marquee font size on desktop"
+        }
       },
-      "desktop": {
-        "$value": "{font-size.sm}",
-        "$type": "fontSizes",
-        "$description": ""
-      }
-    },
-    "background-color": {
-      "brand": {
-        "$value": "{powerfull-blue}",
+      "color": {
+        "$value": "{color.neutral.lightest}",
         "$type": "color",
-        "$description": "branding bg-color"
+        "$description": "Marquee text color"
       }
     },
-    "font-color": {
-      "brand": {
-        "$value": "{white}",
+    "background": {
+      "color": {
+        "$value": "{color.brand.primary}",
         "$type": "color",
-        "$description": ""
+        "$description": "Marquee background color"
       }
     },
-    "border-radius": {
-      "desktop": {
-        "$value": "{border-radius.md}",
-        "$type": "borderRadius",
-        "$description": ""
-      },
-      "mobile": {
-        "$value": "{border-radius.sm}",
-        "$type": "borderRadius",
-        "$description": ""
+    "border": {
+      "radius": {
+        "mobile": {
+          "$value": "{border.radius.sm}",
+          "$type": "borderRadius",
+          "$description": "Marquee border radius on mobile"
+        },
+        "desktop": {
+          "$value": "{border.radius.md}",
+          "$type": "borderRadius",
+          "$description": "Marquee border radius on desktop"
+        }
       }
     },
     "item": {
       "gap": {
-        "$value": "{md}",
+        "$value": "{spacing.md}",
         "$type": "spacing",
-        "$description": ""
+        "$description": "Gap between marquee items"
       }
     },
     "link": {
-      "background-color": {
-        "hover": {
-          "$value": "{powerfull-orange}",
-          "$type": "color",
-          "$description": ""
-        }
-      },
-      "border-radius": {
-        "hover": {
-          "desktop": {
-            "$value": "{border-radius.md}",
-            "$type": "borderRadius",
-            "$description": ""
-          },
-          "mobile": {
-            "$value": "{border-radius.sm}",
-            "$type": "borderRadius",
-            "$description": ""
+      "background": {
+        "color": {
+          "hover": {
+            "$value": "{color.brand.secondary}",
+            "$type": "color",
+            "$description": "Marquee link background on hover"
           }
         }
       },
-      "paddingV": {
-        "hover": {
-          "mobile": {
-            "$value": "{xxs}",
-            "$type": "spacing",
-            "$description": ""
-          },
-          "desktop": {
-            "$value": "{xs}",
-            "$type": "spacing",
-            "$description": ""
+      "border": {
+        "radius": {
+          "hover": {
+            "mobile": {
+              "$value": "{border.radius.sm}",
+              "$type": "borderRadius",
+              "$description": "Marquee link border radius on hover (mobile)"
+            },
+            "desktop": {
+              "$value": "{border.radius.md}",
+              "$type": "borderRadius",
+              "$description": "Marquee link border radius on hover (desktop)"
+            }
           }
         }
       },
-      "paddingH": {
-        "hover": {
-          "mobile": {
-            "$value": "{xs}",
-            "$type": "spacing",
-            "$description": ""
-          },
-          "desktop": {
-            "$value": "{md}",
-            "$type": "spacing",
-            "$description": ""
+      "padding": {
+        "vertical": {
+          "hover": {
+            "mobile": {
+              "$value": "{spacing.xxs}",
+              "$type": "spacing",
+              "$description": "Marquee link vertical padding on hover (mobile)"
+            },
+            "desktop": {
+              "$value": "{spacing.xs}",
+              "$type": "spacing",
+              "$description": "Marquee link vertical padding on hover (desktop)"
+            }
+          }
+        },
+        "horizontal": {
+          "hover": {
+            "mobile": {
+              "$value": "{spacing.xs}",
+              "$type": "spacing",
+              "$description": "Marquee link horizontal padding on hover (mobile)"
+            },
+            "desktop": {
+              "$value": "{spacing.md}",
+              "$type": "spacing",
+              "$description": "Marquee link horizontal padding on hover (desktop)"
+            }
           }
         }
       }
     },
-    "paddingH": {
-      "desktop": {
-        "$value": "{lg}",
-        "$type": "spacing",
-        "$description": ""
+    "padding": {
+      "horizontal": {
+        "mobile": {
+          "$value": "{spacing.md}",
+          "$type": "spacing",
+          "$description": "Marquee horizontal padding (mobile)"
+        },
+        "desktop": {
+          "$value": "{spacing.lg}",
+          "$type": "spacing",
+          "$description": "Marquee horizontal padding (desktop)"
+        }
       },
-      "mobile": {
-        "$value": "{md}",
-        "$type": "spacing",
-        "$description": ""
-      }
-    },
-    "paddingV": {
-      "desktop": {
-        "$value": "{md}",
-        "$type": "spacing",
-        "$description": ""
-      },
-      "mobile": {
-        "$value": "{xs}",
-        "$type": "spacing",
-        "$description": ""
+      "vertical": {
+        "mobile": {
+          "$value": "{spacing.xs}",
+          "$type": "spacing",
+          "$description": "Marquee vertical padding (mobile)"
+        },
+        "desktop": {
+          "$value": "{spacing.md}",
+          "$type": "spacing",
+          "$description": "Marquee vertical padding (desktop)"
+        }
       }
     }
   }
