@@ -9,8 +9,8 @@
   // Variant: Brand (default, uses design tokens)
   &--brand {
     .popin__container {
-      background: var(--popin-background-colorBrand);
-      color: var(--popin-text-colorBrand);
+      background: var(--popin-background-color);
+      color: var(--popin-text-color);
     }
   }
 

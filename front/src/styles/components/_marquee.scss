@@ -3,11 +3,11 @@
 @use '../abstracts/mixins' as mix;
 
 .marquee {
-  background-color: var(--marquee-background-colorBrand);
-  color: var(--marquee-font-colorBrand);
-  padding: var(--marquee-padding-vDesktop) var(--marquee-padding-hDesktop);
-  border-bottom-left-radius: var(--marquee-border-radiusDesktop);
-  border-bottom-right-radius: var(--marquee-border-radiusDesktop);
+  background-color: var(--marquee-background-color);
+  color: var(--marquee-font-color);
+  padding: var(--marquee-padding-vertical-desktop) var(--marquee-padding-horizontal-desktop);
+  border-bottom-left-radius: var(--marquee-border-radius-desktop);
+  border-bottom-right-radius: var(--marquee-border-radius-desktop);
 
   // Element: marquee__content
   &__content {
@@ -15,7 +15,7 @@
     animation: marquee-scroll calc(20s / var(--marquee-speed, 1)) linear infinite;
     font-family: var(--font-family-mono);
     font-weight: bold;
-    font-size: var(--marquee-font-sizeDesktop);
+    font-size: var(--marquee-font-size-desktop);
 
     // Pause animation on hover
     &:hover {
@@ -26,13 +26,13 @@
   // Link and text styles
   &__link,
   &__text {
-    padding: var(--marquee-link-paddingVHoverDesktop) var(--marquee-link-paddingHHoverDesktop);
-    border-radius: var(--marquee-link-borderRadiusHoverDesktop);
+    padding: var(--marquee-link-padding-vertical-hover-desktop) var(--marquee-link-padding-horizontal-hover-desktop);
+    border-radius: var(--marquee-link-border-radius-hover-desktop);
   }
 
   &__link:hover,
   &__link:focus {
-    background-color: var(--marquee-link-backgroundColorHover);
+    background-color: var(--marquee-link-background-color-hover);
   }
 
   // Icon rotation animation
@@ -42,23 +42,23 @@
 
   // Modifier: marquee--mobile (responsive)
   @include mix.respond-to(medium) {
-    padding: var(--marquee-padding-vMobile) var(--marquee-padding-hMobile);
-    border-bottom-left-radius: var(--marquee-border-radiusMobile);
-    border-bottom-right-radius: var(--marquee-border-radiusMobile);
+    padding: var(--marquee-padding-vertical-mobile) var(--marquee-padding-horizontal-mobile);
+    border-bottom-left-radius: var(--marquee-border-radius-mobile);
+    border-bottom-right-radius: var(--marquee-border-radius-mobile);
 
     &__content {
-      font-size: var(--marquee-font-sizeMobile);
+      font-size: var(--marquee-font-size-mobile);
       &__item {
         &__icon {
-          font-size: var(--marquee-font-sizeMobile);
+          font-size: var(--marquee-font-size-mobile);
         }
       }
     }
 
     &__link,
     &__text {
-      padding: var(--marquee-link-paddingVHoverMobile) var(--marquee-link-paddingHHoverMobile);
-      border-radius: var(--marquee-link-borderRadiusHoverMobile);
+      padding: var(--marquee-link-padding-vertical-hover-mobile) var(--marquee-link-padding-horizontal-hover-mobile);
+      border-radius: var(--marquee-link-border-radius-hover-mobile);
     }
   }
 }
