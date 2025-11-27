@@ -2,6 +2,7 @@
 /**
  * Maintenance page - Displays maintenance message with animated marquee
  * Uses type-safe Strapi API with Zod validation
+ * ONLY shows real data from Strapi - no fallback
  */
 import BaseLayout from '../layouts/Layout.astro';
 import ThreeScene from '../components/scenes/ThreeScene.jsx';
@@ -9,34 +10,17 @@ import Marquee from '../components/ui/Marquee.astro';
 import Popin from '../components/ui/Popin.astro';
 import { getMaintenancePage } from '../lib/api/strapi';
 import { richTextToHtml } from '../lib/utils/richtext';
-import type { MaintenancePageResponse, MarqueeItem, PopinComponent } from '../lib/schemas/strapi.schema';
+import type { MarqueeItem, PopinComponent } from '../lib/schemas/strapi.schema';
 
-// Fallback data with proper typing
-const FALLBACK_DATA: MaintenancePageResponse = {
-  data: {
-    id: 0,
-    documentId: 'fallback',
-    title: "Maintenance — Qalim",
-    message: "Nous revenons bientôt",
-    marquee: [],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    publishedAt: new Date().toISOString(),
-    locale: 'en',
-  }
-};
+// Fetch maintenance data - no fallback, throws if API fails
+const maintenanceData = await getMaintenancePage();
 
-// Fetch maintenance data with type safety and validation
-let maintenanceData: MaintenancePageResponse;
-try {
-  maintenanceData = await getMaintenancePage();
-  if (import.meta.env.DEV) {
-    console.log('✓ Maintenance data fetched and validated');
-  }
-} catch (error) {
-  console.error('✗ Error fetching maintenance data:', error);
-  // Use fallback data if API fails
-  maintenanceData = FALLBACK_DATA;
+if (import.meta.env.DEV) {
+  console.log('✓ Maintenance data fetched from Strapi:', {
+    title: maintenanceData.data.title,
+    marqueeCount: maintenanceData.data.marquee?.length || 0,
+    hasPopin: !!maintenanceData.data.popinInfo?.length,
+  });
 }
 
 // Extract data with type safety

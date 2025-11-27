@@ -52,7 +52,10 @@ export default {
    */
   async bootstrap({ strapi }: { strapi: Core.Strapi }) {
     logger.info('🚀 Strapi application is starting...');
-    
+
+    // Set up public permissions for qyu-is-coming single type
+    await setupPublicPermissions(strapi);
+
     // Register health check routes in bootstrap
     strapi.server.router.get('/_health', async (ctx: any) => {
       const startTime = Date.now();
@@ -125,3 +128,49 @@ export default {
     logger.info('✓ Strapi application started successfully');
   },
 };
+
+/**
+ * Ensure public access to qyu-is-coming single type
+ */
+async function setupPublicPermissions(strapi: Core.Strapi) {
+  try {
+    // Get the public role
+    const publicRole = await strapi
+      .query('plugin::users-permissions.role')
+      .findOne({
+        where: { type: 'public' },
+      });
+
+    if (!publicRole) {
+      logger.warn('⚠️  Public role not found');
+      return;
+    }
+
+    // Check if permission already exists
+    const existingPermission = await strapi
+      .query('plugin::users-permissions.permission')
+      .findOne({
+        where: {
+          action: 'api::qyu-is-coming.qyu-is-coming.find',
+        },
+        populate: ['role'],
+      });
+
+    if (existingPermission && existingPermission.role?.id === publicRole.id) {
+      logger.info('✓ Public permission for qyu-is-coming already exists');
+      return;
+    }
+
+    // Create the permission
+    await strapi.query('plugin::users-permissions.permission').create({
+      data: {
+        action: 'api::qyu-is-coming.qyu-is-coming.find',
+        role: publicRole.id,
+      },
+    });
+
+    logger.info('✓ Created public permission for qyu-is-coming');
+  } catch (error) {
+    logger.error('✗ Error setting up public permissions:', { error });
+  }
+}
