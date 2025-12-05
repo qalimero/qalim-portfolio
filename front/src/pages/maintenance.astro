@@ -51,9 +51,9 @@ const popinContentHtml: string | undefined = popinData?.text
         </div>
 
         <!-- Three.js Scene Container (above marquee) -->
-        <!-- Use client:idle for better initial page load performance -->
+        <!-- Use client:load to ensure immediate rendering -->
         <div class="canvas-host">
-            <ThreeScene client:idle />
+            <ThreeScene client:load />
         </div>
      
             {popinData && popinContentHtml && (

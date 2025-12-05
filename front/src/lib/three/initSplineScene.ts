@@ -38,16 +38,28 @@ export function initSplineScene(
   // Load Spline card and store reference for resize handling
   let cardObject: THREE.Object3D | null = null;
   let disposeCardInteraction: (() => void) | null = null;
-  loadCard(scene, camera, renderer).then(card => {
-    cardObject = card;
-    if (card) {
-      // Initial camera fitting
-      fitCameraToCard(card, camera);
+  console.log('[initSplineScene] Starting to load card...');
+  loadCard(scene, camera, renderer)
+    .then(card => {
+      console.log('[initSplineScene] loadCard promise resolved');
+      cardObject = card;
+      if (card) {
+        console.log('[initSplineScene] Card loaded successfully, fitting camera...');
+        // Initial camera fitting
+        fitCameraToCard(card, camera);
+        console.log('[initSplineScene] Camera fitted to card');
 
-      // Add click interaction for LinkedIn link
-      disposeCardInteraction = addCardClickInteraction(card, camera, renderer);
-    }
-  });
+        // Add click interaction for LinkedIn link
+        console.log('[initSplineScene] Adding click interaction...');
+        disposeCardInteraction = addCardClickInteraction(card, camera, renderer);
+        console.log('[initSplineScene] ✓ Card fully initialized!');
+      } else {
+        console.warn('[initSplineScene] ⚠ Card is null - scene will render without 3D object');
+      }
+    })
+    .catch(error => {
+      console.error('[initSplineScene] ✘ Failed to load card:', error);
+    });
 
   // Smooth resize handling with coherent rendering
   let resizeTimeout: NodeJS.Timeout;
