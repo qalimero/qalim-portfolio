@@ -72,13 +72,11 @@
     inset-inline-start: 0;
     inset-inline-end: 0;
 
-    // Desktop: fixed with grid alignment (>= lg, 992px)
+    // Desktop: grid positioning (>= lg, 992px)
     @media (min-width: vars.$breakpoint-lg) {
-      // Grid: 12 cols × 5.75rem + 11 gutters × 1rem = 80rem total, centered
-      // Column 2-5: inset-inline-start = calc(50vw - 33.25rem)
-      inset-inline-start: calc(50vw - 33.25rem);
-      inset-inline-end: auto;
-      width: 26rem; // 4 columns + 3 gutters
+      position: static;
+      grid-column: 2 / 6; // Columns 2-5 (4 column span)
+      align-self: end;
     }
   }
 
