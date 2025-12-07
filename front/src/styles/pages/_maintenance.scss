@@ -2,9 +2,6 @@
 @use '../abstracts/variables' as vars;
 @use '../abstracts/mixins' as mix;
 
-// Grid system simple : 12 par défaut, 8 à partir de md
-
-
 .maintenance {
   position: relative; // For absolute positioning of children
   z-index: 1; // Above the background
@@ -14,57 +11,74 @@
   align-items: center;
   justify-content: center;
 
-
-.title-container {
-  position: relative;
-  z-index: 25; // Above everything
-  width: 100%;
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-.maintenance-title {
-  font-size: clamp(2rem, 5vw, 4rem);
-  font-weight: 600;
-  color: white;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  margin: 0;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-}
-
-.marquee-container {
-  position: absolute;
-  top: 0;
-  z-index: 1; // Above the 3D scene
-  width: 100%;
-}
-
-.canvas-host {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  z-index: 0; // Behind marquee and popin
-}
-
-// Ensure the 3D scene container fills its parent
-#three-container {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-// Responsive adjustments
-@include mix.respond-to(medium) {
   .title-container {
-    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 25; // Above everything
+    width: 100%;
+    margin-bottom: 2rem;
+    text-align: center;
   }
-  
+
   .maintenance-title {
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 600;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
   }
-}
+
+  .marquee-container {
+    position: absolute;
+    top: 0;
+    z-index: 1; // Above the 3D scene
+    width: 100%;
+  }
+
+  .canvas-host {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 0; // Behind marquee and popin
+  }
+
+  // Ensure the 3D scene container fills its parent
+  #three-container {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  // Popin positioning within maintenance page
+  .popin {
+    position: fixed;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    width: 100%;
+    max-width: min(400px, 100vw);
+
+    // Desktop: 12 column grid positioning (lg+, 992px)
+    @media (min-width: vars.$breakpoint-lg) {
+      // Grid: 12 columns × 5.75rem + 11 gutters × 1rem
+      // Popin: columns 2-5 (4 columns span)
+      inset-inline-start: 6.75rem; // 1 column (5.75rem) + 1 gutter (1rem)
+      width: 26rem; // 4 columns (4 × 5.75rem) + 3 gutters (3 × 1rem)
+      max-width: none;
+    }
+  }
+
+  // Responsive adjustments
+  @include mix.respond-to(medium) {
+    .title-container {
+      margin-bottom: 1.5rem;
+    }
+
+    .maintenance-title {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+    }
+  }
 }
