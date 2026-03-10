@@ -1,0 +1,53 @@
+# Decap CMS Configuration
+# Docs: https://decapcms.org/docs/
+
+backend:
+  name: github
+  repo: qalimero/qalim-portfolio # à configurer
+  branch: main
+
+# Needed for local development (run: npx decap-server)
+# local_backend: true
+
+media_folder: public/images
+public_folder: /images
+
+collections:
+  - name: site-config
+    label: Configuration du site
+    files:
+      - name: main
+        label: Page principale
+        file: src/content/site.config.json
+        fields:
+          - label: Titre de la page
+            name: title
+            widget: string
+
+          - label: Marquee — Items défilants
+            name: marquee
+            widget: list
+            fields:
+              - label: Texte
+                name: listItem
+                widget: string
+              - label: URL (optionnel)
+                name: linkItem
+                widget: string
+                required: false
+
+          - label: Popins
+            name: popinInfo
+            widget: list
+            required: false
+            fields:
+              - label: Titre
+                name: title
+                widget: string
+              - label: Contenu
+                name: text
+                widget: text
+              - label: Fermable
+                name: closable
+                widget: boolean
+                default: true

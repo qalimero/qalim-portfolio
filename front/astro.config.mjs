@@ -2,16 +2,15 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
-import node from '@astrojs/node';
-
 import icon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'server',
-  adapter: node({
-    mode: 'standalone'
-  }),
+  output: 'static',
+  trailingSlash: 'never',
+  redirects: {
+    '/': '/maintenance',
+  },
   integrations: [react(), tailwind({
     applyBaseStyles: false,
   }), icon({
@@ -22,7 +21,6 @@ export default defineConfig({
   },
   vite: {
     build: {
-      // Code splitting for better performance
       rollupOptions: {
         output: {
           manualChunks: {
@@ -32,17 +30,13 @@ export default defineConfig({
           },
         },
       },
-      // Optimize chunk size
       chunkSizeWarningLimit: 600,
-      // Enable CSS code splitting
       cssCodeSplit: true,
     },
-    // Optimize dependencies
     optimizeDeps: {
       include: ['react', 'react-dom'],
       exclude: ['@splinetool/loader'],
     },
-    // Performance optimizations
     server: {
       warmup: {
         clientFiles: [
@@ -52,7 +46,6 @@ export default defineConfig({
       },
     },
   },
-  // Image optimization
   image: {
     service: {
       entrypoint: 'astro/assets/services/sharp',
