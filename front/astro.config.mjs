@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+
 import react from '@astrojs/react';
-import tailwind from '@astrojs/tailwind';
 import icon from 'astro-icon';
 
 // https://astro.build/config
@@ -11,9 +11,7 @@ export default defineConfig({
   redirects: {
     '/': '/maintenance',
   },
-  integrations: [react(), tailwind({
-    applyBaseStyles: false,
-  }), icon({
+  integrations: [react(), icon({
     iconDir: 'src/assets/icons',
   })],
   devToolbar: {
@@ -21,21 +19,11 @@ export default defineConfig({
   },
   vite: {
     build: {
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            'three': ['three'],
-            'gsap': ['gsap'],
-            'spline': ['@splinetool/loader'],
-          },
-        },
-      },
       chunkSizeWarningLimit: 600,
       cssCodeSplit: true,
     },
     optimizeDeps: {
       include: ['react', 'react-dom'],
-      exclude: ['@splinetool/loader'],
     },
     server: {
       warmup: {
