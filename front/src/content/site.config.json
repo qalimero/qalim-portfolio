@@ -1,0 +1,17 @@
+{
+  "title": "Qyu Is Coming",
+  "marquee": [
+    { "listItem": "Bientôt disponible", "linkItem": null },
+    { "listItem": "Coming soon", "linkItem": null },
+    { "listItem": "En cours de création", "linkItem": null },
+    { "listItem": "Portfolio", "linkItem": null },
+    { "listItem": "Développeur créatif", "linkItem": null }
+  ],
+  "popinInfo": [
+    {
+      "title": "Bienvenue",
+      "text": "Bonjour et bienvenue ! Ce site est en cours de construction. Revenez bientôt pour découvrir mon portfolio.",
+      "closable": true
+    }
+  ]
+}

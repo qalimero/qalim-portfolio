@@ -1,73 +1,49 @@
 ---
 /**
  * Maintenance page - Displays maintenance message with animated marquee
- * Uses type-safe Strapi API with Zod validation
- * ONLY shows real data from Strapi - no fallback
+ * Content managed via src/content/site.config.json (editable via Decap CMS)
  */
+import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/Layout.astro';
 import ThreeScene from '../components/scenes/ThreeScene.jsx';
 import Marquee from '../components/ui/Marquee.astro';
 import Popin from '../components/ui/Popin.astro';
-import { getMaintenancePage } from '../lib/api/strapi';
-import { richTextToHtml } from '../lib/utils/richtext';
-import type { MarqueeItem, PopinComponent } from '../lib/schemas/strapi.schema';
 
-// Fetch maintenance data - no fallback, throws if API fails
-const maintenanceData = await getMaintenancePage();
+const entry = await getEntry('siteConfig', 'main');
+if (!entry) throw new Error('Site config not found: src/content/site.config.json');
 
-if (import.meta.env.DEV) {
-  console.log('✓ Maintenance data fetched from Strapi:', {
-    title: maintenanceData.data.title,
-    marqueeCount: maintenanceData.data.marquee?.length || 0,
-    hasPopin: !!maintenanceData.data.popinInfo?.length,
-  });
-}
-
-// Extract data with type safety
-const marqueeItems: MarqueeItem[] = maintenanceData.data.marquee || [];
-const pageTitle: string = maintenanceData.data.title;
-
-// Extract popin data from maintenance page (first popin in the array)
-const popinData: PopinComponent | undefined = maintenanceData.data.popinInfo?.[0];
-
-// Convert popin text (RichText blocks) to HTML
-const popinContentHtml: string | undefined = popinData?.text
-  ? richTextToHtml(popinData.text)
-  : undefined;
-
+const { title, marquee, popinInfo } = entry.data;
+const popin = popinInfo?.[0];
 ---
 
 <BaseLayout
-    title={pageTitle}
-    description="Retour très bientôt."
-    bodyClass="page-maintenance"
-    >
+  title={title}
+  description="Retour très bientôt."
+  bodyClass="page-maintenance"
+>
 
-    <section class="maintenance">
-        <!-- Marquee content (above background) -->
-        <div class="marquee-container">
-          <!-- Display marquees from maintenance page data -->
-          <Marquee items={marqueeItems} />
-        </div>
+  <section class="maintenance">
 
-        <!-- Three.js Scene Container (above marquee) -->
-        <!-- Use client:load to ensure immediate rendering -->
-        <div class="canvas-host">
-            <ThreeScene client:load />
-        </div>
-     
-            {popinData && popinContentHtml && (
-              <Popin
-                id="maintenance-popin"
-                title={popinData.title}
-                closeable={popinData.closable}
-                autoOpen={true}
-              >
-                <div set:html={popinContentHtml} />
-              </Popin>
-            )}
+    {popin && (
+      <Popin
+        id="maintenance-popin"
+        title={popin.title}
+        closeable={popin.closable}
+        autoOpen={true}
+      >
+        <p>{popin.text}</p>
+      </Popin>
+    )}
 
-        
-        
-    </section>
+    <!-- Marquee content -->
+    <div class="marquee-container">
+      <Marquee items={marquee} />
+    </div>
+
+    <!-- Three.js Scene -->
+    <div class="canvas-host">
+      <ThreeScene client:load />
+    </div>
+
+  </section>
 </BaseLayout>

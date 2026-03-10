@@ -4,7 +4,7 @@
  * Type-safe props without runtime validation to avoid SSR/client issues
  */
 import { Icon } from 'astro-icon/components';
-import type { MarqueeItem } from '../../lib/schemas/strapi.schema';
+import type { MarqueeItem } from '../../content/config';
 
 // Props interface (type-only, no runtime validation)
 export interface Props {
@@ -37,7 +37,7 @@ if (import.meta.env.DEV && displayItems.length === 0) {
 <div class={`marquee ${className} sticky overflow-hidden whitespace-nowrap w-full box-border relative z-[1]`} data-direction={direction} style={`--marquee-speed: ${speed};`}>
   <ul class="marquee__content inline-block pl-full list-none m-0 antialiased">
     {displayItems.map((item, index) => (
-      <li class="inline-flex shrink-0 whitespace-nowrap marquee__content__item" key={`${index}`}>
+      <li class="inline-flex shrink-0 whitespace-nowrap marquee__content__item">
         {item.linkItem ? (
           <a
             href={item.linkItem}

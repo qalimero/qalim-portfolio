@@ -6,13 +6,6 @@ import { z } from 'zod';
  * Ensures all required env vars are present and valid at build/runtime
  */
 const envSchema = z.object({
-  // Strapi API configuration
-  STRAPI_URL: z
-    .string()
-    .url()
-    .default('http://localhost:1337')
-    .describe('Strapi backend API URL'),
-
   // Public site configuration
   PUBLIC_SITE_URL: z
     .string()
@@ -44,7 +37,6 @@ function validateEnv(): z.infer<typeof envSchema> {
 
   try {
     _env = envSchema.parse({
-      STRAPI_URL: import.meta.env.STRAPI_URL,
       PUBLIC_SITE_URL: import.meta.env.PUBLIC_SITE_URL,
       NODE_ENV: import.meta.env.NODE_ENV,
       PROD: import.meta.env.PROD,
@@ -54,7 +46,6 @@ function validateEnv(): z.infer<typeof envSchema> {
     console.error('Environment validation error:', error);
     // Return defaults on error to prevent app crash
     return {
-      STRAPI_URL: 'http://localhost:1337',
       NODE_ENV: 'development',
     } as z.infer<typeof envSchema>;
   }
