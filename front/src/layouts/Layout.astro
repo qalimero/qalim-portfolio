@@ -1,6 +1,5 @@
 ---
 import '../styles/main.scss';
-//import { ViewTransitions } from 'astro:transitions';
 
 interface Props {
 	title?: string;
@@ -57,30 +56,9 @@ const ogImageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
 	<meta property="twitter:image" content={ogImageUrl} />
 
 	<!-- DNS Prefetch for external resources -->
-	<link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-	<link rel="dns-prefetch" href="https://fonts.gstatic.com" />
 	<link rel="dns-prefetch" href="https://prod.spline.design" />
 
-	<!-- Fonts with optimized loading -->
-	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-	<link
-		href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-		rel="stylesheet"
-		media="print"
-		onload="this.media='all'"
-	/>
-	<noscript>
-		<link
-			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-			rel="stylesheet"
-		/>
-	</noscript>
-
-	<!-- Transitions de page -->
-	<!--<ViewTransitions />-->
-
-        <!-- Slot pour des styles ou scripts supplémentaires -->
+	<!-- Slot pour des styles ou scripts supplémentaires -->
         <slot name="head" />
 </head>
 
@@ -105,7 +83,5 @@ const ogImageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
 	</script>
 )}
 
-<!-- Scripts globaux -->
-<!--<script src="/scripts/main.js" defer></script>-->
 </body>
 </html>

@@ -16,10 +16,6 @@
 // 5. Pages - Page-specific styles
 @use 'pages';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 // Design tokens - Available globally in all SCSS files
 @import './tokens/tokens.css';
 

@@ -1,8 +1,13 @@
 // Marquee Component Styles
-// Only styles that cannot be done with Tailwind utilities
 @use '../abstracts/mixins' as mix;
 
 .marquee {
+  position: sticky;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 1;
   background-color: var(--marquee-background-color);
   color: var(--marquee-font-color);
   padding: var(--marquee-padding-vertical-desktop) var(--marquee-padding-horizontal-desktop);
@@ -11,6 +16,12 @@
 
   // Element: marquee__content
   &__content {
+    display: inline-block;
+    padding-left: 100%;
+    list-style: none;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     // Infinite scroll animation
     animation: marquee-scroll calc(20s / var(--marquee-speed, 1)) linear infinite;
     font-family: var(--font-family-mono);
@@ -21,23 +32,49 @@
     &:hover {
       animation-play-state: paused;
     }
+
+    &__item {
+      display: inline-flex;
+      flex-shrink: 0;
+      white-space: nowrap;
+
+      &__icon {
+        flex-shrink: 0;
+        animation: icon-rotate 8s linear infinite;
+      }
+
+      &__text {
+        letter-spacing: -0.05em;
+      }
+    }
   }
 
-  // Link and text styles
-  &__link,
-  &__text {
+  // Link styles
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    color: inherit;
+    text-decoration: underline;
+    transition: all 300ms ease-in-out;
     padding: var(--marquee-link-padding-vertical-hover-desktop) var(--marquee-link-padding-horizontal-hover-desktop);
     border-radius: var(--marquee-link-border-radius-hover-desktop);
+
+    &:hover,
+    &:focus {
+      background-color: var(--marquee-link-background-color-hover);
+    }
   }
 
-  &__link:hover,
-  &__link:focus {
-    background-color: var(--marquee-link-background-color-hover);
-  }
-
-  // Icon rotation animation
-  &__content__item__icon {
-    animation: icon-rotate 8s linear infinite;
+  // Text (non-link) styles
+  &__text {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    padding: var(--marquee-link-padding-vertical-hover-desktop) var(--marquee-link-padding-horizontal-hover-desktop);
+    border-radius: var(--marquee-link-border-radius-hover-desktop);
   }
 
   // Modifier: marquee--mobile (responsive)

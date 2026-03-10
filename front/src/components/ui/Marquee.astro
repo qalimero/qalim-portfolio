@@ -34,24 +34,24 @@ if (import.meta.env.DEV && displayItems.length === 0) {
 }
 ---
 
-<div class={`marquee ${className} sticky overflow-hidden whitespace-nowrap w-full box-border relative z-[1]`} data-direction={direction} style={`--marquee-speed: ${speed};`}>
-  <ul class="marquee__content inline-block pl-full list-none m-0 antialiased">
+<div class={`marquee ${className}`} data-direction={direction} style={`--marquee-speed: ${speed};`}>
+  <ul class="marquee__content">
     {displayItems.map((item, index) => (
-      <li class="inline-flex shrink-0 whitespace-nowrap marquee__content__item">
+      <li class="marquee__content__item">
         {item.linkItem ? (
           <a
             href={item.linkItem}
             target="_blank"
             rel="noopener noreferrer"
-            class="marquee__link inline-flex items-center gap-2 uppercase text-inherit underline transition-all duration-300 ease-in-out"
+            class="marquee__link"
           >
-            <Icon class="shrink-0 marquee__content__item__icon" name="shuriken"/>
-            <span class="tracking-tighter">{item.listItem}</span>
+            <Icon class="marquee__content__item__icon" name="shuriken"/>
+            <span class="marquee__content__item__text">{item.listItem}</span>
           </a>
         ) : (
-          <span class="marquee__text inline-flex items-center gap-2 uppercase">
-            <Icon class=" shrink-0 marquee__content__item__icon" name="shuriken"/>
-            <span class="tracking-tighter">{item.listItem}</span>
+          <span class="marquee__text">
+            <Icon class="marquee__content__item__icon" name="shuriken"/>
+            <span class="marquee__content__item__text">{item.listItem}</span>
           </span>
         )}
       </li>

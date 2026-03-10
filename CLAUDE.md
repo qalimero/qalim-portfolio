@@ -4,128 +4,137 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Portfolio application ("Qyu Is Coming") — Astro static frontend. Displays a maintenance/coming-soon page with a Three.js/Spline 3D scene and a CMS-driven popin. Content is managed via Decap CMS (GitHub-connected), stored in `src/content/site.config.json`.
+Portfolio application ("Qyu Is Coming") — monorepo with an Astro SSR frontend and a Strapi v5 headless CMS backend. Currently displays a maintenance/coming-soon page with a Three.js/Spline 3D scene and CMS-driven popins.
 
-Node version: **v22.14.0** (see `.nvmrc`). All commands run from `front/`.
+Node version: **v22.14.0** (see `.nvmrc`).
 
 ---
 
 ## Commands
 
+All commands must be run from the respective subdirectory unless stated otherwise.
+
+### Frontend (`cd front/`)
+
 ```bash
-npm run dev           # Astro dev server (http://localhost:4321)
-npm run build         # Static build → dist/
-npm run preview       # Preview built output
-npm run type-check    # TypeScript + Astro type checking (astro check)
-npm run build:tokens  # Compile design tokens via Style Dictionary
-npm run tokens        # Run token generation script (generate-tokens.js)
+npm run dev          # Astro dev server (http://localhost:4321)
+npm run build        # Production build
+npm run preview      # Preview production build
+npm run type-check   # TypeScript + Astro type checking (astro check)
+npm run build:tokens # Compile design tokens via Style Dictionary
+npm run tokens       # Run token generation script (generate-tokens.js)
+npm run security:check # Bundle security audit
 ```
 
-### Linting
-
-Biome is used instead of ESLint/Prettier:
+### Backend (`cd backend/`)
 
 ```bash
+npm run develop      # Strapi dev server with auto-reload (http://localhost:1337)
+npm run build        # Build Strapi admin panel
+npm run start        # Start in production mode
+npm run console      # Node REPL with Strapi context
+```
+
+### Linting & Formatting
+
+Biome is used instead of ESLint/Prettier (frontend only):
+
+```bash
+# From front/
 npx biome check .           # Lint + format check
 npx biome check --write .   # Auto-fix
-```
-
-### Decap CMS (local editing)
-
-```bash
-npx decap-server   # Start local CMS backend (then uncomment local_backend in public/admin/config.yml)
 ```
 
 ---
 
 ## Architecture
 
-### Project Structure
+### Monorepo Structure
 
 ```
 quentin/
-└── front/              # Astro static frontend (the only project)
-    ├── src/
-    │   ├── content/    # Content collections
-    │   │   ├── config.ts          # Collection schemas (Zod)
-    │   │   └── site.config.json   # All editable site content
-    │   ├── pages/
-    │   │   └── maintenance.astro  # Only routed page
-    │   ├── components/
-    │   │   ├── scenes/ThreeScene.jsx   # Three.js/Spline scene (React, client:load)
-    │   │   └── ui/                    # Popin.astro, Marquee.astro
-    │   ├── layouts/Layout.astro
-    │   ├── lib/
-    │   │   ├── env.ts             # Lazy Zod-validated env vars
-    │   │   └── three/             # createRenderer, createCamera, initSplineScene, loadCard
-    │   ├── styles/                # SCSS + BEM
-    │   │   └── tokens/            # Compiled CSS custom properties
-    │   ├── data/design-tokens/    # W3C DTCG JSON tokens → compiled via Style Dictionary
-    │   └── middleware.ts          # Request logging, security headers, maintenance redirect
-    └── public/
-        └── admin/                 # Decap CMS (index.html + config.yml)
+├── front/       # Astro frontend (SSR, Node adapter)
+└── backend/     # Strapi v5 CMS
 ```
+
+### Frontend (`front/src/`)
+
+- **`pages/`** — Astro pages (`index.astro`, `maintenance.astro`). Pages fetch CMS data server-side at request time.
+- **`components/ui/`** — Reusable Astro components (`Popin.astro` using `<dialog>`, `Marquee.astro`).
+- **`layouts/`** — Page wrappers (`Layout.astro`).
+- **`lib/api/strapi.ts`** — Strapi API client using `@strapi/client` with in-memory caching (5-min TTL) and Zod validation. Main functions: `getMaintenancePage()`, `fetchStrapiData<T>()`, `clearStrapiCache()`.
+- **`lib/schemas/strapi.schema.ts`** — Zod schemas for all API responses. **Always update schemas when Strapi content types change.**
+- **`lib/three/`** — Three.js scene setup: `createRenderer.ts`, `createCamera.ts`, `initSplineScene.ts`, `loadCard.ts`. Includes adaptive pixel ratio and FPS-based quality adjustments.
+- **`lib/env.ts`** — Lazy-validated env via Zod. Access env vars through this module, not `import.meta.env` directly.
+- **`styles/`** — SCSS with BEM methodology, organized by `base/`, `components/`, `layouts/`, `pages/`, `tokens/`.
+- **`data/design-tokens/`** — W3C DTCG-format JSON token files. Compiled to CSS variables and a Tailwind theme export via Style Dictionary.
+
+### Backend (`backend/src/`)
+
+- **`api/`** — Strapi content types: `qyu-is-coming` (single type for maintenance page), `popin`, `health`.
+- **`middlewares/security.ts`** — Rate limiting (koa-ratelimit) + Winston request logging.
+- **`lib/env.ts`** — Eagerly validated env at startup (throws if invalid).
+- **`config/`** — Strapi configuration files (`database.ts`, `server.ts`, `middlewares.ts`, etc.).
 
 ### Data Flow
 
 ```
-src/content/site.config.json
-  → Astro content collection (file() loader, Zod-validated)
-  → getEntry('siteConfig', 'main') in maintenance.astro
-  → Static HTML at build time
+Strapi CMS → REST API → front/src/lib/api/strapi.ts (cache + Zod) → Astro pages (SSR) → HTML
 ```
 
-Edited via Decap CMS at `/admin/` — saves directly to `site.config.json` in the GitHub repo, triggering a rebuild.
-
-### Content Collection
-
-Defined in `src/content/config.ts` with `file()` loader (Astro 5 content layer). The JSON is a flat object; the loader wraps it as entry `id: 'main'`. `MarqueeItem` type is exported from `config.ts` and used by `Marquee.astro`.
-
-To change the content schema:
-1. Update `config.ts` (Zod schema)
-2. Update `site.config.json` to match
-3. Update `public/admin/config.yml` (Decap CMS fields)
-
-### Routing
-
-`/` redirects to `/maintenance` via `redirects` in `astro.config.mjs`. `maintenance.astro` is the only real page. `output: 'static'` — all pages pre-rendered at build time.
-
-### Middleware (`src/middleware.ts`)
-
-Runs at request time (dev server / preview). Handles:
-- Dev request logging
-- `PUBLIC_MAINTENANCE_MODE` redirect to `/maintenance`
-- Security response headers (X-Frame-Options, CSP-adjacent headers)
+Astro runs in `output: 'server'` mode with the Node.js standalone adapter — all pages are server-rendered on each request (no static generation by default).
 
 ### Styling Architecture
 
-- **SCSS + BEM** — component styles in `styles/components/`, page styles in `styles/pages/`
-- **Tailwind CSS** with DaisyUI — `applyBaseStyles: false` to avoid conflicts with SCSS resets
-- **Design tokens** — W3C DTCG JSON in `src/data/design-tokens/` → compiled to CSS vars in `styles/tokens/` and a Tailwind theme export via Style Dictionary
+- **SCSS + BEM** for component/page styles
+- **Tailwind CSS** (utility classes, with DaisyUI for component themes)
+- **Design tokens** defined in JSON → compiled to CSS custom properties in `styles/tokens/`
+- Tailwind is configured with `applyBaseStyles: false` to avoid conflicts with custom SCSS resets
+
+### React in Astro
+
+React components use `client:idle` (or similar) directives for progressive hydration. Server-side Astro components are preferred; React is used only where interactivity is needed.
 
 ### Vite / Build
 
-Three.js, GSAP, and Spline are split into named manual chunks in `astro.config.mjs` to optimize caching.
+Heavy libraries (Three.js, GSAP, Spline) are split into named manual chunks (`three`, `gsap`, `spline`) to optimize caching. Chunk size warning limit is 600 KB.
 
 ---
 
 ## Environment Variables
 
+### Frontend (`.env` in `front/`)
+
 ```
-# front/.env
-PUBLIC_MAINTENANCE_MODE=true   # Redirects all routes → /maintenance via middleware
-PUBLIC_SITE_URL=               # Optional canonical URL
+STRAPI_URL=http://127.0.0.1:1337
+PUBLIC_MAINTENANCE_MODE=true
+```
+
+### Backend (`.env` in `backend/`, see `.env.example`)
+
+```
+HOST=0.0.0.0
+PORT=1337
+APP_KEYS=...
+API_TOKEN_SALT=...
+ADMIN_JWT_SECRET=...
+JWT_SECRET=...
+DATABASE_CLIENT=sqlite
+DATABASE_FILENAME=.tmp/data.db
+CLIENT_URL=http://localhost:4321
+RATE_LIMIT_MAX=100
+RATE_LIMIT_DURATION=60000
 ```
 
 ---
 
 ## Key Conventions
 
-- **Content edits:** Always go through `src/content/site.config.json`. Do not hardcode content in components or pages.
-- **Env vars:** Access via `front/src/lib/env.ts`, not `import.meta.env` directly.
-- **Types:** `MarqueeItem` and collection schemas live in `src/content/config.ts`.
-- **Styling:** BEM for SCSS class names. No style logic in pages — use component/page SCSS files.
-- **Components:** Reuse existing components before creating new ones.
-- **Documentation:** Single source of documentation named `docs`. Never create multiple documentation files; delete any documentation file not named `docs`.
-- **Commits:** Conventional commits (`feat:`, `fix:`, `refactor:`, `docs:`).
-- **Linting:** Biome only (no ESLint).
+- **Type safety:** Use Zod schemas for all Strapi API responses. Add/update schemas in `front/src/lib/schemas/strapi.schema.ts` when content types change.
+- **API access:** Always go through `front/src/lib/api/strapi.ts`; don't call `@strapi/client` directly from pages.
+- **Env vars:** Access via the `env` module (`front/src/lib/env.ts` or `backend/src/lib/env.ts`), not raw `process.env` / `import.meta.env`.
+- **Styling:** Follow BEM for SCSS class names. Page-specific styles go in `styles/pages/`, component styles in `styles/components/`.
+- **Commits:** Use conventional commits (`feat:`, `fix:`, `refactor:`, `docs:`).
+- **Linting:** Biome (frontend). No ESLint config.
+- **Create reusable component:** re use component instead duplicating code
+- **Create single source of documentation:** one source of documentation in folder /docs about the workflow of the project and how it works, never create multiple documentation files and delete each documentation files which not in folder /docs
