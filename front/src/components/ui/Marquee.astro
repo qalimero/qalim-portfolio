@@ -4,7 +4,7 @@
  * Type-safe props without runtime validation to avoid SSR/client issues
  */
 import { Icon } from 'astro-icon/components';
-import type { MarqueeItem } from '../../content/config';
+import type { MarqueeItem } from '../../content.config.ts';
 
 // Props interface (type-only, no runtime validation)
 export interface Props {
@@ -27,11 +27,6 @@ const {
 // Support both new items format and legacy text format
 // Keep the full item objects instead of just the text
 const displayItems: MarqueeItem[] = items || (text ? [{ listItem: text, linkItem: null }] : []);
-
-// Validate display items (development only)
-if (import.meta.env.DEV && displayItems.length === 0) {
-  console.warn('Marquee: No items to display');
-}
 ---
 
 <div class={`marquee ${className}`} data-direction={direction} style={`--marquee-speed: ${speed};`}>
@@ -41,6 +36,7 @@ if (import.meta.env.DEV && displayItems.length === 0) {
         {item.linkItem ? (
           <a
             href={item.linkItem}
+            title={item.linkTitle}
             target="_blank"
             rel="noopener noreferrer"
             class="marquee__link"
@@ -49,10 +45,10 @@ if (import.meta.env.DEV && displayItems.length === 0) {
             <span class="marquee__content__item__text">{item.listItem}</span>
           </a>
         ) : (
-          <span class="marquee__text">
+          <p class="marquee__text">
             <Icon class="marquee__content__item__icon" name="shuriken"/>
             <span class="marquee__content__item__text">{item.listItem}</span>
-          </span>
+          </p>
         )}
       </li>
     ))}

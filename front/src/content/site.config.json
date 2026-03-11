@@ -1,11 +1,28 @@
 {
   "title": "Qyu Is Coming",
   "marquee": [
-    { "listItem": "Bientôt disponible", "linkItem": null },
-    { "listItem": "Coming soon", "linkItem": null },
-    { "listItem": "En cours de création", "linkItem": null },
-    { "listItem": "Portfolio", "linkItem": null },
-    { "listItem": "Développeur créatif", "linkItem": null }
+    { "listItem": "soon available", "linkItem": null, "linkTitle": null },
+
+    {
+      "listItem": "Accessibility expert - RGAA/RAWEB/WCAG",
+      "linkItem": null,
+      "linkTitle": null
+    },
+    {
+      "listItem": "linkedin",
+      "linkTitle": "linkedin ouvre un nouvel onglet vers linkedin",
+      "linkItem": "https://www.linkedin.com/in/quentin-serda/"
+    },
+    {
+      "listItem": "Some arts",
+      "linkTitle": "instagram ouvre un nouvel onglet vers instagram",
+      "linkItem": "https://www.instagram.com/_qalim/"
+    },
+    {
+      "listItem": "bric-à-brac technologique",
+      "linkItem": null,
+      "linkTitle": null
+    }
   ],
   "popinInfo": [
     {
