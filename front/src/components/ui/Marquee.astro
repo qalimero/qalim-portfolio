@@ -26,7 +26,7 @@ const {
 
 // Support both new items format and legacy text format
 // Keep the full item objects instead of just the text
-const displayItems: MarqueeItem[] = items || (text ? [{ listItem: text, linkItem: null }] : []);
+const displayItems: MarqueeItem[] = items || (text ? [{ listItem: text, linkItem: text }] : []);
 ---
 
 <div class={`marquee ${className}`} data-direction={direction} style={`--marquee-speed: ${speed};`}>
