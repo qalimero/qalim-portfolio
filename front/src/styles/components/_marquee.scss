@@ -22,6 +22,10 @@
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    // GPU compositing for smooth animation across all browsers (incl. Safari)
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     // Infinite scroll animation
     animation: marquee-scroll calc(20s / var(--marquee-speed, 1)) linear infinite;
     font-family: var(--font-family-mono);
@@ -106,10 +110,10 @@
 // This creates a continuous infinite scroll effect
 @keyframes marquee-scroll {
   0% {
-    transform: translateX(0%);
+    transform: translate3d(0, 0, 0);
   }
   100% {
-    transform: translateX(-100%);
+    transform: translate3d(-100%, 0, 0);
   }
 }
 
@@ -117,9 +121,9 @@
 // Rotates slowly in the opposite direction of clock hands for dynamic effect
 @keyframes icon-rotate {
   0% {
-    transform: rotate(0deg);
+    transform: rotate3d(0, 0, 1, 0deg);
   }
   100% {
-    transform: rotate(-360deg);
+    transform: rotate3d(0, 0, 1, -360deg);
   }
 }
