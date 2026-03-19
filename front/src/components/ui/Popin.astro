@@ -24,6 +24,7 @@ const {
   id={id}
   class="popin popin--brand"
   aria-labelledby={title ? `${id}-title` : undefined}
+  aria-label={!title ? 'Notification' : undefined}
   aria-modal="true"
   data-auto-open={autoOpen}
 >
@@ -43,7 +44,7 @@ const {
             aria-label="Fermer la fenêtre"
             data-popin-close
           >
-            <Icon name="close" />
+              <Icon width="1.5rem"height="1.5rem" name="close" />
           </button>
         )}
       </div>
@@ -55,25 +56,30 @@ const {
     </div>
   </div>
 
-  <!-- Backdrop -->
-          
+  <!-- Backdrop — closes dialog on click -->
+  <div class="popin__backdrop" data-popin-backdrop aria-hidden="true"></div>
 </dialog>
 
 <script>
   // Initialize popin functionality
   function initPopins() {
     document.querySelectorAll<HTMLDialogElement>('.popin').forEach((dialog) => {
-      // Close button and backdrop listeners
       const closeButton = dialog.querySelector<HTMLButtonElement>('[data-popin-close]');
-      const backdrop = dialog.querySelector<HTMLElement>('[data-popin-backdrop]');
+      const backdrop    = dialog.querySelector<HTMLElement>('[data-popin-backdrop]');
 
-      closeButton?.addEventListener('click', () => dialog.close());
-      backdrop?.addEventListener('click', () => dialog.close());
+      // Restore focus to the element that triggered the dialog on close
+      const closeAndRestoreFocus = () => {
+        const trigger = (dialog as any)._trigger as HTMLElement | undefined;
+        dialog.close();
+        trigger?.focus();
+      };
 
-      // Auto-open if data-auto-open is true
+      closeButton?.addEventListener('click', closeAndRestoreFocus);
+      backdrop?.addEventListener('click', closeAndRestoreFocus);
+
+      // Auto-open if data-auto-open is true (no trigger to restore, focus stays on body)
       const autoOpen = dialog.getAttribute('data-auto-open') === 'true';
       if (autoOpen) {
-        // Use setTimeout to ensure DOM is fully ready
         setTimeout(() => {
           dialog.showModal();
         }, 100);
@@ -83,8 +89,12 @@ const {
 
   // Global API
   (window as any).Popin = {
-    open: (id: string) => {
-      (document.getElementById(id) as HTMLDialogElement)?.showModal();
+    open: (id: string, trigger?: HTMLElement) => {
+      const dialog = document.getElementById(id) as HTMLDialogElement | null;
+      if (!dialog) return;
+      // Store the trigger so focus can be restored on close
+      (dialog as any)._trigger = trigger ?? (document.activeElement as HTMLElement);
+      dialog.showModal();
     },
     close: (id: string) => {
       (document.getElementById(id) as HTMLDialogElement)?.close();

@@ -12,32 +12,32 @@
   --color-neutral-lightest: #ffffff;
 
   /* Border Radius Tokens */
-  --border-radius-sm: 1.0000rem;
-  --border-radius-md: 2.5000rem;
+  --border-radius-sm: 1rem;
+  --border-radius-md: 2.5rem;
 
   /* Typography - Font Family Tokens */
   --font-family-base: Satoshi;
   --font-family-mono: PP Fraktion Mono;
 
   /* Typography - Font Size Tokens */
-  --font-size-xxs: 0.6250rem;
-  --font-size-xs: 1.0000rem;
-  --font-size-sm: 1.6250rem;
-  --font-size-md: 2.6250rem;
-  --font-size-lg: 4.2500rem;
-  --font-size-xl: 6.8750rem;
+  --font-size-xxs: 0.625rem;
+  --font-size-xs: 1rem;
+  --font-size-sm: 1.625rem;
+  --font-size-md: 2.625rem;
+  --font-size-lg: 4.25rem;
+  --font-size-xl: 6.875rem;
 
   /* Spacing Tokens */
-  --spacing-xxs: 0.2500rem;
-  --spacing-xs: 0.5000rem;
-  --spacing-sm: 0.7500rem;
-  --spacing-md: 1.0000rem;
-  --spacing-lg: 1.5000rem;
-  --spacing-xl: 2.0000rem;
-  --spacing-2xl: 2.5000rem;
-  --spacing-3xl: 3.0000rem;
-  --spacing-4xl: 4.0000rem;
-  --spacing-5xl: 5.0000rem;
+  --spacing-xxs: 0.25rem;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 2.5rem;
+  --spacing-3xl: 3rem;
+  --spacing-4xl: 4rem;
+  --spacing-5xl: 5rem;
 
   /* ========================================
      Component-Specific Semantic Tokens
@@ -49,7 +49,7 @@
   --marquee-background-color: var(--color-brand-primary);
   --marquee-font-color: var(--color-neutral-lightest);
   --marquee-item-gap: var(--spacing-md);
-  
+
   /* Marquee - Link Hover States */
   --marquee-link-background-color-hover: var(--color-brand-secondary);
   --marquee-link-border-radius-hover-mobile: var(--border-radius-sm);
@@ -58,7 +58,7 @@
   --marquee-link-padding-vertical-hover-desktop: var(--spacing-xs);
   --marquee-link-padding-horizontal-hover-mobile: var(--spacing-xs);
   --marquee-link-padding-horizontal-hover-desktop: var(--spacing-md);
-  
+
   /* Marquee - Container Padding */
   --marquee-padding-horizontal-mobile: var(--spacing-md);
   --marquee-padding-horizontal-desktop: var(--spacing-lg);
