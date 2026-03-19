@@ -30,27 +30,60 @@ const displayItems: MarqueeItem[] = items || (text ? [{ listItem: text, linkItem
 ---
 
 <div class={`marquee ${className}`} data-direction={direction} style={`--marquee-speed: ${speed};`}>
-  <ul class="marquee__content">
-    {displayItems.map((item, index) => (
-      <li class="marquee__content__item">
-        {item.linkItem ? (
-          <a
-            href={item.linkItem}
-            title={item.linkTitle}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="marquee__link"
-          >
-            <Icon class="marquee__content__item__icon" name="shuriken"/>
-            <span class="marquee__content__item__text">{item.listItem}</span>
-          </a>
-        ) : (
-          <p class="marquee__text">
-            <Icon class="marquee__content__item__icon" name="shuriken"/>
-            <span class="marquee__content__item__text">{item.listItem}</span>
-          </p>
-        )}
-      </li>
-    ))}
-  </ul>
+  <!--
+    Two identical lists placed side-by-side inside a flex track.
+    The track animates from translateX(0) to translateX(-50%): when the
+    first list has fully scrolled out, the second is in exactly the same
+    position the first started at, making the loop invisible.
+    The duplicate list is hidden from assistive technology.
+  -->
+  <div class="marquee__track">
+    <ul class="marquee__content">
+      {displayItems.map((item) => (
+        <li class="marquee__content__item">
+          {item.linkItem ? (
+            <a
+              href={item.linkItem}
+              title={item.linkTitle}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="marquee__link"
+            >
+              <Icon class="marquee__content__item__icon" name="shuriken"/>
+              <span class="marquee__content__item__text">{item.listItem}</span>
+            </a>
+          ) : (
+            <p class="marquee__text">
+              <Icon class="marquee__content__item__icon" name="shuriken"/>
+              <span class="marquee__content__item__text">{item.listItem}</span>
+            </p>
+          )}
+        </li>
+      ))}
+    </ul>
+    <ul class="marquee__content" aria-hidden="true">
+      {displayItems.map((item) => (
+        <li class="marquee__content__item">
+          {item.linkItem ? (
+            <a
+              href={item.linkItem}
+              title={item.linkTitle}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="marquee__link"
+              tabindex="-1"
+            >
+              <Icon class="marquee__content__item__icon" name="shuriken"/>
+              <span class="marquee__content__item__text">{item.listItem}</span>
+            </a>
+          ) : (
+            <p class="marquee__text">
+              <Icon class="marquee__content__item__icon" name="shuriken"/>
+              <span class="marquee__content__item__text">{item.listItem}</span>
+            </p>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
 </div>

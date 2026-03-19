@@ -14,28 +14,34 @@
   border-bottom-left-radius: var(--marquee-border-radius-desktop);
   border-bottom-right-radius: var(--marquee-border-radius-desktop);
 
-  // Element: marquee__content
-  &__content {
-    display: inline-block;
-    padding-left: 100%;
-    list-style: none;
-    margin: 0;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    // GPU compositing for smooth animation across all browsers (incl. Safari)
+  // Track: wraps two identical content lists side-by-side.
+  // Animating the track by -50% scrolls exactly one list width, making
+  // the loop point invisible (second list ends where first list began).
+  &__track {
+    display: inline-flex;
     will-change: transform;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    // Infinite scroll animation
     animation: marquee-scroll calc(20s / var(--marquee-speed, 1)) linear infinite;
-    font-family: var(--font-family-mono);
-    font-weight: bold;
-    font-size: var(--marquee-font-size-desktop);
 
     // Pause animation on hover
     &:hover {
       animation-play-state: paused;
     }
+  }
+
+  // Element: marquee__content (one of two identical lists inside the track)
+  &__content {
+    display: inline-flex;
+    flex-shrink: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: var(--font-family-mono);
+    font-weight: bold;
+    font-size: var(--marquee-font-size-desktop);
 
     &__item {
       display: inline-flex;
@@ -104,21 +110,19 @@
   }
 }
 
-// Keyframes for truly seamless infinite marquee animation
-// Key: Animation moves from 0% to -100%
-// Content starts from right (padding-left: 100%) and scrolls completely off screen to the left
-// This creates a continuous infinite scroll effect
+// Keyframes: track moves from 0 to -50% of its total width.
+// Since the track contains two identical lists, -50% = exactly one list width.
+// The loop resets to the same visual state → no visible jump on any browser.
 @keyframes marquee-scroll {
   0% {
     transform: translate3d(0, 0, 0);
   }
   100% {
-    transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
 // Keyframes for icon rotation (counter-clockwise)
-// Rotates slowly in the opposite direction of clock hands for dynamic effect
 @keyframes icon-rotate {
   0% {
     transform: rotate3d(0, 0, 1, 0deg);
