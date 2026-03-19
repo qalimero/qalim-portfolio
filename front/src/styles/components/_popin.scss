@@ -24,9 +24,9 @@
 
   // Variant: Brand (default, uses design tokens)
   &--brand {
+    border-color: solid 1px var(--popin-background-color);
     .popin__container {
       background: var(--popin-background-color);
-      border-color: solid 1px var(--popin-background-color);
       color: var(--popin-text-color);
     }
   }
