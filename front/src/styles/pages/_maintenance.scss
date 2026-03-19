@@ -71,14 +71,13 @@
 
     // Desktop: fixed positioning aligned with grid column 2 (>= lg, 992px)
     @media (min-width: vars.$breakpoint-lg) {
-      // Calculate left position: center container + 1 column width
-      // Grid is centered with 12 columns of 5.75rem = 69rem total
-      // Left margin to center = (100vw - 69rem) / 2
-      // Plus 1 column (5.75rem) to start at column 2
-      left: calc((100vw - 80rem) / 2 + 5.75rem);
+      // Grid: 12 × 5.75rem columns + 11 × 1rem gutters = 80rem (1280px at base 16px)
+      // Centered container: (100vw - 80rem) / 2
+      // Column 2 start: col 1 (5.75rem) + gutter (1rem) = 6.75rem → 108px at 1280px
+      left: calc((100vw - 80rem) / 2 + 6.75rem);
 
-      // Width: 4 columns (2-5 inclusive)
-      width: calc(5.75rem * 7);
+      // 4 columns + 3 gutters = 4×5.75rem + 3×1rem = 26rem → 416px at 1280px
+      width: calc(5.75rem * 4 + 1rem * 3);
     }
 
   }
