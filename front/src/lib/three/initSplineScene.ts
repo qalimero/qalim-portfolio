@@ -38,27 +38,18 @@ export function initSplineScene(
   // Load Spline card and store reference for resize handling
   let cardObject: THREE.Object3D | null = null;
   let disposeCardInteraction: (() => void) | null = null;
-  console.log('[initSplineScene] Starting to load card...');
   loadCard(scene, camera, renderer)
     .then(card => {
-      console.log('[initSplineScene] loadCard promise resolved');
       cardObject = card;
       if (card) {
-        console.log('[initSplineScene] Card loaded successfully, fitting camera...');
-        // Initial camera fitting
         fitCameraToCard(card, camera);
-        console.log('[initSplineScene] Camera fitted to card');
-
-        // Add click interaction for LinkedIn link
-        console.log('[initSplineScene] Adding click interaction...');
         disposeCardInteraction = addCardClickInteraction(card, camera, renderer);
-        console.log('[initSplineScene] ✓ Card fully initialized!');
-      } else {
-        console.warn('[initSplineScene] ⚠ Card is null - scene will render without 3D object');
       }
     })
     .catch(error => {
-      console.error('[initSplineScene] ✘ Failed to load card:', error);
+      if (import.meta.env.DEV) {
+        console.error('[initSplineScene] Failed to load card:', error);
+      }
     });
 
   // Smooth resize handling with coherent rendering
@@ -144,9 +135,20 @@ export function initSplineScene(
 
   const animationId = renderer.setAnimationLoop(animate);
 
+  const handleVisibilityChange = () => {
+    if (document.hidden) {
+      renderer.setAnimationLoop(null);
+    } else {
+      renderer.setAnimationLoop(animate);
+    }
+  };
+
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+
   // Cleanup function
   const cleanup = () => {
     renderer.setAnimationLoop(null);
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
     window.removeEventListener('resize', handleResize);
     clearTimeout(resizeTimeout);
 
@@ -254,19 +256,27 @@ function addCardClickInteraction(
   renderer.domElement.addEventListener('click', handleClick);
 
   // Add visual feedback on hover
+  let rafPending = false;
+  let pendingMouseX = 0;
+  let pendingMouseY = 0;
+
   const handleMouseMove = (event: MouseEvent) => {
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    pendingMouseX = (event.clientX / window.innerWidth) * 2 - 1;
+    pendingMouseY = -(event.clientY / window.innerHeight) * 2 + 1;
 
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObject(card, true);
+    if (rafPending) return;
+    rafPending = true;
 
-    // Change cursor style based on hover
-    if (intersects.length > 0) {
-      renderer.domElement.style.cursor = 'pointer';
-    } else {
-      renderer.domElement.style.cursor = 'default';
-    }
+    requestAnimationFrame(() => {
+      rafPending = false;
+      mouse.x = pendingMouseX;
+      mouse.y = pendingMouseY;
+
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObject(card, true);
+
+      renderer.domElement.style.cursor = intersects.length > 0 ? 'pointer' : 'default';
+    });
   };
 
   renderer.domElement.addEventListener('mousemove', handleMouseMove);
