@@ -131,9 +131,9 @@ temp/
 # ===========================================
 # EDITOR FILES
 # ===========================================
-.vscode/*
-!.vscode/extensions.json
-!.vscode/settings.json
+/.vscode/*
+!/.vscode/extensions.json
+!/.vscode/settings.json
 .idea/
 *.swp
 *.swo
