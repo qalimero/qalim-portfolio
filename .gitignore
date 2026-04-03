@@ -119,11 +119,7 @@ backend/.strapi-updater.json
 backend/.strapi-cloud.json
 license.txt
 
-# ===========================================
-# DESIGN SYSTEM & TOKENS
-# ===========================================
-src/styles/tokens/
-style-dictionary-output/
+
 
 # ===========================================
 # TEMPORARY FILES
@@ -135,7 +131,9 @@ temp/
 # ===========================================
 # EDITOR FILES
 # ===========================================
-.vscode/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
 .idea/
 *.swp
 *.swo

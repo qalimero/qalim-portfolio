@@ -2,20 +2,19 @@
 // Uses modern @use syntax for proper concatenation and BEM methodology
 
 // 1. Abstracts - Variables, mixins, functions (foundation layer)
-@use 'abstracts';
+@use "abstracts";
 
 // 2. Base - Reset, typography, base elements
-@use 'base';
+@use "base";
 
 // 3. Components - Reusable UI components (BEM methodology)
-@use 'components';
+@use "components";
 
 // 4. Layouts - Page layout components
-@use 'layouts';
+@use "layouts";
 
 // 5. Pages - Page-specific styles
-@use 'pages';
+@use "pages";
 
 // Design tokens - Available globally in all SCSS files
-@import './tokens/tokens.css';
-
+@import "./tokens/tokens.css";
