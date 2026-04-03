@@ -1,0 +1,17 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=827846 to learn about workspace recommendations.
+  "recommendations": [
+    // AI assistant
+    "github.copilot",
+    "github.copilot-chat",
+    // Linting & formatting (replaces ESLint + Prettier)
+    "biomejs.biome",
+    // Astro language support
+    "astro-build.astro-vscode",
+  ],
+  "unwantedRecommendations": [
+    // Conflicts with Biome
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+  ],
+}

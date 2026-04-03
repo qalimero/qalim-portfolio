@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Portfolio application ("Qyu Is Coming") — static Astro site serving a coming-soon/maintenance page with a Three.js/Spline 3D scene. Content is managed via local JSON files editable through Decap CMS.
+Portfolio application ("qyu") — static Astro site serving a coming-soon/maintenance page with a Three.js/Spline 3D scene. Content is managed via local JSON files editable through Decap CMS.
 
 Node version: **v22.14.0** (see `.nvmrc`).
 
@@ -19,8 +19,6 @@ npm run dev          # Astro dev server (http://localhost:4321)
 npm run build        # Production build → dist/
 npm run preview      # Preview production build
 npm run type-check   # TypeScript + Astro type checking (astro check)
-npm run build:tokens # Compile design tokens via Style Dictionary
-npm run tokens       # Run token generation script (generate-tokens.js)
 ```
 
 ### Linting & Formatting
@@ -55,7 +53,6 @@ quentin/
 │   │   │   └── three/         # Three.js scene helpers (unused at build time)
 │   │   ├── middleware.ts      # Maintenance mode redirect + security headers
 │   │   ├── styles/            # SCSS (BEM), see Styling section
-│   │   └── data/design-tokens/ # W3C DTCG JSON token source files
 │   └── public/admin/          # Decap CMS admin UI
 └── netlify.toml               # Deploy config, redirects, cache/security headers
 ```
@@ -88,8 +85,7 @@ Decap CMS (`/admin`) provides a browser-based editor for `site.config.json` — 
 - **SCSS + BEM** only — no Tailwind, no utility classes
 - Entry point: `styles/main.scss`, imports all partials
 - Organized: `base/`, `components/`, `layouts/`, `pages/`, `tokens/`
-- `styles/tokens/` contains CSS custom properties compiled from design tokens
-- **Design tokens** defined as W3C DTCG JSON in `src/data/design-tokens/` → compiled to CSS variables via Style Dictionary (`npm run build:tokens`)
+- `styles/tokens/tokens.css` defines all CSS custom properties (colors, typography, spacing) — edit this file directly, it is not generated
 
 ### React in Astro
 
