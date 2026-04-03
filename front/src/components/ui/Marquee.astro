@@ -44,7 +44,7 @@ const displayItems: MarqueeItem[] = items || (text ? [{ listItem: text, linkItem
           {item.linkItem ? (
             <a
               href={item.linkItem}
-              title={item.linkTitle}
+              title={item.listItem}
               target="_blank"
               rel="noopener noreferrer"
               class="marquee__link"
@@ -67,7 +67,7 @@ const displayItems: MarqueeItem[] = items || (text ? [{ listItem: text, linkItem
           {item.linkItem ? (
             <a
               href={item.linkItem}
-              title={item.linkTitle}
+              title={item.listItem}
               target="_blank"
               rel="noopener noreferrer"
               class="marquee__link"
