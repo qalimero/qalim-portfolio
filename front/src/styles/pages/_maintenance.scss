@@ -30,13 +30,15 @@
   }
 
   .maintenance-title {
-    font-size: clamp(2rem, 5vw, 4rem);
-    font-weight: 600;
+    font-family: var(--typography-h1-font-family);
+    font-size: var(--typography-h1-font-size);
+    font-weight: var(--typography-h1-font-weight);
+    line-height: var(--typography-h1-line-height);
+    letter-spacing: var(--typography-h1-letter-spacing);
+    text-transform: var(--typography-h1-text-transform);
     color: white;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     margin: 0;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
   }
 
   .marquee-container {
@@ -89,7 +91,7 @@
     }
 
     .maintenance-title {
-      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-size: var(--typography-h2-font-size);
     }
   }
 }

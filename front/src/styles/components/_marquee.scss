@@ -40,7 +40,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-family: var(--font-family-mono);
-    font-weight: bold;
+    font-weight: var(--typography-h4-font-weight);
     font-size: var(--marquee-font-size-desktop);
 
     &__item {

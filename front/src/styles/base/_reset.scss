@@ -18,9 +18,9 @@ html {
 }
 
 body {
-  font-family: var(--font-family-base);
-  font-size: 1rem;
-  line-height: 1.6;
+  font-family: var(--typography-body-font-family);
+  font-size: var(--typography-body-font-size);
+  line-height: var(--typography-body-line-height);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
