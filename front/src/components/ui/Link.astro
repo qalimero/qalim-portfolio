@@ -1,0 +1,143 @@
+---
+/**
+ * Link Component — Accessible anchor element with button-like styling.
+ *
+ * Always renders as <a>. Designed for navigation and external links that
+ * need the same visual treatment as Button but with correct link semantics.
+ *
+ * RGAA / RAWEB compliance:
+ *  - Criterion 6.1 : every link has an explicit accessible name (label prop,
+ *    visible or sr-only — never omitted)
+ *  - Criterion 6.2 : icon/image links carry a text alternative via the label
+ *  - Criterion 6.3 : the accessible name is coherent with the link destination
+ *  - Criterion 13.2 : external links that open a new window indicate it to the
+ *    user with a sr-only "(nouvelle fenêtre)" text appended inside the <a>
+ *
+ * Shares the `.btn` CSS block for visual consistency with the Button component.
+ *
+ * Usage:
+ *   import Link from '@/components/ui/Link.astro';
+ *   import CircleTextShape from '@/components/shapes/CircleTextShape.astro';
+ *
+ *   <Link
+ *     label="Let's connect"
+ *     href="https://linkedin.com/in/quentin-serda/"
+ *     variant="shape-circle"
+ *     shape={CircleTextShape}
+ *     shapeProps={{ text: "Let's connect" }}
+ *     srOnly={true}
+ *     external={true}
+ *   />
+ */
+import { Icon } from 'astro-icon/components';
+
+export interface Props {
+  /**
+   * Text label — visible or sr-only, always provides the accessible name.
+   * RGAA 6.1: every link MUST have an explicit intitulé de lien.
+   */
+  label: string;
+  /** Link destination (required — this is a link, not a button) */
+  href: string;
+  /** Visual variant — shares Button's design tokens */
+  variant?: 'primary' | 'shape-circle';
+  /**
+   * Astro shape component for the decorative SVG background.
+   * The component receives class="btn__shape" aria-hidden="true" focusable="false".
+   */
+  // biome-ignore lint/suspicious/noExplicitAny: no stable Astro component factory type
+  shape?: any;
+  /** Additional props forwarded to the shape component */
+  shapeProps?: Record<string, unknown>;
+  /** astro-icon name for optional icon */
+  icon?: string;
+  /** Icon placement relative to label text */
+  iconPosition?: 'left' | 'right';
+  /**
+   * When true the label text is visually hidden (sr-only) but remains
+   * accessible to assistive technologies.
+   * Useful for icon-only or shape-only links where the visual design
+   * conveys the purpose to sighted users.
+   * The link still meets RGAA 6.1 — the accessible name is preserved.
+   * @default false
+   */
+  srOnly?: boolean;
+  /**
+   * External link — opens in a new tab.
+   * Automatically adds target="_blank", rel="noopener noreferrer",
+   * and a sr-only "(nouvelle fenêtre)" indication per RGAA 13.2.
+   * @default false
+   */
+  external?: boolean;
+  /**
+   * title attribute.
+   * Per RGAA, should complement (not duplicate) the accessible name.
+   * Only use when extra context is genuinely needed.
+   */
+  title?: string;
+  /** Additional CSS classes */
+  class?: string;
+}
+
+const {
+  label,
+  href,
+  variant = 'primary',
+  shape: Shape,
+  shapeProps = {},
+  icon,
+  iconPosition = 'right',
+  srOnly = false,
+  external = false,
+  title,
+  class: className = '',
+} = Astro.props;
+
+// Build HTML attributes for the <a> element
+const attrs: Record<string, string | undefined> = {};
+attrs.href = href;
+
+if (external) {
+  attrs.target = '_blank';
+  attrs.rel = 'noopener noreferrer';
+}
+
+if (title) {
+  attrs.title = title;
+}
+
+const classes = ['btn', `btn--${variant}`, className].filter(Boolean).join(' ');
+const labelClasses = ['btn__label', srOnly && 'btn__label--sr-only'].filter(Boolean).join(' ');
+---
+
+<a class={classes} {...attrs}>
+  {Shape && (
+    <Shape class="btn__shape" aria-hidden="true" focusable="false" {...shapeProps} />
+  )}
+  <span class="btn__content">
+    {icon && iconPosition === 'left' && (
+      <Icon
+        class="btn__icon"
+        name={icon}
+        aria-hidden="true"
+        focusable="false"
+        width="1em"
+        height="1em"
+      />
+    )}
+    <span class={labelClasses}>{label}</span>
+    {icon && iconPosition === 'right' && (
+      <Icon
+        class="btn__icon"
+        name={icon}
+        aria-hidden="true"
+        focusable="false"
+        width="1em"
+        height="1em"
+      />
+    )}
+    {external && (
+      <span class="btn__external-hint">{' '}(nouvelle fenêtre)</span>
+    )}
+  </span>
+</a>
