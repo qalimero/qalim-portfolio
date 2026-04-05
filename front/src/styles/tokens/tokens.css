@@ -1,131 +1,152 @@
 :root {
-	/* ========================================
+  /* ========================================
      DTCG-Compliant Design Tokens
      Following kebab-case convention for CSS
      Structure: {category}-{property}-{variant}
      ======================================== */
 
-	/* Core Color Tokens */
-	--color-brand-primary: #3200f2;
-	--color-brand-secondary: #ff602f;
-	--color-neutral-darkest: #232121;
-	--color-neutral-lightest: #ffffff;
+  /* Core Color Tokens */
+  --color-brand-primary: #3200f2;
+  --color-brand-secondary: #ff602f;
+  --color-neutral-darkest: #232121;
+  --color-neutral-lightest: #ffffff;
 
-	/* Border Radius Tokens */
-	--border-radius-sm: 1rem;
-	--border-radius-md: 2.5rem;
+  /* Border Radius Tokens */
+  --border-radius-sm: 1rem;
+  --border-radius-md: 2.5rem;
 
-	/* Typography - Font Family Tokens */
-	--font-family-base: Satoshi;
-	--font-family-mono: PP Fraktion Mono;
+  /* Typography - Font Family Tokens */
+  --font-family-base: Satoshi;
+  --font-family-mono: PP Fraktion Mono;
 
-	/* Typography - Font Size Tokens */
-	--font-size-xxs: 0.625rem;
-	--font-size-xs: 1rem;
-	--font-size-sm: 1.625rem;
-	--font-size-md: 2.625rem;
-	--font-size-lg: 4.25rem;
-	--font-size-xl: 6.875rem;
+  /* Typography - Font Size Tokens */
+  --font-size-xxs: 0.625rem;
+  --font-size-xs: 1rem;
+  --font-size-sm: 1.625rem;
+  --font-size-md: 2.625rem;
+  --font-size-lg: 4.25rem;
+  --font-size-xl: 6.875rem;
 
-	/* Spacing Tokens */
-	--spacing-xxs: 0.25rem;
-	--spacing-xs: 0.5rem;
-	--spacing-sm: 0.75rem;
-	--spacing-md: 1rem;
-	--spacing-lg: 1.5rem;
-	--spacing-xl: 2rem;
-	--spacing-2xl: 2.5rem;
-	--spacing-3xl: 3rem;
-	--spacing-4xl: 4rem;
-	--spacing-5xl: 5rem;
+  /* Spacing Tokens */
+  --spacing-xxs: 0.25rem;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 2.5rem;
+  --spacing-3xl: 3rem;
+  --spacing-4xl: 4rem;
+  --spacing-5xl: 5rem;
 
-	/* ========================================
+  /* ========================================
      Component-Specific Semantic Tokens
      ======================================== */
 
-	/* Marquee Component */
-	--marquee-font-size-mobile: var(--font-size-xs);
-	--marquee-font-size-desktop: var(--font-size-sm);
-	--marquee-background-color: var(--color-brand-primary);
-	--marquee-font-color: var(--color-neutral-lightest);
-	--marquee-item-gap: var(--spacing-md);
+  /* Marquee Component */
+  --marquee-font-size-mobile: var(--font-size-xs);
+  --marquee-font-size-desktop: var(--font-size-sm);
+  --marquee-background-color: var(--color-brand-primary);
+  --marquee-font-color: var(--color-neutral-lightest);
+  --marquee-item-gap: var(--spacing-md);
 
-	/* Marquee - Link Hover States */
-	--marquee-link-background-color-hover: var(--color-brand-secondary);
-	--marquee-link-border-radius-hover-mobile: var(--border-radius-sm);
-	--marquee-link-border-radius-hover-desktop: var(--border-radius-md);
-	--marquee-link-padding-vertical-hover-mobile: var(--spacing-xxs);
-	--marquee-link-padding-vertical-hover-desktop: var(--spacing-xs);
-	--marquee-link-padding-horizontal-hover-mobile: var(--spacing-xs);
-	--marquee-link-padding-horizontal-hover-desktop: var(--spacing-md);
+  /* Marquee - Link Hover States */
+  --marquee-link-background-color-hover: var(--color-brand-secondary);
+  --marquee-link-border-radius-hover-mobile: var(--border-radius-sm);
+  --marquee-link-border-radius-hover-desktop: var(--border-radius-md);
+  --marquee-link-padding-vertical-hover-mobile: var(--spacing-xxs);
+  --marquee-link-padding-vertical-hover-desktop: var(--spacing-xs);
+  --marquee-link-padding-horizontal-hover-mobile: var(--spacing-xs);
+  --marquee-link-padding-horizontal-hover-desktop: var(--spacing-md);
 
-	/* Marquee - Container Padding */
-	--marquee-padding-horizontal-mobile: var(--spacing-md);
-	--marquee-padding-horizontal-desktop: var(--spacing-lg);
-	--marquee-padding-vertical-mobile: var(--spacing-xs);
-	--marquee-padding-vertical-desktop: var(--spacing-md);
-	--marquee-border-radius-mobile: var(--border-radius-sm);
-	--marquee-border-radius-desktop: var(--border-radius-md);
+  /* Marquee - Container Padding */
+  --marquee-padding-horizontal-mobile: var(--spacing-md);
+  --marquee-padding-horizontal-desktop: var(--spacing-lg);
+  --marquee-padding-vertical-mobile: var(--spacing-xs);
+  --marquee-padding-vertical-desktop: var(--spacing-md);
+  --marquee-border-radius-mobile: var(--border-radius-sm);
+  --marquee-border-radius-desktop: var(--border-radius-md);
 
-	/* Popin Component */
-	--popin-background-color: var(--color-brand-primary);
-	--popin-text-color: var(--color-neutral-lightest);
-	--popin-text-size: var(--font-size-xs);
-	--popin-padding-xy: var(--spacing-lg);
-	--popin-gap-y: var(--spacing-md);
+  /* Popin Component */
+  --popin-background-color: var(--color-brand-primary);
+  --popin-text-color: var(--color-neutral-lightest);
+  --popin-text-size: var(--font-size-xs);
+  --popin-padding-xy: var(--spacing-lg);
+  --popin-gap-y: var(--spacing-md);
 
-	/* ========================================
+  /* ========================================
      Typography - Composite Tokens
      Stores all design decisions per text role.
      Structure: --typography-{role}-{property}
      Roles map to HTML semantic elements: h1–h4, body (p), label (span/small)
      ======================================== */
 
-	/* Body (p) — content reading layer, PP Fraktion Mono regular */
-	--typography-body-font-family: var(--font-family-mono);
-	--typography-body-font-size: var(--font-size-xs);
-	--typography-body-font-weight: 400;
-	--typography-body-line-height: 1.6;
-	--typography-body-letter-spacing: 0;
-	--typography-body-text-transform: none;
+  /* Body (p) — content reading layer, PP Fraktion Mono regular */
+  --typography-body-font-family: var(--font-family-mono);
+  --typography-body-font-size: var(--font-size-xs);
+  --typography-body-font-weight: 400;
+  --typography-body-line-height: 1.6;
+  --typography-body-letter-spacing: 0;
+  --typography-body-text-transform: none;
 
-	/* Label (span, small) — auxiliary / caption text */
-	--typography-label-font-family: var(--font-family-mono);
-	--typography-label-font-size: var(--font-size-xxs);
-	--typography-label-font-weight: 400;
-	--typography-label-line-height: 1.5;
-	--typography-label-letter-spacing: 0;
-	--typography-label-text-transform: none;
+  /* Label (span, small) — auxiliary / caption text */
+  --typography-label-font-family: var(--font-family-mono);
+  --typography-label-font-size: var(--font-size-xxs);
+  --typography-label-font-weight: 400;
+  --typography-label-line-height: 1.5;
+  --typography-label-letter-spacing: 0;
+  --typography-label-text-transform: none;
 
-	/* h4 — ticker label, section sub-label (Satoshi sm) */
-	--typography-h4-font-family: var(--font-family-base);
-	--typography-h4-font-size: var(--font-size-sm);
-	--typography-h4-font-weight: 700;
-	--typography-h4-line-height: 1.2;
-	--typography-h4-letter-spacing: -0.05em;
-	--typography-h4-text-transform: uppercase;
+  /* h4 — ticker label, section sub-label (Satoshi sm) */
+  --typography-h4-font-family: var(--font-family-base);
+  --typography-h4-font-size: var(--font-size-sm);
+  --typography-h4-font-weight: 700;
+  --typography-h4-line-height: 1.2;
+  --typography-h4-letter-spacing: -0.05em;
+  --typography-h4-text-transform: uppercase;
 
-	/* h3 — card title / sub-section heading (Satoshi md) */
-	--typography-h3-font-family: var(--font-family-base);
-	--typography-h3-font-size: var(--font-size-md);
-	--typography-h3-font-weight: 700;
-	--typography-h3-line-height: 1.2;
-	--typography-h3-letter-spacing: -0.02em;
-	--typography-h3-text-transform: uppercase;
+  /* h3 — card title / sub-section heading (Satoshi md) */
+  --typography-h3-font-family: var(--font-family-base);
+  --typography-h3-font-size: var(--font-size-md);
+  --typography-h3-font-weight: 700;
+  --typography-h3-line-height: 1.2;
+  --typography-h3-letter-spacing: -0.02em;
+  --typography-h3-text-transform: uppercase;
 
-	/* h2 — page section heading (Satoshi lg) */
-	--typography-h2-font-family: var(--font-family-base);
-	--typography-h2-font-size: var(--font-size-lg);
-	--typography-h2-font-weight: 700;
-	--typography-h2-line-height: 1.1;
-	--typography-h2-letter-spacing: -0.02em;
-	--typography-h2-text-transform: uppercase;
+  /* h2 — page section heading (Satoshi lg) */
+  --typography-h2-font-family: var(--font-family-base);
+  --typography-h2-font-size: var(--font-size-lg);
+  --typography-h2-font-weight: 700;
+  --typography-h2-line-height: 1.1;
+  --typography-h2-letter-spacing: -0.02em;
+  --typography-h2-text-transform: uppercase;
 
-	/* h1 — hero / main page title, display level (Satoshi xl) */
-	--typography-h1-font-family: var(--font-family-base);
-	--typography-h1-font-size: var(--font-size-xl);
-	--typography-h1-font-weight: 700;
-	--typography-h1-line-height: 1.1;
-	--typography-h1-letter-spacing: -0.03em;
-	--typography-h1-text-transform: uppercase;
+  /* h1 — hero / main page title, display level (Satoshi xl) */
+  --typography-h1-font-family: var(--font-family-base);
+  --typography-h1-font-size: var(--font-size-xl);
+  --typography-h1-font-weight: 700;
+  --typography-h1-line-height: 1.1;
+  --typography-h1-letter-spacing: -0.03em;
+  --typography-h1-text-transform: uppercase;
+
+  /* Button Component */
+  --btn-font-family: var(--font-family-base);
+  --btn-font-size: var(--font-size-xs);
+  --btn-font-weight: 700;
+  --btn-letter-spacing: -0.02em;
+  --btn-text-transform: uppercase;
+  --btn-gap: var(--spacing-xs);
+
+  /* Button — Primary variant */
+  --btn-primary-background: var(--color-brand-secondary);
+  --btn-primary-color: var(--color-neutral-lightest);
+  --btn-primary-border-radius: var(--border-radius-md);
+  --btn-primary-padding-x: var(--spacing-xl);
+  --btn-primary-padding-y: var(--spacing-md);
+
+  /* Button — Shape variant (hexagonal SVG frame) */
+  --btn-shape-fill: var(--color-brand-secondary);
+  --btn-shape-color: var(--color-neutral-lightest);
+  --btn-shape-padding-x: var(--spacing-2xl);
+  --btn-shape-padding-y: var(--spacing-lg);
 }

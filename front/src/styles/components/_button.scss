@@ -1,0 +1,134 @@
+// Button Component Styles
+@use '../abstracts/mixins' as mix;
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  // Typography from tokens
+  font-family: var(--btn-font-family);
+  font-size: var(--btn-font-size);
+  font-weight: var(--btn-font-weight);
+  letter-spacing: var(--btn-letter-spacing);
+  text-transform: var(--btn-text-transform);
+
+  // Reset
+  border: none;
+  background: none;
+  padding: 0;
+
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 200ms ease, opacity 200ms ease;
+
+  // Focus ring
+  &:focus-visible {
+    outline: 2px solid var(--color-brand-primary);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  // Disabled state
+  &[disabled],
+  &[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  // Element: wraps label + icon, sits above the decorative shape via z-index
+  &__content {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--btn-gap);
+  }
+
+  // Element: text label
+  &__label {
+    display: inline-block;
+  }
+
+  // Element: icon (sized relative to current font-size)
+  &__icon {
+    flex-shrink: 0;
+    width: 1em;
+    height: 1em;
+  }
+
+  // Element: decorative inline SVG used by the shape variant.
+  // Stretched to fill the button bounds and sits behind content via z-index.
+  &__shape {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: visible;
+    transition: transform 300ms ease;
+
+    path {
+      fill: var(--btn-shape-fill);
+      transition: fill 200ms ease;
+    }
+  }
+
+  // Variant: solid rectangle button
+  &--primary {
+    background: var(--btn-primary-background);
+    color: var(--btn-primary-color);
+    border-radius: var(--btn-primary-border-radius);
+    padding: var(--btn-primary-padding-y) var(--btn-primary-padding-x);
+
+    &:hover:not([disabled]):not([aria-disabled="true"]) {
+      opacity: 0.88;
+    }
+
+    &:active:not([disabled]):not([aria-disabled="true"]) {
+      transform: scale(0.97);
+    }
+  }
+
+  // Variant: hexagonal SVG-framed button
+  &--shape {
+    color: var(--btn-shape-color);
+    padding: var(--btn-shape-padding-y) var(--btn-shape-padding-x);
+
+    // Scale up the decorative SVG on hover
+    &:hover:not([disabled]):not([aria-disabled="true"]) {
+      .btn__shape {
+        transform: scale(1.04);
+      }
+    }
+
+    &:active:not([disabled]):not([aria-disabled="true"]) {
+      transform: scale(0.97);
+    }
+
+    // Override focus ring for shape variant (no radius, lighter outline)
+    &:focus-visible {
+      outline: 2px solid var(--color-neutral-lightest);
+      outline-offset: 6px;
+      border-radius: 0;
+    }
+  }
+
+  // Responsive: reduce padding on small screens using mobile-specific tokens
+  // with a graceful fallback to the desktop token when the mobile one is absent
+  @include mix.respond-to(medium) {
+    &--primary {
+      padding:
+        var(--btn-primary-padding-y-mobile, var(--btn-primary-padding-y))
+        var(--btn-primary-padding-x-mobile, var(--btn-primary-padding-x));
+    }
+
+    &--shape {
+      padding:
+        var(--btn-shape-padding-y-mobile, var(--btn-shape-padding-y))
+        var(--btn-shape-padding-x-mobile, var(--btn-shape-padding-x));
+    }
+  }
+}

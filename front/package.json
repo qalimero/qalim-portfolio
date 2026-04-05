@@ -32,6 +32,7 @@
     "@biomejs/biome": "2.2.4",
     "@types/node": "^24.4.0",
     "@types/three": "^0.175.0",
+    "jsdom": "^26.1.0",
     "sass": "^1.86.0",
     "vitest": "^4.1.2"
   }

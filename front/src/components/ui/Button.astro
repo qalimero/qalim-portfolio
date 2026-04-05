@@ -1,0 +1,89 @@
+---
+/**
+ * Button Component — Polymorphic button / anchor
+ * Renders as <a> when `href` is provided, otherwise as <button>.
+ * Supports two visual variants: 'primary' (default) and 'shape' (SVG hex frame).
+ */
+import { Icon } from 'astro-icon/components';
+
+export interface Props {
+  /** Visible text label — also used as accessible name */
+  label: string;
+  /** If set, renders as an anchor (<a>) */
+  href?: string;
+  /** HTML type attribute, only used when rendering as <button> */
+  type?: 'button' | 'submit' | 'reset';
+  /** Visual variant */
+  variant?: 'primary' | 'shape';
+  /** astro-icon name for optional icon */
+  icon?: string;
+  /** Icon placement relative to label text */
+  iconPosition?: 'left' | 'right';
+  /** Disabled state */
+  disabled?: boolean;
+  /** Overrides accessible name for screen readers */
+  ariaLabel?: string;
+  /** Additional CSS classes */
+  class?: string;
+}
+
+const {
+  label,
+  href,
+  type = 'button',
+  variant = 'primary',
+  icon,
+  iconPosition = 'right',
+  disabled = false,
+  ariaLabel,
+  class: className = '',
+} = Astro.props;
+
+const Tag = href ? 'a' : 'button';
+
+const attrs: Record<string, string | boolean | number | undefined> = {};
+
+if (href) {
+  attrs.href = href;
+  if (disabled) {
+    attrs['aria-disabled'] = 'true';
+    attrs.tabindex = '-1';
+  }
+} else {
+  attrs.type = type;
+  if (disabled) {
+    attrs.disabled = true;
+    attrs['aria-disabled'] = 'true';
+  }
+}
+
+if (ariaLabel) {
+  attrs['aria-label'] = ariaLabel;
+}
+
+const classes = ['btn', `btn--${variant}`, className].filter(Boolean).join(' ');
+---
+
+<Tag class={classes} {...attrs}>
+  {variant === 'shape' && (
+    <svg
+      class="btn__shape"
+      aria-hidden="true"
+      focusable="false"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 180 56"
+      preserveAspectRatio="none"
+    >
+      <path d="M 16 0 L 164 0 L 180 28 L 164 56 L 16 56 L 0 28 Z" />
+    </svg>
+  )}
+  <span class="btn__content">
+    {icon && iconPosition === 'left' && (
+      <Icon class="btn__icon" name={icon} aria-hidden="true" focusable="false" width="1em" height="1em" />
+    )}
+    <span class="btn__label">{label}</span>
+    {icon && iconPosition === 'right' && (
+      <Icon class="btn__icon" name={icon} aria-hidden="true" focusable="false" width="1em" height="1em" />
+    )}
+  </span>
+</Tag>

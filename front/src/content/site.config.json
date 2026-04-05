@@ -30,5 +30,10 @@
       "text": "Bonjour et bienvenue ! Ce site est en cours de construction. Revenez bientôt pour découvrir mon portfolio. Vous pouvez me contacter en cliquant sur ma carte !",
       "closable": true
     }
-  ]
+  ],
+  "cta": {
+    "label": "Let's connect",
+    "href": "https://www.linkedin.com/in/quentin-serda/",
+    "icon": "shuriken"
+  }
 }

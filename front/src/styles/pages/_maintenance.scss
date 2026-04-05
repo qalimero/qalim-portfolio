@@ -1,6 +1,6 @@
 // Maintenance page specific styles
-@use '../abstracts/variables' as vars;
-@use '../abstracts/mixins' as mix;
+@use "../abstracts/variables" as vars;
+@use "../abstracts/mixins" as mix;
 
 .maintenance {
   position: relative; // For absolute positioning of children
@@ -13,7 +13,6 @@
   column-gap: 1rem;
   justify-content: center;
   align-content: start;
-
 
   // Desktop: CSS Grid layout (lg+, 992px)
   @media (min-width: vars.$breakpoint-lg) {
@@ -56,6 +55,16 @@
     z-index: 0; // Behind marquee and popin
   }
 
+  // CTA button — centered over the 3D scene, above canvas and marquee
+  &__cta {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: auto;
+  }
+
   // Ensure the 3D scene container fills its parent
   #three-container {
     position: absolute;
@@ -81,7 +90,6 @@
       // 4 columns + 3 gutters = 4×5.75rem + 3×1rem = 26rem → 416px at 1280px
       width: calc(5.75rem * 4 + 1rem * 3);
     }
-
   }
 
   // Responsive adjustments
