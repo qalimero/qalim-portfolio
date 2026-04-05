@@ -13,6 +13,7 @@ export const buttonCtaSchema = z.object({
   label: z.string().min(1),
   href: z.string().optional(),
   icon: z.string().optional(),
+  shapeText: z.string().optional(),
 });
 export type ButtonCta = z.infer<typeof buttonCtaSchema>;
 

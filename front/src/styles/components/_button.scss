@@ -61,7 +61,7 @@
     height: 1em;
   }
 
-  // Element: decorative inline SVG used by the shape variant.
+  // Element: decorative inline SVG used by shape variants.
   // Stretched to fill the button bounds and sits behind content via z-index.
   &__shape {
     position: absolute;
@@ -76,6 +76,14 @@
       fill: var(--btn-shape-fill);
       transition: fill 200ms ease;
     }
+  }
+
+  // Element: text along the circular path inside the shape SVG.
+  // Only font-family is set via CSS so the token is honoured;
+  // font-size and letter-spacing stay as SVG attributes (SVG coordinate units)
+  // so they scale together with the viewBox.
+  &__shape-text {
+    font-family: var(--font-family-mono);
   }
 
   // ============================================================
@@ -97,7 +105,7 @@
   }
 
   // ============================================================
-  // Variant: SVG-framed button (shape-circle)
+  // Variant: circular SVG-framed button (shape-circle)
   // The visual background is an Astro shape component from
   // src/components/shapes/ passed via the `shape` prop.
   // It renders as <svg class="btn__shape"> — absolutely positioned
@@ -105,13 +113,18 @@
   // from shapes/ and pass it: <Button shape={MyShape} variant="shape-circle" />
   // ============================================================
   &--shape-circle {
+    // Force the button into a perfect square so the circle isn't distorted
+    aspect-ratio: 1;
+    width: var(--btn-shape-circle-size);
     color: var(--btn-shape-color);
-    padding: var(--btn-shape-padding-y) var(--btn-shape-padding-x);
+    padding: var(--btn-shape-padding-y);
+    border-radius: 50%;
+    overflow: hidden;
 
-    // Scale up the decorative SVG on hover
+    // Scale decorative SVG on hover
     &:hover:not([disabled]):not([aria-disabled="true"]) {
       .btn__shape {
-        transform: scale(1.04);
+        transform: scale(1.06);
       }
     }
 
@@ -119,17 +132,16 @@
       transform: scale(0.97);
     }
 
-    // Override focus ring for shape variant (no radius, lighter outline)
+    // Focus ring follows the circular outline
     &:focus-visible {
       outline: 2px solid var(--color-neutral-lightest);
       outline-offset: 6px;
-      border-radius: 0;
+      border-radius: 50%;
     }
   }
 
   // ============================================================
-  // Responsive: reduce padding on small screens using mobile-specific tokens
-  // with a graceful fallback to the desktop token when the mobile one is absent
+  // Responsive
   // ============================================================
   @include mix.respond-to(medium) {
     &--primary {
@@ -138,8 +150,7 @@
     }
 
     &--shape-circle {
-      padding: var(--btn-shape-padding-y-mobile, var(--btn-shape-padding-y))
-        var(--btn-shape-padding-x-mobile, var(--btn-shape-padding-x));
+      width: var(--btn-shape-circle-size-mobile, var(--btn-shape-circle-size));
     }
   }
 }

@@ -149,4 +149,5 @@
   --btn-shape-color: var(--color-neutral-lightest);
   --btn-shape-padding-x: var(--spacing-2xl);
   --btn-shape-padding-y: var(--spacing-lg);
+  --btn-shape-circle-size: 10rem;
 }

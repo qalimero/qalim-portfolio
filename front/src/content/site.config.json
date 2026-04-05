@@ -34,6 +34,7 @@
   "cta": {
     "label": "Let's connect",
     "href": "https://www.linkedin.com/in/quentin-serda/",
-    "icon": "shuriken"
+    "icon": "shuriken",
+    "shapeText": "Let's connect"
   }
 }

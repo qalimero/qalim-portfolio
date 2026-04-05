@@ -1,0 +1,80 @@
+---
+/**
+ * CircleTextShape — decorative SVG circle with adaptive circular text.
+ *
+ * The `text` prop content is automatically repeated (with " · " separators)
+ * to fill the full circumference of the circle. All text is uppercased to
+ * match the brand's visual style.
+ *
+ * Designed to be used as the `shape` prop of the Button component's
+ * shape-circle variant. All extra props are forwarded to the root <svg>
+ * so that Button can pass `aria-hidden`, `focusable`, and `class`.
+ *
+ * Usage:
+ *   import CircleTextShape from '@/components/shapes/CircleTextShape.astro';
+ *   <Button
+ *     variant="shape-circle"
+ *     shape={CircleTextShape}
+ *     shapeProps={{ text: "Let's connect" }}
+ *     label="Let's connect"
+ *   />
+ */
+
+interface Props {
+  class?: string;
+  'aria-hidden'?: 'true' | 'false';
+  focusable?: 'false' | 'true';
+  /** Text to display along the circular path. Auto-repeated to fill the circle. */
+  text?: string;
+}
+
+const { class: className = '', text = '', ...rest } = Astro.props;
+
+// Unique ID for the <defs> path — avoids DOM conflicts when multiple instances exist.
+const pathId = `circle-text-${Math.random().toString(36).slice(2, 9)}`;
+
+// Auto-repeat the text with separators to fill the full circumference.
+// Circle path radius = 75 SVG units → circumference ≈ 471 units.
+// At font-size 14 + letter-spacing 2, each character ≈ 10 units → ~47 chars fill the circle.
+const SEPARATOR = ' \u00B7 '; // " · " (middle dot)
+const textWithSep = text ? `${text}${SEPARATOR}` : '';
+const APPROX_CHARS_PER_CIRCLE = 47;
+const repeatCount = textWithSep.length > 0
+  ? Math.max(1, Math.ceil(APPROX_CHARS_PER_CIRCLE / textWithSep.length))
+  : 0;
+const displayText = textWithSep.repeat(repeatCount).toUpperCase();
+---
+
+<svg
+  class={className}
+  {...rest}
+  viewBox="0 0 200 200"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <defs>
+    <!--
+      Circular path for textPath: radius 75, centered at (100,100), clockwise.
+      Starting at the top so text reads naturally from 12-o'clock position.
+    -->
+    <path
+      id={pathId}
+      d="M 100,25 a 75,75 0 1,1 0,150 a 75,75 0 1,1 0,-150"
+    />
+  </defs>
+
+  <!-- Background circle — fills the full viewBox -->
+  <circle cx="100" cy="100" r="100" fill="var(--btn-shape-fill)" />
+
+  <!-- Circular text following the path (decorative — parent SVG is aria-hidden) -->
+  {displayText && (
+    <text
+      class="btn__shape-text"
+      fill="currentColor"
+      font-size="14"
+      font-weight="700"
+      letter-spacing="2"
+    >
+      <textPath href={`#${pathId}`}>{displayText}</textPath>
+    </text>
+  )}
+</svg>

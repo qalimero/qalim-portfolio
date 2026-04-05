@@ -142,6 +142,27 @@ describe("buttonCtaSchema", () => {
     expect(result.success).toBe(true);
   });
 
+  it("accepts label + href + icon + shapeText", () => {
+    const result = buttonCtaSchema.safeParse({
+      label: "Let's connect",
+      href: "https://example.com",
+      icon: "shuriken",
+      shapeText: "Let's connect",
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.shapeText).toBe("Let's connect");
+    }
+  });
+
+  it("accepts label without shapeText (optional field)", () => {
+    const result = buttonCtaSchema.safeParse({ label: "Go" });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.shapeText).toBeUndefined();
+    }
+  });
+
   it("accepts label with undefined href (optional field)", () => {
     const result = buttonCtaSchema.safeParse({
       label: "Let's connect",
@@ -269,25 +290,46 @@ describe("Button — shape variant", () => {
 
 /**
  * Builds a shape-circle button that mirrors how Button.astro renders when a
- * shape component is passed: the component is called with class="btn__shape",
- * aria-hidden="true", and focusable="false". We simulate this by creating the
- * SVG directly — Vitest cannot render .astro components.
+ * CircleTextShape component is passed via the `shape` prop and text content
+ * is forwarded via `shapeProps`. We simulate this by creating the SVG
+ * directly — Vitest cannot render .astro components.
  */
-function buildShapeComponentButton(label = "Let's connect"): HTMLElement {
+function buildShapeComponentButton(
+  label = "Let's connect",
+  shapeText?: string,
+): HTMLElement {
   const el = document.createElement("button") as HTMLElement;
   el.className = "btn btn--shape-circle";
   (el as HTMLButtonElement).type = "button";
 
-  // Simulates: <Shape class="btn__shape" aria-hidden="true" focusable="false" />
+  // Simulates: <Shape class="btn__shape" aria-hidden="true" focusable="false" {...shapeProps} />
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("class", "btn__shape");
   svg.setAttribute("aria-hidden", "true");
   svg.setAttribute("focusable", "false");
-  svg.setAttribute("viewBox", "0 0 180 56");
-  svg.setAttribute("preserveAspectRatio", "none");
-  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  path.setAttribute("d", "M 16 0 L 164 0 L 180 28 L 164 56 L 16 56 L 0 28 Z");
-  svg.appendChild(path);
+  svg.setAttribute("viewBox", "0 0 200 200");
+
+  // Background circle
+  const circle = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "circle",
+  );
+  circle.setAttribute("cx", "100");
+  circle.setAttribute("cy", "100");
+  circle.setAttribute("r", "100");
+  svg.appendChild(circle);
+
+  // Circular text (only when shapeText is provided via shapeProps)
+  if (shapeText) {
+    const textEl = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "text",
+    );
+    textEl.setAttribute("class", "btn__shape-text");
+    textEl.textContent = shapeText.toUpperCase();
+    svg.appendChild(textEl);
+  }
+
   el.appendChild(svg);
 
   const content = document.createElement("span");
@@ -320,12 +362,6 @@ describe("Button — shape component contract", () => {
     expect(svg?.getAttribute("focusable")).toBe("false");
   });
 
-  it("shape SVG has preserveAspectRatio='none' so it stretches to the button size", () => {
-    const el = buildShapeComponentButton();
-    const svg = el.querySelector("svg.btn__shape");
-    expect(svg?.getAttribute("preserveAspectRatio")).toBe("none");
-  });
-
   it("shape is positioned before .btn__content in the DOM (background behind label)", () => {
     const el = buildShapeComponentButton();
     const children = Array.from(el.children);
@@ -342,5 +378,45 @@ describe("Button — shape component contract", () => {
     const el = buildShapeComponentButton("Let's connect");
     const labelSpan = el.querySelector(".btn__label");
     expect(labelSpan?.textContent).toBe("Let's connect");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Button — circular text via shapeProps
+// ---------------------------------------------------------------------------
+
+describe("Button — circular text via shapeProps", () => {
+  it("renders circular text inside the SVG when shapeText is provided", () => {
+    const el = buildShapeComponentButton("Go", "Let's connect");
+    const textEl = el.querySelector("svg.btn__shape text.btn__shape-text");
+    expect(textEl).not.toBeNull();
+    expect(textEl?.textContent).toContain("LET'S CONNECT");
+  });
+
+  it("circular text is uppercased regardless of input casing", () => {
+    const el = buildShapeComponentButton("Go", "hello world");
+    const textEl = el.querySelector("svg.btn__shape text.btn__shape-text");
+    expect(textEl?.textContent).toBe("HELLO WORLD");
+  });
+
+  it("no <text> element is rendered when shapeText is omitted", () => {
+    const el = buildShapeComponentButton("Go");
+    const textEl = el.querySelector("svg.btn__shape text");
+    expect(textEl).toBeNull();
+  });
+
+  it("circular text does not affect the button's accessible name", () => {
+    const el = buildShapeComponentButton("Let's connect", "Portfolio");
+    const svg = el.querySelector("svg.btn__shape");
+    expect(svg?.getAttribute("aria-hidden")).toBe("true");
+    const labelSpan = el.querySelector(".btn__label");
+    expect(labelSpan?.textContent).toBe("Let's connect");
+  });
+
+  it("the SVG contains a background <circle> element", () => {
+    const el = buildShapeComponentButton("Go", "Text");
+    const circle = el.querySelector("svg.btn__shape circle");
+    expect(circle).not.toBeNull();
+    expect(circle?.getAttribute("r")).toBe("100");
   });
 });

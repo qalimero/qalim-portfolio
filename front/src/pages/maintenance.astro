@@ -9,7 +9,7 @@ import ThreeScene from '../components/scenes/ThreeScene.jsx';
 import Marquee from '../components/ui/Marquee.astro';
 import Popin from '../components/ui/Popin.astro';
 import Button from '../components/ui/Button.astro';
-import HexagonShape from '../components/shapes/HexagonShape.astro';
+import CircleTextShape from '../components/shapes/CircleTextShape.astro';
 
 const entry = await getEntry('siteConfig', 'main');
 if (!entry) throw new Error('Site config not found: src/content/site.config.json');
@@ -48,7 +48,8 @@ const popin = popinInfo?.[0];
           label={cta.label}
           href={cta.href}
           variant="shape-circle"
-          shape={HexagonShape}
+          shape={CircleTextShape}
+          shapeProps={{ text: cta.shapeText }}
           icon={cta.icon}
           iconPosition="right"
         />
