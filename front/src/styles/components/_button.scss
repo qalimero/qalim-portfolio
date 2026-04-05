@@ -1,5 +1,5 @@
 // Button Component Styles
-@use '../abstracts/mixins' as mix;
+@use "../abstracts/mixins" as mix;
 
 .btn {
   display: inline-flex;
@@ -21,7 +21,9 @@
 
   cursor: pointer;
   text-decoration: none;
-  transition: transform 200ms ease, opacity 200ms ease;
+  transition:
+    transform 200ms ease,
+    opacity 200ms ease;
 
   // Focus ring
   &:focus-visible {
@@ -76,7 +78,9 @@
     }
   }
 
+  // ============================================================
   // Variant: solid rectangle button
+  // ============================================================
   &--primary {
     background: var(--btn-primary-background);
     color: var(--btn-primary-color);
@@ -92,7 +96,11 @@
     }
   }
 
-  // Variant: hexagonal SVG-framed button
+  // ============================================================
+  // Variant: custom SVG-framed button
+  // The shape is defined by an inline <svg class="btn__shape"> whose
+  // <path d="..."> is passed as a prop — fully customisable per usage.
+  // ============================================================
   &--shape {
     color: var(--btn-shape-color);
     padding: var(--btn-shape-padding-y) var(--btn-shape-padding-x);
@@ -116,18 +124,18 @@
     }
   }
 
+  // ============================================================
   // Responsive: reduce padding on small screens using mobile-specific tokens
   // with a graceful fallback to the desktop token when the mobile one is absent
+  // ============================================================
   @include mix.respond-to(medium) {
     &--primary {
-      padding:
-        var(--btn-primary-padding-y-mobile, var(--btn-primary-padding-y))
+      padding: var(--btn-primary-padding-y-mobile, var(--btn-primary-padding-y))
         var(--btn-primary-padding-x-mobile, var(--btn-primary-padding-x));
     }
 
     &--shape {
-      padding:
-        var(--btn-shape-padding-y-mobile, var(--btn-shape-padding-y))
+      padding: var(--btn-shape-padding-y-mobile, var(--btn-shape-padding-y))
         var(--btn-shape-padding-x-mobile, var(--btn-shape-padding-x));
     }
   }

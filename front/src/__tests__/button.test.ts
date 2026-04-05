@@ -16,11 +16,11 @@
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("astro:content", () => ({
-	defineCollection: (config: unknown) => config,
+  defineCollection: (config: unknown) => config,
 }));
 
 vi.mock("astro/loaders", () => ({
-	file: (_path: string, _opts?: unknown) => ({ type: "file" }),
+  file: (_path: string, _opts?: unknown) => ({ type: "file" }),
 }));
 
 // Static import works because the vi.mock calls above are hoisted by Vitest.
@@ -31,20 +31,20 @@ import { buttonCtaSchema } from "../content.config";
 // ---------------------------------------------------------------------------
 
 interface BuildButtonOptions {
-	/** Visual variant — controls shape SVG presence and CSS modifier. */
-	variant?: "primary" | "shape";
-	/** When set the root element is rendered as <a href="...">. */
-	href?: string;
-	/** Visible button label text placed in .btn__label. */
-	label?: string;
-	/** Optional icon text / glyph placed in .btn__icon. */
-	icon?: string;
-	/** Disables the element following native/ARIA patterns. */
-	disabled?: boolean;
-	/** Forwarded to <button type="…">; ignored for <a> elements. */
-	type?: "button" | "submit" | "reset";
-	/** When set, adds aria-label to the root element. */
-	ariaLabel?: string;
+  /** Visual variant — controls shape SVG presence and CSS modifier. */
+  variant?: "primary" | "shape";
+  /** When set the root element is rendered as <a href="...">. */
+  href?: string;
+  /** Visible button label text placed in .btn__label. */
+  label?: string;
+  /** Optional icon text / glyph placed in .btn__icon. */
+  icon?: string;
+  /** Disables the element following native/ARIA patterns. */
+  disabled?: boolean;
+  /** Forwarded to <button type="…">; ignored for <a> elements. */
+  type?: "button" | "submit" | "reset";
+  /** When set, adds aria-label to the root element. */
+  ariaLabel?: string;
 }
 
 /**
@@ -57,69 +57,69 @@ interface BuildButtonOptions {
  * - icon set → appends a <span class="btn__icon"> inside .btn__content
  */
 function buildButton({
-	variant = "primary",
-	href,
-	label = "Click me",
-	icon,
-	disabled = false,
-	type = "button",
-	ariaLabel,
+  variant = "primary",
+  href,
+  label = "Click me",
+  icon,
+  disabled = false,
+  type = "button",
+  ariaLabel,
 }: BuildButtonOptions = {}): HTMLElement {
-	const isLink = href !== undefined;
-	const el = document.createElement(isLink ? "a" : "button") as HTMLElement;
+  const isLink = href !== undefined;
+  const el = document.createElement(isLink ? "a" : "button") as HTMLElement;
 
-	el.className = `btn btn--${variant}`;
+  el.className = `btn btn--${variant}`;
 
-	if (isLink) {
-		(el as HTMLAnchorElement).href = href as string;
-		if (disabled) {
-			el.setAttribute("aria-disabled", "true");
-			el.setAttribute("tabindex", "-1");
-		}
-	} else {
-		(el as HTMLButtonElement).type = type;
-		if (disabled) {
-			(el as HTMLButtonElement).disabled = true;
-			el.setAttribute("aria-disabled", "true");
-		}
-	}
+  if (isLink) {
+    (el as HTMLAnchorElement).href = href as string;
+    if (disabled) {
+      el.setAttribute("aria-disabled", "true");
+      el.setAttribute("tabindex", "-1");
+    }
+  } else {
+    (el as HTMLButtonElement).type = type;
+    if (disabled) {
+      (el as HTMLButtonElement).disabled = true;
+      el.setAttribute("aria-disabled", "true");
+    }
+  }
 
-	if (ariaLabel) {
-		el.setAttribute("aria-label", ariaLabel);
-	}
+  if (ariaLabel) {
+    el.setAttribute("aria-label", ariaLabel);
+  }
 
-	// Decorative shape SVG — shape variant only.
-	if (variant === "shape") {
-		const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-		svg.setAttribute("class", "btn__shape");
-		svg.setAttribute("aria-hidden", "true");
-		svg.setAttribute("focusable", "false");
-		const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-		path.setAttribute("d", "M 16 0 L 164 0 L 180 28 L 164 56 L 16 56 L 0 28 Z");
-		svg.appendChild(path);
-		el.appendChild(svg);
-	}
+  // Decorative shape SVG — shape variant only.
+  if (variant === "shape") {
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("class", "btn__shape");
+    svg.setAttribute("aria-hidden", "true");
+    svg.setAttribute("focusable", "false");
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", "M 16 0 L 164 0 L 180 28 L 164 56 L 16 56 L 0 28 Z");
+    svg.appendChild(path);
+    el.appendChild(svg);
+  }
 
-	// Content wrapper.
-	const content = document.createElement("span");
-	content.className = "btn__content";
+  // Content wrapper.
+  const content = document.createElement("span");
+  content.className = "btn__content";
 
-	const labelSpan = document.createElement("span");
-	labelSpan.className = "btn__label";
-	labelSpan.textContent = label;
-	content.appendChild(labelSpan);
+  const labelSpan = document.createElement("span");
+  labelSpan.className = "btn__label";
+  labelSpan.textContent = label;
+  content.appendChild(labelSpan);
 
-	if (icon) {
-		const iconSpan = document.createElement("span");
-		iconSpan.className = "btn__icon";
-		iconSpan.setAttribute("aria-hidden", "true");
-		iconSpan.setAttribute("focusable", "false");
-		iconSpan.textContent = icon;
-		content.appendChild(iconSpan);
-	}
+  if (icon) {
+    const iconSpan = document.createElement("span");
+    iconSpan.className = "btn__icon";
+    iconSpan.setAttribute("aria-hidden", "true");
+    iconSpan.setAttribute("focusable", "false");
+    iconSpan.textContent = icon;
+    content.appendChild(iconSpan);
+  }
 
-	el.appendChild(content);
-	return el;
+  el.appendChild(content);
+  return el;
 }
 
 // ---------------------------------------------------------------------------
@@ -127,40 +127,40 @@ function buildButton({
 // ---------------------------------------------------------------------------
 
 describe("buttonCtaSchema", () => {
-	it("accepts a label only", () => {
-		const result = buttonCtaSchema.safeParse({ label: "Let's connect" });
-		expect(result.success).toBe(true);
-	});
+  it("accepts a label only", () => {
+    const result = buttonCtaSchema.safeParse({ label: "Let's connect" });
+    expect(result.success).toBe(true);
+  });
 
-	it("accepts label + href + icon", () => {
-		const result = buttonCtaSchema.safeParse({
-			label: "Let's connect",
-			href: "https://example.com",
-			icon: "arrow-right",
-		});
-		expect(result.success).toBe(true);
-	});
+  it("accepts label + href + icon", () => {
+    const result = buttonCtaSchema.safeParse({
+      label: "Let's connect",
+      href: "https://example.com",
+      icon: "arrow-right",
+    });
+    expect(result.success).toBe(true);
+  });
 
-	it("accepts label with undefined href (optional field)", () => {
-		const result = buttonCtaSchema.safeParse({
-			label: "Let's connect",
-			href: undefined,
-		});
-		expect(result.success).toBe(true);
-		if (result.success) {
-			expect(result.data.href).toBeUndefined();
-		}
-	});
+  it("accepts label with undefined href (optional field)", () => {
+    const result = buttonCtaSchema.safeParse({
+      label: "Let's connect",
+      href: undefined,
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.href).toBeUndefined();
+    }
+  });
 
-	it("rejects an empty label", () => {
-		const result = buttonCtaSchema.safeParse({ label: "" });
-		expect(result.success).toBe(false);
-	});
+  it("rejects an empty label", () => {
+    const result = buttonCtaSchema.safeParse({ label: "" });
+    expect(result.success).toBe(false);
+  });
 
-	it("rejects a missing label", () => {
-		const result = buttonCtaSchema.safeParse({ href: "https://example.com" });
-		expect(result.success).toBe(false);
-	});
+  it("rejects a missing label", () => {
+    const result = buttonCtaSchema.safeParse({ href: "https://example.com" });
+    expect(result.success).toBe(false);
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -168,25 +168,25 @@ describe("buttonCtaSchema", () => {
 // ---------------------------------------------------------------------------
 
 describe("Button — element semantics", () => {
-	it("renders a <button> by default (no href)", () => {
-		const el = buildButton();
-		expect(el.tagName.toLowerCase()).toBe("button");
-	});
+  it("renders a <button> by default (no href)", () => {
+    const el = buildButton();
+    expect(el.tagName.toLowerCase()).toBe("button");
+  });
 
-	it("renders an <a> when href is provided", () => {
-		const el = buildButton({ href: "https://example.com" });
-		expect(el.tagName.toLowerCase()).toBe("a");
-	});
+  it("renders an <a> when href is provided", () => {
+    const el = buildButton({ href: "https://example.com" });
+    expect(el.tagName.toLowerCase()).toBe("a");
+  });
 
-	it("<button> has type='button' by default", () => {
-		const el = buildButton();
-		expect((el as HTMLButtonElement).type).toBe("button");
-	});
+  it("<button> has type='button' by default", () => {
+    const el = buildButton();
+    expect((el as HTMLButtonElement).type).toBe("button");
+  });
 
-	it("<button type='submit'> is set correctly", () => {
-		const el = buildButton({ type: "submit" });
-		expect((el as HTMLButtonElement).type).toBe("submit");
-	});
+  it("<button type='submit'> is set correctly", () => {
+    const el = buildButton({ type: "submit" });
+    expect((el as HTMLButtonElement).type).toBe("submit");
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -194,25 +194,25 @@ describe("Button — element semantics", () => {
 // ---------------------------------------------------------------------------
 
 describe("Button — accessible name", () => {
-	it("has visible label text in .btn__label", () => {
-		const el = buildButton({ label: "Let's connect" });
-		const labelSpan = el.querySelector(".btn__label");
-		expect(labelSpan).not.toBeNull();
-		expect(labelSpan?.textContent).toBe("Let's connect");
-	});
+  it("has visible label text in .btn__label", () => {
+    const el = buildButton({ label: "Let's connect" });
+    const labelSpan = el.querySelector(".btn__label");
+    expect(labelSpan).not.toBeNull();
+    expect(labelSpan?.textContent).toBe("Let's connect");
+  });
 
-	it("sets aria-label when ariaLabel prop is given", () => {
-		const el = buildButton({ ariaLabel: "Open contact form" });
-		expect(el.getAttribute("aria-label")).toBe("Open contact form");
-	});
+  it("sets aria-label when ariaLabel prop is given", () => {
+    const el = buildButton({ ariaLabel: "Open contact form" });
+    expect(el.getAttribute("aria-label")).toBe("Open contact form");
+  });
 
-	it("icon span has aria-hidden='true' and focusable='false'", () => {
-		const el = buildButton({ icon: "→" });
-		const iconSpan = el.querySelector(".btn__icon");
-		expect(iconSpan).not.toBeNull();
-		expect(iconSpan?.getAttribute("aria-hidden")).toBe("true");
-		expect(iconSpan?.getAttribute("focusable")).toBe("false");
-	});
+  it("icon span has aria-hidden='true' and focusable='false'", () => {
+    const el = buildButton({ icon: "→" });
+    const iconSpan = el.querySelector(".btn__icon");
+    expect(iconSpan).not.toBeNull();
+    expect(iconSpan?.getAttribute("aria-hidden")).toBe("true");
+    expect(iconSpan?.getAttribute("focusable")).toBe("false");
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -220,21 +220,21 @@ describe("Button — accessible name", () => {
 // ---------------------------------------------------------------------------
 
 describe("Button — disabled state", () => {
-	it("<button disabled> carries the native disabled attribute", () => {
-		const el = buildButton({ disabled: true });
-		expect((el as HTMLButtonElement).disabled).toBe(true);
-	});
+  it("<button disabled> carries the native disabled attribute", () => {
+    const el = buildButton({ disabled: true });
+    expect((el as HTMLButtonElement).disabled).toBe(true);
+  });
 
-	it("<button disabled> has aria-disabled='true'", () => {
-		const el = buildButton({ disabled: true });
-		expect(el.getAttribute("aria-disabled")).toBe("true");
-	});
+  it("<button disabled> has aria-disabled='true'", () => {
+    const el = buildButton({ disabled: true });
+    expect(el.getAttribute("aria-disabled")).toBe("true");
+  });
 
-	it("<a> disabled: has aria-disabled='true' and tabindex='-1' (no native disabled on anchors)", () => {
-		const el = buildButton({ href: "https://example.com", disabled: true });
-		expect(el.getAttribute("aria-disabled")).toBe("true");
-		expect(el.getAttribute("tabindex")).toBe("-1");
-	});
+  it("<a> disabled: has aria-disabled='true' and tabindex='-1' (no native disabled on anchors)", () => {
+    const el = buildButton({ href: "https://example.com", disabled: true });
+    expect(el.getAttribute("aria-disabled")).toBe("true");
+    expect(el.getAttribute("tabindex")).toBe("-1");
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -242,22 +242,119 @@ describe("Button — disabled state", () => {
 // ---------------------------------------------------------------------------
 
 describe("Button — shape variant", () => {
-	it("renders <svg class='btn__shape'> inside the button", () => {
-		const el = buildButton({ variant: "shape" });
-		const svg = el.querySelector("svg.btn__shape");
-		expect(svg).not.toBeNull();
-	});
+  it("renders <svg class='btn__shape'> inside the button", () => {
+    const el = buildButton({ variant: "shape" });
+    const svg = el.querySelector("svg.btn__shape");
+    expect(svg).not.toBeNull();
+  });
 
-	it("the shape SVG has aria-hidden='true' and focusable='false' (purely decorative)", () => {
-		const el = buildButton({ variant: "shape" });
-		const svg = el.querySelector("svg.btn__shape");
-		expect(svg?.getAttribute("aria-hidden")).toBe("true");
-		expect(svg?.getAttribute("focusable")).toBe("false");
-	});
+  it("the shape SVG has aria-hidden='true' and focusable='false' (purely decorative)", () => {
+    const el = buildButton({ variant: "shape" });
+    const svg = el.querySelector("svg.btn__shape");
+    expect(svg?.getAttribute("aria-hidden")).toBe("true");
+    expect(svg?.getAttribute("focusable")).toBe("false");
+  });
 
-	it("the shape SVG does not replace the label — .btn__label still contains the text", () => {
-		const el = buildButton({ variant: "shape", label: "Let's connect" });
-		const labelSpan = el.querySelector(".btn__label");
-		expect(labelSpan?.textContent).toBe("Let's connect");
-	});
+  it("the shape SVG does not replace the label — .btn__label still contains the text", () => {
+    const el = buildButton({ variant: "shape", label: "Let's connect" });
+    const labelSpan = el.querySelector(".btn__label");
+    expect(labelSpan?.textContent).toBe("Let's connect");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Button — shape customisation (shapePath / shapeViewBox)
+// ---------------------------------------------------------------------------
+
+interface BuildShapeButtonOptions {
+  shapePath?: string;
+  shapeViewBox?: string;
+}
+
+/**
+ * Builds a shape-variant button with an optional custom path and viewBox,
+ * mirroring how Button.astro uses the shapePath / shapeViewBox props.
+ */
+function buildShapeButton({
+  shapePath = "M 16 0 L 164 0 L 180 28 L 164 56 L 16 56 L 0 28 Z",
+  shapeViewBox = "0 0 180 56",
+}: BuildShapeButtonOptions = {}): HTMLElement {
+  const el = document.createElement("button") as HTMLElement;
+  el.className = "btn btn--shape";
+  (el as HTMLButtonElement).type = "button";
+
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("class", "btn__shape");
+  svg.setAttribute("aria-hidden", "true");
+  svg.setAttribute("focusable", "false");
+  svg.setAttribute("viewBox", shapeViewBox);
+  svg.setAttribute("preserveAspectRatio", "none");
+
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute("d", shapePath);
+  svg.appendChild(path);
+  el.appendChild(svg);
+
+  const content = document.createElement("span");
+  content.className = "btn__content";
+  const labelSpan = document.createElement("span");
+  labelSpan.className = "btn__label";
+  labelSpan.textContent = "Custom";
+  content.appendChild(labelSpan);
+  el.appendChild(content);
+
+  return el;
+}
+
+describe("Button — shape customisation", () => {
+  it("uses the default hexagon path when no shapePath is given", () => {
+    const el = buildShapeButton();
+    const path = el.querySelector("svg.btn__shape path");
+    expect(path?.getAttribute("d")).toBe(
+      "M 16 0 L 164 0 L 180 28 L 164 56 L 16 56 L 0 28 Z",
+    );
+  });
+
+  it("uses the default viewBox '0 0 180 56' when no shapeViewBox is given", () => {
+    const el = buildShapeButton();
+    const svg = el.querySelector("svg.btn__shape");
+    expect(svg?.getAttribute("viewBox")).toBe("0 0 180 56");
+  });
+
+  it("reflects a custom shapePath on the <path d> attribute", () => {
+    const customPath = "M 0 0 Q 90 40 180 0 L 180 56 Q 90 16 0 56 Z";
+    const el = buildShapeButton({ shapePath: customPath });
+    const path = el.querySelector("svg.btn__shape path");
+    expect(path?.getAttribute("d")).toBe(customPath);
+  });
+
+  it("reflects a custom shapeViewBox on the <svg viewBox> attribute", () => {
+    const el = buildShapeButton({ shapeViewBox: "0 0 240 80" });
+    const svg = el.querySelector("svg.btn__shape");
+    expect(svg?.getAttribute("viewBox")).toBe("0 0 240 80");
+  });
+
+  it("custom shapePath and shapeViewBox work together independently of label", () => {
+    const customPath = "M 24 0 L 216 0 L 240 40 L 216 80 L 24 80 L 0 40 Z";
+    const el = buildShapeButton({
+      shapePath: customPath,
+      shapeViewBox: "0 0 240 80",
+    });
+    const svg = el.querySelector("svg.btn__shape");
+    const path = svg?.querySelector("path");
+    const label = el.querySelector(".btn__label");
+
+    expect(svg?.getAttribute("viewBox")).toBe("0 0 240 80");
+    expect(path?.getAttribute("d")).toBe(customPath);
+    expect(label?.textContent).toBe("Custom");
+  });
+
+  it("the custom shape SVG remains decorative regardless of path value", () => {
+    const el = buildShapeButton({
+      shapePath: "M 0 0 L 100 0 L 100 40 L 0 40 Z",
+    });
+    const svg = el.querySelector("svg.btn__shape");
+    expect(svg?.getAttribute("aria-hidden")).toBe("true");
+    expect(svg?.getAttribute("focusable")).toBe("false");
+  });
 });
