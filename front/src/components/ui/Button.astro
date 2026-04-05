@@ -5,12 +5,16 @@
  * Renders as <a> when `href` is provided, otherwise as <button>.
  *
  * Variants:
- *  - 'primary'  solid filled rectangle (default)
- *  - 'shape'    decorative inline SVG frame whose path is fully customisable
+ *  - 'primary'      solid filled rectangle (default)
+ *  - 'shape-circle' decorative SVG background frame
  *
- * Shape customisation:
- *  - `shapePath`    SVG <path d="…"> value  (default: hexagon)
- *  - `shapeViewBox` SVG viewBox attribute   (default: "0 0 180 56")
+ * Shape usage:
+ *  Import any component from src/components/shapes/ and pass it via the
+ *  `shape` prop. The component is rendered as the button's visual background
+ *  with aria-hidden="true" so it is invisible to screen readers.
+ *
+ *  import HexagonShape from '@/components/shapes/HexagonShape.astro';
+ *  <Button variant="shape-circle" shape={HexagonShape} label="Go" />
  */
 import { Icon } from 'astro-icon/components';
 
@@ -23,6 +27,16 @@ export interface Props {
   type?: 'button' | 'submit' | 'reset';
   /** Visual variant */
   variant?: 'primary' | 'shape-circle';
+  /**
+   * Astro shape component to render as the button's decorative SVG background.
+   * Use with variant="shape-circle". Import from src/components/shapes/.
+   * The component receives class="btn__shape" aria-hidden="true" focusable="false".
+   *
+   * Note: typed as `any` — Astro does not expose a stable public type for
+   * component factory functions.
+   */
+  // biome-ignore lint/suspicious/noExplicitAny: no stable Astro component factory type
+  shape?: any;
   /** astro-icon name for optional icon */
   icon?: string;
   /** Icon placement relative to label text */
@@ -31,36 +45,20 @@ export interface Props {
   disabled?: boolean;
   /** Overrides accessible name for screen readers */
   ariaLabel?: string;
-  /**
-   * Custom SVG path data for the shape variant.
-   * Replace the default hexagon with any valid SVG <path d="…"> string.
-   * @default "M 16 0 L 164 0 L 180 28 L 164 56 L 16 56 L 0 28 Z"
-   */
-  shapePath?: string;
-  /**
-   * viewBox attribute for the shape SVG.
-   * Must match the coordinate space of your custom `shapePath`.
-   * @default "0 0 180 56"
-   */
-  shapeViewBox?: string;
   /** Additional CSS classes */
   class?: string;
 }
-
-const DEFAULT_SHAPE_PATH    = 'M 16 0 L 164 0 L 180 28 L 164 56 L 16 56 L 0 28 Z';
-const DEFAULT_SHAPE_VIEWBOX = '0 0 180 56';
 
 const {
   label,
   href,
   type = 'button',
   variant = 'primary',
+  shape: Shape,
   icon,
   iconPosition = 'right',
   disabled = false,
   ariaLabel,
-  shapePath    = DEFAULT_SHAPE_PATH,
-  shapeViewBox = DEFAULT_SHAPE_VIEWBOX,
   class: className = '',
 } = Astro.props;
 
@@ -90,17 +88,8 @@ const classes = ['btn', `btn--${variant}`, className].filter(Boolean).join(' ');
 ---
 
 <Tag class={classes} {...attrs}>
-  {variant === 'shape-circle' && (
-    <svg
-      class="btn__shape"
-      aria-hidden="true"
-      focusable="false"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox={shapeViewBox}
-      preserveAspectRatio="none"
-    >
-      <path d={shapePath} />
-    </svg>
+  {Shape && (
+    <Shape class="btn__shape" aria-hidden="true" focusable="false" />
   )}
   <span class="btn__content">
     {icon && iconPosition === 'left' && (

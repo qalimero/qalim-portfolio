@@ -27,7 +27,8 @@ quentin/
 │   ├── src/
 │   │   ├── pages/             # maintenance.astro + _layout.astro
 │   │   ├── components/
-│   │   │   ├── ui/            # Marquee.astro, Popin.astro
+│   │   │   ├── ui/            # Marquee.astro, Popin.astro, Button.astro
+│   │   │   ├── shapes/        # SVG shape components (HexagonShape.astro, …)
 │   │   │   └── scenes/        # ThreeScene.jsx (React island, client:load)
 │   │   ├── layouts/           # Layout.astro (base HTML shell)
 │   │   ├── content/           # site.config.json (CMS-editable content)

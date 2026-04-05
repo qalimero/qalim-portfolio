@@ -1,0 +1,37 @@
+---
+/**
+ * HexagonShape — decorative SVG hexagon for use as a button background frame.
+ *
+ * Designed to be used as the `shape` prop of the Button component's
+ * shape-circle variant. All props are forwarded to the root <svg> element
+ * so that the Button can pass `aria-hidden`, `focusable`, and `class`
+ * without this component needing to know about its rendering context.
+ *
+ * Usage:
+ *   import HexagonShape from '@/components/shapes/HexagonShape.astro';
+ *   <Button variant="shape-circle" shape={HexagonShape} label="Go" />
+ */
+
+interface Props {
+  class?: string;
+  'aria-hidden'?: 'true' | 'false';
+  focusable?: 'false' | 'true';
+}
+
+const { class: className = '', ...rest } = Astro.props;
+---
+
+<svg
+  class={className}
+  {...rest}
+  viewBox="0 0 180 56"
+  preserveAspectRatio="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!--
+    Hexagon: flat top/bottom edges, pointed left and right tips.
+    Coordinate space: 180×56 units — matches the Button's default shapeViewBox.
+    preserveAspectRatio="none" allows the shape to stretch to any button size.
+  -->
+  <path d="M 16 0 L 164 0 L 180 28 L 164 56 L 16 56 L 0 28 Z" />
+</svg>

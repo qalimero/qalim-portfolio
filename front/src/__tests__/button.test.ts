@@ -89,6 +89,7 @@ function buildButton({
   }
 
   // Decorative shape SVG — shape-circle variant only.
+  // Mirrors Button.astro: <Shape class="btn__shape" aria-hidden="true" focusable="false" />
   if (variant === "shape-circle") {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("class", "btn__shape");
@@ -263,35 +264,29 @@ describe("Button — shape variant", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Button — shape customisation (shapePath / shapeViewBox)
+// Button — shape component contract
 // ---------------------------------------------------------------------------
 
-interface BuildShapeButtonOptions {
-  shapePath?: string;
-  shapeViewBox?: string;
-}
-
 /**
- * Builds a shape-variant button with an optional custom path and viewBox,
- * mirroring how Button.astro uses the shapePath / shapeViewBox props.
+ * Builds a shape-circle button that mirrors how Button.astro renders when a
+ * shape component is passed: the component is called with class="btn__shape",
+ * aria-hidden="true", and focusable="false". We simulate this by creating the
+ * SVG directly — Vitest cannot render .astro components.
  */
-function buildShapeButton({
-  shapePath = "M 16 0 L 164 0 L 180 28 L 164 56 L 16 56 L 0 28 Z",
-  shapeViewBox = "0 0 180 56",
-}: BuildShapeButtonOptions = {}): HTMLElement {
+function buildShapeComponentButton(label = "Let's connect"): HTMLElement {
   const el = document.createElement("button") as HTMLElement;
-  el.className = "btn btn--shape";
+  el.className = "btn btn--shape-circle";
   (el as HTMLButtonElement).type = "button";
 
+  // Simulates: <Shape class="btn__shape" aria-hidden="true" focusable="false" />
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("class", "btn__shape");
   svg.setAttribute("aria-hidden", "true");
   svg.setAttribute("focusable", "false");
-  svg.setAttribute("viewBox", shapeViewBox);
+  svg.setAttribute("viewBox", "0 0 180 56");
   svg.setAttribute("preserveAspectRatio", "none");
-
   const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  path.setAttribute("d", shapePath);
+  path.setAttribute("d", "M 16 0 L 164 0 L 180 28 L 164 56 L 16 56 L 0 28 Z");
   svg.appendChild(path);
   el.appendChild(svg);
 
@@ -299,62 +294,53 @@ function buildShapeButton({
   content.className = "btn__content";
   const labelSpan = document.createElement("span");
   labelSpan.className = "btn__label";
-  labelSpan.textContent = "Custom";
+  labelSpan.textContent = label;
   content.appendChild(labelSpan);
   el.appendChild(content);
 
   return el;
 }
 
-describe("Button — shape customisation", () => {
-  it("uses the default hexagon path when no shapePath is given", () => {
-    const el = buildShapeButton();
-    const path = el.querySelector("svg.btn__shape path");
-    expect(path?.getAttribute("d")).toBe(
-      "M 16 0 L 164 0 L 180 28 L 164 56 L 16 56 L 0 28 Z",
-    );
-  });
-
-  it("uses the default viewBox '0 0 180 56' when no shapeViewBox is given", () => {
-    const el = buildShapeButton();
+describe("Button — shape component contract", () => {
+  it("shape is rendered as <svg class='btn__shape'> (Button passes class prop)", () => {
+    const el = buildShapeComponentButton();
     const svg = el.querySelector("svg.btn__shape");
-    expect(svg?.getAttribute("viewBox")).toBe("0 0 180 56");
+    expect(svg).not.toBeNull();
   });
 
-  it("reflects a custom shapePath on the <path d> attribute", () => {
-    const customPath = "M 0 0 Q 90 40 180 0 L 180 56 Q 90 16 0 56 Z";
-    const el = buildShapeButton({ shapePath: customPath });
-    const path = el.querySelector("svg.btn__shape path");
-    expect(path?.getAttribute("d")).toBe(customPath);
-  });
-
-  it("reflects a custom shapeViewBox on the <svg viewBox> attribute", () => {
-    const el = buildShapeButton({ shapeViewBox: "0 0 240 80" });
-    const svg = el.querySelector("svg.btn__shape");
-    expect(svg?.getAttribute("viewBox")).toBe("0 0 240 80");
-  });
-
-  it("custom shapePath and shapeViewBox work together independently of label", () => {
-    const customPath = "M 24 0 L 216 0 L 240 40 L 216 80 L 24 80 L 0 40 Z";
-    const el = buildShapeButton({
-      shapePath: customPath,
-      shapeViewBox: "0 0 240 80",
-    });
-    const svg = el.querySelector("svg.btn__shape");
-    const path = svg?.querySelector("path");
-    const label = el.querySelector(".btn__label");
-
-    expect(svg?.getAttribute("viewBox")).toBe("0 0 240 80");
-    expect(path?.getAttribute("d")).toBe(customPath);
-    expect(label?.textContent).toBe("Custom");
-  });
-
-  it("the custom shape SVG remains decorative regardless of path value", () => {
-    const el = buildShapeButton({
-      shapePath: "M 0 0 L 100 0 L 100 40 L 0 40 Z",
-    });
+  it("Button passes aria-hidden='true' to the shape component", () => {
+    const el = buildShapeComponentButton();
     const svg = el.querySelector("svg.btn__shape");
     expect(svg?.getAttribute("aria-hidden")).toBe("true");
+  });
+
+  it("Button passes focusable='false' to the shape component", () => {
+    const el = buildShapeComponentButton();
+    const svg = el.querySelector("svg.btn__shape");
     expect(svg?.getAttribute("focusable")).toBe("false");
+  });
+
+  it("shape SVG has preserveAspectRatio='none' so it stretches to the button size", () => {
+    const el = buildShapeComponentButton();
+    const svg = el.querySelector("svg.btn__shape");
+    expect(svg?.getAttribute("preserveAspectRatio")).toBe("none");
+  });
+
+  it("shape is positioned before .btn__content in the DOM (background behind label)", () => {
+    const el = buildShapeComponentButton();
+    const children = Array.from(el.children);
+    const svgIndex = children.findIndex((c) =>
+      c.classList.contains("btn__shape"),
+    );
+    const contentIndex = children.findIndex((c) =>
+      c.classList.contains("btn__content"),
+    );
+    expect(svgIndex).toBeLessThan(contentIndex);
+  });
+
+  it("the label is still accessible when a shape component is used", () => {
+    const el = buildShapeComponentButton("Let's connect");
+    const labelSpan = el.querySelector(".btn__label");
+    expect(labelSpan?.textContent).toBe("Let's connect");
   });
 });

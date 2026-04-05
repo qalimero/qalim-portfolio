@@ -97,9 +97,12 @@
   }
 
   // ============================================================
-  // Variant: custom SVG-framed button
-  // The shape is defined by an inline <svg class="btn__shape"> whose
-  // <path d="..."> is passed as a prop — fully customisable per usage.
+  // Variant: SVG-framed button (shape-circle)
+  // The visual background is an Astro shape component from
+  // src/components/shapes/ passed via the `shape` prop.
+  // It renders as <svg class="btn__shape"> — absolutely positioned
+  // behind the label. To use a different shape, import any component
+  // from shapes/ and pass it: <Button shape={MyShape} variant="shape-circle" />
   // ============================================================
   &--shape-circle {
     color: var(--btn-shape-color);
