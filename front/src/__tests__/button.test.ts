@@ -32,7 +32,7 @@ import { buttonCtaSchema } from "../content.config";
 
 interface BuildButtonOptions {
   /** Visual variant — controls shape SVG presence and CSS modifier. */
-  variant?: "primary" | "shape";
+  variant?: "primary" | "shape-circle";
   /** When set the root element is rendered as <a href="...">. */
   href?: string;
   /** Visible button label text placed in .btn__label. */
@@ -88,8 +88,8 @@ function buildButton({
     el.setAttribute("aria-label", ariaLabel);
   }
 
-  // Decorative shape SVG — shape variant only.
-  if (variant === "shape") {
+  // Decorative shape SVG — shape-circle variant only.
+  if (variant === "shape-circle") {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("class", "btn__shape");
     svg.setAttribute("aria-hidden", "true");
@@ -243,20 +243,20 @@ describe("Button — disabled state", () => {
 
 describe("Button — shape variant", () => {
   it("renders <svg class='btn__shape'> inside the button", () => {
-    const el = buildButton({ variant: "shape" });
+    const el = buildButton({ variant: "shape-circle" });
     const svg = el.querySelector("svg.btn__shape");
     expect(svg).not.toBeNull();
   });
 
   it("the shape SVG has aria-hidden='true' and focusable='false' (purely decorative)", () => {
-    const el = buildButton({ variant: "shape" });
+    const el = buildButton({ variant: "shape-circle" });
     const svg = el.querySelector("svg.btn__shape");
     expect(svg?.getAttribute("aria-hidden")).toBe("true");
     expect(svg?.getAttribute("focusable")).toBe("false");
   });
 
   it("the shape SVG does not replace the label — .btn__label still contains the text", () => {
-    const el = buildButton({ variant: "shape", label: "Let's connect" });
+    const el = buildButton({ variant: "shape-circle", label: "Let's connect" });
     const labelSpan = el.querySelector(".btn__label");
     expect(labelSpan?.textContent).toBe("Let's connect");
   });

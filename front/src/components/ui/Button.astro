@@ -22,7 +22,7 @@ export interface Props {
   /** HTML type attribute, only used when rendering as <button> */
   type?: 'button' | 'submit' | 'reset';
   /** Visual variant */
-  variant?: 'primary' | 'shape';
+  variant?: 'primary' | 'shape-circle';
   /** astro-icon name for optional icon */
   icon?: string;
   /** Icon placement relative to label text */
@@ -90,7 +90,7 @@ const classes = ['btn', `btn--${variant}`, className].filter(Boolean).join(' ');
 ---
 
 <Tag class={classes} {...attrs}>
-  {variant === 'shape' && (
+  {variant === 'shape-circle' && (
     <svg
       class="btn__shape"
       aria-hidden="true"

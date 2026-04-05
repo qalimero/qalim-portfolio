@@ -101,7 +101,7 @@
   // The shape is defined by an inline <svg class="btn__shape"> whose
   // <path d="..."> is passed as a prop — fully customisable per usage.
   // ============================================================
-  &--shape {
+  &--shape-circle {
     color: var(--btn-shape-color);
     padding: var(--btn-shape-padding-y) var(--btn-shape-padding-x);
 
@@ -134,7 +134,7 @@
         var(--btn-primary-padding-x-mobile, var(--btn-primary-padding-x));
     }
 
-    &--shape {
+    &--shape-circle {
       padding: var(--btn-shape-padding-y-mobile, var(--btn-shape-padding-y))
         var(--btn-shape-padding-x-mobile, var(--btn-shape-padding-x));
     }
