@@ -130,8 +130,8 @@
   --typography-h1-text-transform: uppercase;
 
   /* Button Component */
-  --btn-font-family: var(--font-family-base);
-  --btn-font-size: var(--font-size-xs);
+  --btn-font-family: var(--font-family-mono);
+  --btn-font-size: var(--font-size-sm);
   --btn-font-weight: 700;
   --btn-letter-spacing: -0.02em;
   --btn-text-transform: uppercase;
@@ -146,6 +146,7 @@
 
   /* Button — Shape variant (hexagonal SVG frame) */
   --btn-shape-fill: var(--color-brand-secondary);
+  --btn-shape-stroke: var(--color-brand-primary);
   --btn-shape-color: var(--color-neutral-lightest);
   --btn-shape-padding-x: var(--spacing-2xl);
   --btn-shape-padding-y: var(--spacing-lg);
