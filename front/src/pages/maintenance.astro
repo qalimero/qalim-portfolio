@@ -6,6 +6,7 @@
 import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/Layout.astro';
 import ThreeScene from '../components/scenes/ThreeScene.jsx';
+import WebGLGrid from '../components/scenes/WebGLGrid.jsx';
 import Marquee from '../components/ui/Marquee.astro';
 import Popin from '../components/ui/Popin.astro';
 import Link from '../components/ui/Link.astro';
@@ -24,6 +25,9 @@ const popin = popinInfo?.[0];
   description="Retour très bientôt."
   bodyClass="page-maintenance"
 >
+
+  <!-- WebGL distortion grid background -->
+  <WebGLGrid client:load />
 
   <section class="maintenance">
 
