@@ -100,7 +100,7 @@ export function initGridScene(
 
   // ---- Grid mesh -----------------------------------------------------------
 
-  const gridData = generateGridVertices(30, 30, 80, 1.4);
+  const gridData = generateGridVertices(80, 80, 80, 1.5);
   const gridVertexCount = gridData.length / 2;
 
   const gridVao = gl.createVertexArray();
