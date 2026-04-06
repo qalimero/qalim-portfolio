@@ -41,7 +41,7 @@ void main() {
   vec2 mouseCorr = vec2(u_mouse.x * u_aspect, u_mouse.y);
   float dist = distance(corrected, mouseCorr);
 
-  float radius = 0.35;
+  float radius = 0.70;
   float strength = 0.12;
   float falloff = exp(-(dist * dist) / (radius * radius));
 
@@ -127,10 +127,10 @@ function createProgram(
  * @param extent   How far beyond [-1,1] clip space the grid extends.
  */
 function generateGridVertices(
-  rows = 30,
-  cols = 30,
+  rows = 80,
+  cols = 80,
   segments = 80,
-  extent = 1.4,
+  extent = 1.1,
 ): Float32Array {
   // Uniform spacing — every cell is the same size.
   const rowPositions: number[] = [];
@@ -242,7 +242,7 @@ export function initGridScene(
 
   // ---- Grid mesh -----------------------------------------------------------
 
-  const gridData = generateGridVertices(30, 30, 80, 1.4);
+  const gridData = generateGridVertices(80, 80, 80, 1.5);
   const vertexCount = gridData.length / 2;
 
   const vao = gl.createVertexArray();
