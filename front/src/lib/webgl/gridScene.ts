@@ -51,14 +51,6 @@ void main() {
   corrected += dir * falloff * strength;
   pos = vec2(corrected.x / u_aspect, corrected.y);
 
-  // --- Subtle stretch warp ---
-  float stretch = 1.0 + 0.03 * (pos.x * pos.x + pos.y * pos.y);
-  pos *= stretch;
-
-  // --- Breathing animation ---
-  float breath = sin(u_time * 0.5) * 0.003;
-  pos *= 1.0 + breath;
-
   gl_Position = vec4(pos, 0.0, 1.0);
 }
 `;
@@ -125,34 +117,32 @@ function createProgram(
 /**
  * Generates grid line vertices suitable for `gl.LINES`.
  *
- * Line *positions* are non-uniformly distributed (stretched via a power curve
- * so they are denser at the edges). Each individual line is subdivided into
- * `segments` uniform steps so vertex-shader distortion looks smooth.
+ * Lines are uniformly distributed so every cell is a perfect square in
+ * clip space. Each individual line is subdivided into `segments` uniform
+ * steps so vertex-shader mouse distortion looks smooth.
  *
  * @param rows     Number of horizontal lines.
  * @param cols     Number of vertical lines.
  * @param segments Subdivision points per line.
- * @param power    Stretching exponent (>1 → denser at edges).
  * @param extent   How far beyond [-1,1] clip space the grid extends.
  */
 function generateGridVertices(
   rows = 30,
   cols = 30,
   segments = 80,
-  power = 1.3,
   extent = 1.4,
 ): Float32Array {
-  // Pre-compute stretched positions for rows and columns.
+  // Uniform spacing — every cell is the same size.
   const rowPositions: number[] = [];
   for (let i = 0; i < rows; i++) {
     const t = rows === 1 ? 0 : (i / (rows - 1)) * 2 - 1; // -1 … 1
-    rowPositions.push(Math.sign(t) * Math.abs(t) ** power * extent);
+    rowPositions.push(t * extent);
   }
 
   const colPositions: number[] = [];
   for (let j = 0; j < cols; j++) {
     const t = cols === 1 ? 0 : (j / (cols - 1)) * 2 - 1;
-    colPositions.push(Math.sign(t) * Math.abs(t) ** power * extent);
+    colPositions.push(t * extent);
   }
 
   // Each line segment produces 2 vertices × 2 floats.
@@ -252,7 +242,7 @@ export function initGridScene(
 
   // ---- Grid mesh -----------------------------------------------------------
 
-  const gridData = generateGridVertices(30, 30, 80, 1.3, 1.4);
+  const gridData = generateGridVertices(30, 30, 80, 1.4);
   const vertexCount = gridData.length / 2;
 
   const vao = gl.createVertexArray();
