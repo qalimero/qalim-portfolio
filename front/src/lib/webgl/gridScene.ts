@@ -91,7 +91,6 @@ export function initGridScene(
   // ---- Uniform & attribute locations ---------------------------------------
 
   const uMouse = gl.getUniformLocation(program, "u_mouse");
-  const uTime = gl.getUniformLocation(program, "u_time");
   const uAspect = gl.getUniformLocation(program, "u_aspect");
   const uMode = gl.getUniformLocation(program, "u_mode");
   const uColor = gl.getUniformLocation(program, "u_color");

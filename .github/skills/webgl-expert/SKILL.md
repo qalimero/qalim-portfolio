@@ -27,7 +27,6 @@ Use this skill when the task involves:
 - `reference.md` — WebGL constants, methods, GLSL built-ins, compatibility notes.
 - `examples/basic-triangle.md` — minimal first render example.
 - `examples/textured-cube.md` — textured 3D scene with matrices and animation.
-<<<<<<< HEAD
 - `examples/distortion-grid.md` — full-screen grid with circular void distortion.
 - `patterns/shader-compilation.md` — compile and link discipline.
 - `patterns/file-architecture.md` — file separation: shaders, meshes, utils, scenes.

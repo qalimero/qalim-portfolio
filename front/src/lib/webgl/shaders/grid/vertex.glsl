@@ -5,7 +5,7 @@ in vec2 a_position;
 
 uniform vec2 u_mouse;
 uniform float u_aspect;
-uniform float u_mode;   // 0.0 = grid, 1.0 = circle border
+uniform float u_mode; // 0.0 = grid, 1.0 = circle border
 uniform float u_radius; // dynamic circle radius (default 0.25)
 
 out vec2 v_origPos; // original clip-space position (for fragment clipping)
