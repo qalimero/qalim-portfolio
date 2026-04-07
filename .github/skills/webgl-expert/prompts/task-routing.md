@@ -11,4 +11,6 @@ Use this file to decide where Copilot should look first.
 - Animation loop issue → `patterns/render-loop.md`
 - Production robustness → `patterns/context-loss.md`
 - Performance tuning → `patterns/performance.md`
+- File structure or separating shaders/meshes/scenes → `patterns/file-architecture.md`
+- Distortion grid or circular void effect → `examples/distortion-grid.md`
 - Constant or API lookup → `reference.md`

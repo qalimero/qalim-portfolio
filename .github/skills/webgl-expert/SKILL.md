@@ -27,7 +27,9 @@ Use this skill when the task involves:
 - `reference.md` — WebGL constants, methods, GLSL built-ins, compatibility notes.
 - `examples/basic-triangle.md` — minimal first render example.
 - `examples/textured-cube.md` — textured 3D scene with matrices and animation.
+- `examples/distortion-grid.md` — full-screen grid with circular void distortion.
 - `patterns/shader-compilation.md` — compile and link discipline.
+- `patterns/file-architecture.md` — file separation: shaders, meshes, utils, scenes.
 - `patterns/buffers-and-attributes.md` — data layout and attribute wiring.
 - `patterns/textures.md` — texture upload and NPOT handling.
 - `patterns/matrices-and-camera.md` — model, view, projection conventions.
@@ -41,6 +43,7 @@ Use this skill when the task involves:
 ## Rules
 
 - Always log shader compilation and program link errors.
+- Keep shaders in `.glsl` files, mesh generators in dedicated modules, and scene orchestration separate (see `patterns/file-architecture.md`).
 - Prefer a reproducible minimal example before refactoring.
 - Handle non-power-of-two textures correctly in WebGL 1.
 - Keep data layout explicit: positions, normals, uvs, colors, and indices should not be ambiguous.

@@ -1,3 +1,9 @@
+// Allow importing .glsl files as raw strings via Vite's ?raw suffix
+declare module "*.glsl?raw" {
+  const src: string;
+  export default src;
+}
+
 interface ImportMetaEnv {
   readonly STRAPI_URL: string;
   readonly PUBLIC_SITE_URL: string;

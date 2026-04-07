@@ -1,15 +1,17 @@
 /**
  * gridScene.ts
  *
- * Pure WebGL2 implementation of a distortion grid background.
- * No Three.js — only raw WebGL2 API calls, custom GLSL 300 ES shaders,
- * and typed Float32Array buffers.
+ * Pure WebGL2 distortion-grid background scene.
+ * Orchestrates shader compilation, mesh creation, and the render loop.
  *
- * Features:
- * - Thin black lines on a white background
- * - Stretched grid (non-uniform line spacing — denser at edges, wider at center)
- * - Mouse-following distortion with gaussian falloff
- * - Subtle breathing animation (slow sine oscillation)
+ * Two draw calls per frame:
+ * 1. Grid lines — white, with magnification inside the mouse circle.
+ * 2. Circle border — brand blue (#3200f2), follows the mouse.
+ *
+ * All domain logic lives in dedicated modules:
+ * - Shaders:  `./shaders/grid/vertex.glsl` & `./shaders/grid/fragment.glsl`
+ * - GPU util: `./shaderUtils.ts`
+ * - Geometry: `./gridMesh.ts`
  *
  * @example
  * ```ts
@@ -20,166 +22,14 @@
  * ```
  */
 
-// ---------------------------------------------------------------------------
-// Shaders
-// ---------------------------------------------------------------------------
+import vertexSource from "./shaders/grid/vertex.glsl?raw";
+import fragmentSource from "./shaders/grid/fragment.glsl?raw";
+import { compileShader, createProgram } from "./shaderUtils";
+import { generateGridVertices, generateCircleVertices } from "./gridMesh";
 
-const VERTEX_SHADER_SOURCE = /* glsl */ `#version 300 es
-precision highp float;
-
-in vec2 a_position;
-
-uniform vec2 u_mouse;
-uniform float u_time;
-uniform float u_aspect;
-
-void main() {
-  vec2 pos = a_position;
-
-  // --- Mouse distortion (aspect-corrected for circular falloff) ---
-  vec2 corrected = vec2(pos.x * u_aspect, pos.y);
-  vec2 mouseCorr = vec2(u_mouse.x * u_aspect, u_mouse.y);
-  float dist = distance(corrected, mouseCorr);
-
-  float radius = 0.70;
-  float strength = 0.12;
-  float falloff = exp(-(dist * dist) / (radius * radius));
-
-  vec2 dir = corrected - mouseCorr;
-  if (dist > 0.001) dir = normalize(dir);
-
-  corrected += dir * falloff * strength;
-  pos = vec2(corrected.x / u_aspect, corrected.y);
-
-  gl_Position = vec4(pos, 0.0, 1.0);
-}
-`;
-
-const FRAGMENT_SHADER_SOURCE = /* glsl */ `#version 300 es
-precision highp float;
-
-out vec4 fragColor;
-
-void main() {
-  fragColor = vec4(0.0, 0.0, 0.0, 1.0);
-}
-`;
-
-// ---------------------------------------------------------------------------
-// Shader helpers
-// ---------------------------------------------------------------------------
-
-function compileShader(
-  gl: WebGL2RenderingContext,
-  type: number,
-  source: string,
-): WebGLShader | null {
-  const shader = gl.createShader(type);
-  if (!shader) return null;
-
-  gl.shaderSource(shader, source);
-  gl.compileShader(shader);
-
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.error("Shader compile error:", gl.getShaderInfoLog(shader));
-    gl.deleteShader(shader);
-    return null;
-  }
-
-  return shader;
-}
-
-function createProgram(
-  gl: WebGL2RenderingContext,
-  vs: WebGLShader,
-  fs: WebGLShader,
-): WebGLProgram | null {
-  const program = gl.createProgram();
-  if (!program) return null;
-
-  gl.attachShader(program, vs);
-  gl.attachShader(program, fs);
-  gl.linkProgram(program);
-
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    console.error("Program link error:", gl.getProgramInfoLog(program));
-    gl.deleteProgram(program);
-    return null;
-  }
-
-  return program;
-}
-
-// ---------------------------------------------------------------------------
-// Grid mesh generation
-// ---------------------------------------------------------------------------
-
-/**
- * Generates grid line vertices suitable for `gl.LINES`.
- *
- * Lines are uniformly distributed so every cell is a perfect square in
- * clip space. Each individual line is subdivided into `segments` uniform
- * steps so vertex-shader mouse distortion looks smooth.
- *
- * @param rows     Number of horizontal lines.
- * @param cols     Number of vertical lines.
- * @param segments Subdivision points per line.
- * @param extent   How far beyond [-1,1] clip space the grid extends.
- */
-function generateGridVertices(
-  rows = 80,
-  cols = 80,
-  segments = 80,
-  extent = 1.1,
-): Float32Array {
-  // Uniform spacing — every cell is the same size.
-  const rowPositions: number[] = [];
-  for (let i = 0; i < rows; i++) {
-    const t = rows === 1 ? 0 : (i / (rows - 1)) * 2 - 1; // -1 … 1
-    rowPositions.push(t * extent);
-  }
-
-  const colPositions: number[] = [];
-  for (let j = 0; j < cols; j++) {
-    const t = cols === 1 ? 0 : (j / (cols - 1)) * 2 - 1;
-    colPositions.push(t * extent);
-  }
-
-  // Each line segment produces 2 vertices × 2 floats.
-  const verticesPerLine = segments * 2 * 2;
-  const totalFloats = (rows + cols) * verticesPerLine;
-  const data = new Float32Array(totalFloats);
-
-  let offset = 0;
-
-  // Horizontal lines
-  for (let i = 0; i < rows; i++) {
-    const y = rowPositions[i];
-    for (let s = 0; s < segments; s++) {
-      const x0 = -extent + (s / segments) * (2 * extent);
-      const x1 = -extent + ((s + 1) / segments) * (2 * extent);
-      data[offset++] = x0;
-      data[offset++] = y;
-      data[offset++] = x1;
-      data[offset++] = y;
-    }
-  }
-
-  // Vertical lines
-  for (let j = 0; j < cols; j++) {
-    const x = colPositions[j];
-    for (let s = 0; s < segments; s++) {
-      const y0 = -extent + (s / segments) * (2 * extent);
-      const y1 = -extent + ((s + 1) / segments) * (2 * extent);
-      data[offset++] = x;
-      data[offset++] = y0;
-      data[offset++] = x;
-      data[offset++] = y1;
-    }
-  }
-
-  return data;
-}
+// Brand blue: #3200f2 → normalized RGBA
+const BRAND_BLUE = { r: 50 / 255, g: 0 / 255, b: 242 / 255, a: 1.0 };
+const GRID_WHITE = { r: 1.0, g: 1.0, b: 1.0, a: 1 };
 
 // ---------------------------------------------------------------------------
 // Public API
@@ -217,8 +67,8 @@ export function initGridScene(
 
   // ---- Shaders & program ---------------------------------------------------
 
-  const vs = compileShader(gl, gl.VERTEX_SHADER, VERTEX_SHADER_SOURCE);
-  const fs = compileShader(gl, gl.FRAGMENT_SHADER, FRAGMENT_SHADER_SOURCE);
+  const vs = compileShader(gl, gl.VERTEX_SHADER, vertexSource);
+  const fs = compileShader(gl, gl.FRAGMENT_SHADER, fragmentSource);
 
   if (!vs || !fs) {
     canvas.remove();
@@ -236,28 +86,49 @@ export function initGridScene(
   // ---- Uniform & attribute locations ---------------------------------------
 
   const uMouse = gl.getUniformLocation(program, "u_mouse");
-  const uTime = gl.getUniformLocation(program, "u_time");
   const uAspect = gl.getUniformLocation(program, "u_aspect");
+  const uMode = gl.getUniformLocation(program, "u_mode");
+  const uColor = gl.getUniformLocation(program, "u_color");
   const aPosition = gl.getAttribLocation(program, "a_position");
 
   // ---- Grid mesh -----------------------------------------------------------
 
-  const gridData = generateGridVertices(80, 80, 80, 1.5);
-  const vertexCount = gridData.length / 2;
+  const gridData = generateGridVertices(20, 20, 64, 1.3);
+  const gridVertexCount = gridData.length / 2;
 
-  const vao = gl.createVertexArray();
-  const vbo = gl.createBuffer();
+  const gridVao = gl.createVertexArray();
+  const gridVbo = gl.createBuffer();
 
-  gl.bindVertexArray(vao);
-  gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+  gl.bindVertexArray(gridVao);
+  gl.bindBuffer(gl.ARRAY_BUFFER, gridVbo);
   gl.bufferData(gl.ARRAY_BUFFER, gridData, gl.STATIC_DRAW);
   gl.enableVertexAttribArray(aPosition);
   gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
   gl.bindVertexArray(null);
 
+  // ---- Circle border mesh --------------------------------------------------
+
+  const circleData = generateCircleVertices(128);
+  const circleVertexCount = circleData.length / 2;
+
+  const circleVao = gl.createVertexArray();
+  const circleVbo = gl.createBuffer();
+
+  gl.bindVertexArray(circleVao);
+  gl.bindBuffer(gl.ARRAY_BUFFER, circleVbo);
+  gl.bufferData(gl.ARRAY_BUFFER, circleData, gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(aPosition);
+  gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+  gl.bindVertexArray(null);
+
+  // ---- Blending for alpha lines --------------------------------------------
+
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
   // ---- Line width ----------------------------------------------------------
 
-  gl.lineWidth(1.0);
+  gl.lineWidth(1.5);
 
   // ---- Sizing --------------------------------------------------------------
 
@@ -320,26 +191,50 @@ export function initGridScene(
       return;
     }
 
-    const now = performance.now() / 1000;
-    const time = now - startTime;
-
     // Smooth mouse lerp
     mouseX += (targetMouseX - mouseX) * 0.08;
     mouseY += (targetMouseY - mouseY) * 0.08;
 
-    // Clear to white
-    gl.clearColor(1.0, 1.0, 1.0, 1.0);
+    const aspect = canvas.width / canvas.height;
+
+    // Clear to black
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    // Draw
     gl.useProgram(program);
 
+    // Shared uniforms
     gl.uniform2f(uMouse, mouseX, mouseY);
-    gl.uniform1f(uTime, time);
-    gl.uniform1f(uAspect, canvas.width / canvas.height);
+    gl.uniform1f(uAspect, aspect);
 
-    gl.bindVertexArray(vao);
-    gl.drawArrays(gl.LINES, 0, vertexCount);
+    // ---- Draw 1: Grid (white, magnified inside circle) ---------------------
+
+    gl.uniform1f(uMode, 0.0);
+    gl.uniform4f(
+      uColor,
+      GRID_WHITE.r,
+      GRID_WHITE.g,
+      GRID_WHITE.b,
+      GRID_WHITE.a,
+    );
+
+    gl.bindVertexArray(gridVao);
+    gl.drawArrays(gl.LINES, 0, gridVertexCount);
+    gl.bindVertexArray(null);
+
+    // ---- Draw 2: Circle border (brand blue) --------------------------------
+
+    gl.uniform1f(uMode, 1.0);
+    gl.uniform4f(
+      uColor,
+      BRAND_BLUE.r,
+      BRAND_BLUE.g,
+      BRAND_BLUE.b,
+      BRAND_BLUE.a,
+    );
+
+    gl.bindVertexArray(circleVao);
+    gl.drawArrays(gl.LINES, 0, circleVertexCount);
     gl.bindVertexArray(null);
 
     animationId = requestAnimationFrame(render);
@@ -356,8 +251,10 @@ export function initGridScene(
     window.removeEventListener("resize", resize);
     document.removeEventListener("visibilitychange", onVisibilityChange);
 
-    gl.deleteVertexArray(vao);
-    gl.deleteBuffer(vbo);
+    gl.deleteVertexArray(gridVao);
+    gl.deleteBuffer(gridVbo);
+    gl.deleteVertexArray(circleVao);
+    gl.deleteBuffer(circleVbo);
     gl.deleteProgram(program);
     gl.deleteShader(vs);
     gl.deleteShader(fs);
