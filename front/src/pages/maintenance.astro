@@ -61,10 +61,34 @@ const popin = popinInfo?.[0];
       </div>
     )}
 
-    <!-- Three.js Scene -->
+    <!-- Three.js Scene (must be before CTA so card bounds are available) -->
     <div class="canvas-host">
       <ThreeScene client:load />
     </div>
 
   </section>
+
+  <script>
+    import { initFloatingCta } from '../lib/animations/floatingCta';
+
+    // Wait for the Three.js card to load before starting the float.
+    // The card sets window.__getCardScreenBounds once it's ready.
+    function boot() {
+      const ctaEl = document.querySelector('.maintenance__cta') as HTMLElement | null;
+      if (!ctaEl) return;
+
+      // Poll until card bounds are available (or start after 3 s anyway)
+      let waited = 0;
+      const interval = setInterval(() => {
+        waited += 100;
+        if (window.__getCardScreenBounds || waited >= 3000) {
+          clearInterval(interval);
+          initFloatingCta(ctaEl);
+        }
+      }, 100);
+    }
+
+    // Astro scripts are type="module" → deferred, DOM is ready
+    boot();
+  </script>
 </BaseLayout>

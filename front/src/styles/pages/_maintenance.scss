@@ -55,14 +55,16 @@
     z-index: 0; // Behind marquee and popin
   }
 
-  // CTA button — centered over the 3D scene, above canvas and marquee
+  // CTA button — floats around the 3D scene, positioned by JS
   &__cta {
-    position: absolute;
-    z-index: 2;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    position: fixed;
+    z-index: 10;
     pointer-events: auto;
+
+    // Responsive: shrink the circle below 1200px so it fits around the card
+    @media (max-width: 1200px) {
+      --btn-shape-circle-size: clamp(4rem, 8vw, 7rem);
+    }
   }
 
   // Ensure the 3D scene container fills its parent
