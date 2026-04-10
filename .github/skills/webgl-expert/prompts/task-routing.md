@@ -14,3 +14,4 @@ Use this file to decide where Copilot should look first.
 - File structure or separating shaders/meshes/scenes → `patterns/file-architecture.md`
 - Distortion grid or circular void effect → `examples/distortion-grid.md`
 - Constant or API lookup → `reference.md`
+- Add / learn / train a new technique, example, or shader → `prompts/train-skill.md`
