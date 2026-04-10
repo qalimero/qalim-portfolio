@@ -89,6 +89,7 @@ export function initGridScene(
   const uAspect = gl.getUniformLocation(program, "u_aspect");
   const uMode = gl.getUniformLocation(program, "u_mode");
   const uColor = gl.getUniformLocation(program, "u_color");
+  const uRadius = gl.getUniformLocation(program, "u_radius");
   const aPosition = gl.getAttribLocation(program, "a_position");
 
   // ---- Grid mesh -----------------------------------------------------------
@@ -154,6 +155,11 @@ export function initGridScene(
   let targetMouseX = 0;
   let targetMouseY = 0;
 
+  /** Default cursor-circle radius in clip-space NDC Y units */
+  const DEFAULT_RADIUS = 0.25;
+  let currentRadius = DEFAULT_RADIUS;
+  let targetRadius = DEFAULT_RADIUS;
+
   function onMouseMove(e: MouseEvent): void {
     targetMouseX = (e.clientX / window.innerWidth) * 2 - 1;
     targetMouseY = -((e.clientY / window.innerHeight) * 2 - 1);
@@ -191,9 +197,51 @@ export function initGridScene(
       return;
     }
 
-    // Smooth mouse lerp
-    mouseX += (targetMouseX - mouseX) * 0.08;
-    mouseY += (targetMouseY - mouseY) * 0.08;
+    // ---- Magnetize: pull circle toward floating CTA when mouse is near -----
+
+    // biome-ignore lint/suspicious/noExplicitAny: cross-module bridge via window globals
+    const ctaBounds = (window as any).__ctaScreenBounds as {
+      x: number; y: number; width: number; height: number; radius: number;
+    } | null | undefined;
+
+    let effectiveTargetX = targetMouseX;
+    let effectiveTargetY = targetMouseY;
+    targetRadius = DEFAULT_RADIUS;
+
+    if (ctaBounds) {
+      const ctaCx = ctaBounds.x + ctaBounds.radius;
+      const ctaCy = ctaBounds.y + ctaBounds.radius;
+
+      // Convert mouse NDC to screen pixels for distance check
+      const mouseScreenX = ((targetMouseX + 1) / 2) * window.innerWidth;
+      const mouseScreenY = ((1 - targetMouseY) / 2) * window.innerHeight;
+
+      const dxPx = mouseScreenX - ctaCx;
+      const dyPx = mouseScreenY - ctaCy;
+      const distPx = Math.sqrt(dxPx * dxPx + dyPx * dyPx);
+
+      // Magnetize threshold: 2.5× the CTA radius in pixels
+      const threshold = ctaBounds.radius * 2.5;
+
+      if (distPx < threshold) {
+        const t = 1 - distPx / threshold; // 0→1 as mouse approaches CTA centre
+
+        // Blend mouse target toward CTA centre (NDC)
+        const ctaNDCX = (ctaCx / window.innerWidth) * 2 - 1;
+        const ctaNDCY = -((ctaCy / window.innerHeight) * 2 - 1);
+        effectiveTargetX = targetMouseX + (ctaNDCX - targetMouseX) * t;
+        effectiveTargetY = targetMouseY + (ctaNDCY - targetMouseY) * t;
+
+        // Blend circle radius to wrap the CTA (1.15× CTA radius, in NDC Y units)
+        const ctaRadiusNDC = (ctaBounds.radius / (window.innerHeight / 2)) * 1.15;
+        targetRadius = DEFAULT_RADIUS + (ctaRadiusNDC - DEFAULT_RADIUS) * t;
+      }
+    }
+
+    // Smooth lerps
+    mouseX += (effectiveTargetX - mouseX) * 0.08;
+    mouseY += (effectiveTargetY - mouseY) * 0.08;
+    currentRadius += (targetRadius - currentRadius) * 0.08;
 
     const aspect = canvas.width / canvas.height;
 
@@ -206,6 +254,7 @@ export function initGridScene(
     // Shared uniforms
     gl.uniform2f(uMouse, mouseX, mouseY);
     gl.uniform1f(uAspect, aspect);
+    gl.uniform1f(uRadius, currentRadius);
 
     // ---- Draw 1: Grid (white, magnified inside circle) ---------------------
 

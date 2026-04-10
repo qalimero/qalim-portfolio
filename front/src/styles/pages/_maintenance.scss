@@ -55,16 +55,13 @@
     z-index: 0; // Behind marquee and popin
   }
 
-  // CTA button — floats around the 3D scene, positioned by JS
+  // CTA button — floats around the 3D scene, positioned by JS.
+  // Size is controlled dynamically by floatingCta.ts based on the available
+  // corridor around the Spline card (shrinks only when space is insufficient).
   &__cta {
     position: fixed;
     z-index: 10;
     pointer-events: auto;
-
-    // Responsive: shrink the circle below 1200px so it fits around the card
-    @media (max-width: 1200px) {
-      --btn-shape-circle-size: clamp(4rem, 8vw, 7rem);
-    }
   }
 
   // Ensure the 3D scene container fills its parent
