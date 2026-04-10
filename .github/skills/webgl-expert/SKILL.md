@@ -36,9 +36,14 @@ Use this skill when the task involves:
 - `patterns/render-loop.md` — animation and resize flow.
 - `patterns/context-loss.md` — production-safe recovery.
 - `patterns/performance.md` — optimization guidance.
+- `patterns/shader-animation.md` — physics, particles, noise, procedural animation, VFX, instancing.
 - `prompts/task-routing.md` — how to choose the right subfile.
 - `prompts/debugging-checklist.md` — step-by-step debugging order.
 - `shaders/` — reusable shader starters.
+- `shaders/noise.glsl` — simplex noise (2D/3D/4D), FBM, curl noise, domain warping.
+- `shaders/sdf-2d.glsl` — 2D SDF primitives, boolean ops, smooth blending, domain transforms.
+- `shaders/easing.glsl` — common easing functions (quad, cubic, elastic, bounce, back, etc.).
+- `shaders/color-utils.glsl` — HSV/HSL conversion, cosine palettes, gamma, blending, temperature.
 
 ## Rules
 
