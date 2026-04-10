@@ -39,6 +39,7 @@ Use this skill when the task involves:
 - `patterns/shader-animation.md` — physics, particles, noise, procedural animation, VFX, instancing.
 - `prompts/task-routing.md` — how to choose the right subfile.
 - `prompts/debugging-checklist.md` — step-by-step debugging order.
+- `prompts/train-skill.md` — how to extend this skill with new examples, patterns, or shaders.
 - `shaders/` — reusable shader starters.
 - `shaders/noise.glsl` — simplex noise (2D/3D/4D), FBM, curl noise, domain warping.
 - `shaders/sdf-2d.glsl` — 2D SDF primitives, boolean ops, smooth blending, domain transforms.
