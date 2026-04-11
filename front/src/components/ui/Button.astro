@@ -23,82 +23,82 @@
  *    label="Let's connect"
  *  />
  */
-import { Icon } from 'astro-icon/components';
+import { Icon } from "astro-icon/components";
 
 export interface Props {
-  /** Visible text label — also used as accessible name */
-  label: string;
-  /** If set, renders as an anchor (<a>) */
-  href?: string;
-  /** HTML type attribute, only used when rendering as <button> */
-  type?: 'button' | 'submit' | 'reset';
-  /** Visual variant */
-  variant?: 'primary' | 'shape-circle';
-  /**
-   * Astro shape component to render as the button's decorative SVG background.
-   * Use with variant="shape-circle". Import from src/components/shapes/.
-   * The component receives class="btn__shape" aria-hidden="true" focusable="false".
-   *
-   * Note: typed as `any` — Astro does not expose a stable public type for
-   * component factory functions.
-   */
-  // biome-ignore lint/suspicious/noExplicitAny: no stable Astro component factory type
-  shape?: any;
-  /**
-   * Additional props forwarded to the shape component.
-   * Use this to pass dynamic content like `{ text: 'My text' }` to shapes
-   * that accept data-driven rendering (e.g. CircleTextShape).
-   */
-  shapeProps?: Record<string, unknown>;
-  /** astro-icon name for optional icon */
-  icon?: string;
-  /** Icon placement relative to label text */
-  iconPosition?: 'left' | 'right';
-  /** Disabled state */
-  disabled?: boolean;
-  /** Overrides accessible name for screen readers */
-  ariaLabel?: string;
-  /** Additional CSS classes */
-  class?: string;
+	/** Visible text label — also used as accessible name */
+	label: string;
+	/** If set, renders as an anchor (<a>) */
+	href?: string;
+	/** HTML type attribute, only used when rendering as <button> */
+	type?: "button" | "submit" | "reset";
+	/** Visual variant */
+	variant?: "primary" | "shape-circle";
+	/**
+	 * Astro shape component to render as the button's decorative SVG background.
+	 * Use with variant="shape-circle". Import from src/components/shapes/.
+	 * The component receives class="btn__shape" aria-hidden="true" focusable="false".
+	 *
+	 * Note: typed as `any` — Astro does not expose a stable public type for
+	 * component factory functions.
+	 */
+	// biome-ignore lint/suspicious/noExplicitAny: no stable Astro component factory type
+	shape?: any;
+	/**
+	 * Additional props forwarded to the shape component.
+	 * Use this to pass dynamic content like `{ text: 'My text' }` to shapes
+	 * that accept data-driven rendering (e.g. CircleTextShape).
+	 */
+	shapeProps?: Record<string, unknown>;
+	/** astro-icon name for optional icon */
+	icon?: string;
+	/** Icon placement relative to label text */
+	iconPosition?: "left" | "right";
+	/** Disabled state */
+	disabled?: boolean;
+	/** Overrides accessible name for screen readers */
+	ariaLabel?: string;
+	/** Additional CSS classes */
+	class?: string;
 }
 
 const {
-  label,
-  href,
-  type = 'button',
-  variant = 'primary',
-  shape: Shape,
-  shapeProps = {},
-  icon,
-  iconPosition = 'right',
-  disabled = false,
-  ariaLabel,
-  class: className = '',
+	label,
+	href,
+	type = "button",
+	variant = "primary",
+	shape: Shape,
+	shapeProps = {},
+	icon,
+	iconPosition = "right",
+	disabled = false,
+	ariaLabel,
+	class: className = "",
 } = Astro.props;
 
-const Tag = href ? 'a' : 'button';
+const Tag = href ? "a" : "button";
 
 const attrs: Record<string, string | boolean | number | undefined> = {};
 
 if (href) {
-  attrs.href = href;
-  if (disabled) {
-    attrs['aria-disabled'] = 'true';
-    attrs.tabindex = '-1';
-  }
+	attrs.href = href;
+	if (disabled) {
+		attrs["aria-disabled"] = "true";
+		attrs.tabindex = "-1";
+	}
 } else {
-  attrs.type = type;
-  if (disabled) {
-    attrs.disabled = true;
-    attrs['aria-disabled'] = 'true';
-  }
+	attrs.type = type;
+	if (disabled) {
+		attrs.disabled = true;
+		attrs["aria-disabled"] = "true";
+	}
 }
 
 if (ariaLabel) {
-  attrs['aria-label'] = ariaLabel;
+	attrs["aria-label"] = ariaLabel;
 }
 
-const classes = ['btn', `btn--${variant}`, className].filter(Boolean).join(' ');
+const classes = ["btn", `btn--${variant}`, className].filter(Boolean).join(" ");
 ---
 
 <Tag class={classes} {...attrs}>

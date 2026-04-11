@@ -29,68 +29,68 @@
  *     external={true}
  *   />
  */
-import { Icon } from 'astro-icon/components';
+import { Icon } from "astro-icon/components";
 
 export interface Props {
-  /**
-   * Text label — visible or sr-only, always provides the accessible name.
-   * RGAA 6.1: every link MUST have an explicit intitulé de lien.
-   */
-  label: string;
-  /** Link destination (required — this is a link, not a button) */
-  href: string;
-  /** Visual variant — shares Button's design tokens */
-  variant?: 'primary' | 'shape-circle';
-  /**
-   * Astro shape component for the decorative SVG background.
-   * The component receives class="btn__shape" aria-hidden="true" focusable="false".
-   */
-  // biome-ignore lint/suspicious/noExplicitAny: no stable Astro component factory type
-  shape?: any;
-  /** Additional props forwarded to the shape component */
-  shapeProps?: Record<string, unknown>;
-  /** astro-icon name for optional icon */
-  icon?: string;
-  /** Icon placement relative to label text */
-  iconPosition?: 'left' | 'right';
-  /**
-   * When true the label text is visually hidden (sr-only) but remains
-   * accessible to assistive technologies.
-   * Useful for icon-only or shape-only links where the visual design
-   * conveys the purpose to sighted users.
-   * The link still meets RGAA 6.1 — the accessible name is preserved.
-   * @default false
-   */
-  srOnly?: boolean;
-  /**
-   * External link — opens in a new tab.
-   * Automatically adds target="_blank", rel="noopener noreferrer",
-   * and a sr-only "(nouvelle fenêtre)" indication per RGAA 13.2.
-   * @default false
-   */
-  external?: boolean;
-  /**
-   * title attribute.
-   * Per RGAA, should complement (not duplicate) the accessible name.
-   * Only use when extra context is genuinely needed.
-   */
-  title?: string;
-  /** Additional CSS classes */
-  class?: string;
+	/**
+	 * Text label — visible or sr-only, always provides the accessible name.
+	 * RGAA 6.1: every link MUST have an explicit intitulé de lien.
+	 */
+	label: string;
+	/** Link destination (required — this is a link, not a button) */
+	href: string;
+	/** Visual variant — shares Button's design tokens */
+	variant?: "primary" | "shape-circle";
+	/**
+	 * Astro shape component for the decorative SVG background.
+	 * The component receives class="btn__shape" aria-hidden="true" focusable="false".
+	 */
+	// biome-ignore lint/suspicious/noExplicitAny: no stable Astro component factory type
+	shape?: any;
+	/** Additional props forwarded to the shape component */
+	shapeProps?: Record<string, unknown>;
+	/** astro-icon name for optional icon */
+	icon?: string;
+	/** Icon placement relative to label text */
+	iconPosition?: "left" | "right";
+	/**
+	 * When true the label text is visually hidden (sr-only) but remains
+	 * accessible to assistive technologies.
+	 * Useful for icon-only or shape-only links where the visual design
+	 * conveys the purpose to sighted users.
+	 * The link still meets RGAA 6.1 — the accessible name is preserved.
+	 * @default false
+	 */
+	srOnly?: boolean;
+	/**
+	 * External link — opens in a new tab.
+	 * Automatically adds target="_blank", rel="noopener noreferrer",
+	 * and a sr-only "(nouvelle fenêtre)" indication per RGAA 13.2.
+	 * @default false
+	 */
+	external?: boolean;
+	/**
+	 * title attribute.
+	 * Per RGAA, should complement (not duplicate) the accessible name.
+	 * Only use when extra context is genuinely needed.
+	 */
+	title?: string;
+	/** Additional CSS classes */
+	class?: string;
 }
 
 const {
-  label,
-  href,
-  variant = 'primary',
-  shape: Shape,
-  shapeProps = {},
-  icon,
-  iconPosition = 'right',
-  srOnly = false,
-  external = false,
-  title,
-  class: className = '',
+	label,
+	href,
+	variant = "primary",
+	shape: Shape,
+	shapeProps = {},
+	icon,
+	iconPosition = "right",
+	srOnly = false,
+	external = false,
+	title,
+	class: className = "",
 } = Astro.props;
 
 // Build HTML attributes for the <a> element
@@ -98,16 +98,18 @@ const attrs: Record<string, string | undefined> = {};
 attrs.href = href;
 
 if (external) {
-  attrs.target = '_blank';
-  attrs.rel = 'noopener noreferrer';
+	attrs.target = "_blank";
+	attrs.rel = "noopener noreferrer";
 }
 
 if (title) {
-  attrs.title = title;
+	attrs.title = title;
 }
 
-const classes = ['btn', `btn--${variant}`, className].filter(Boolean).join(' ');
-const labelClasses = ['btn__label', srOnly && 'btn__label--sr-only'].filter(Boolean).join(' ');
+const classes = ["btn", `btn--${variant}`, className].filter(Boolean).join(" ");
+const labelClasses = ["btn__label", srOnly && "btn__label--sr-only"]
+	.filter(Boolean)
+	.join(" ");
 ---
 
 <a class={classes} {...attrs}>

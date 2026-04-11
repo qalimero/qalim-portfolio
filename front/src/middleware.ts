@@ -2,27 +2,27 @@
  * Astro middleware with typed context and maintenance mode
  * Provides request logging, performance monitoring, and typed locals
  */
-import { defineMiddleware } from 'astro:middleware';
-import type { MiddlewareNext } from 'astro';
-import { isDevelopment } from './lib/env';
+import { defineMiddleware } from "astro:middleware";
+import type { MiddlewareNext } from "astro";
+import { isDevelopment } from "./lib/env";
 
 /**
  * Type definition for context.locals
  * Add any shared data you want to pass to your pages here
  */
 export interface MiddlewareLocals {
-  /** Current request timestamp for performance monitoring */
-  requestStartTime: number;
-  /** User information if authenticated */
-  user?: {
-    id: string;
-    email: string;
-    role: string;
-  };
-  /** Request metadata */
-  requestId: string;
-  /** Whether maintenance mode is active */
-  maintenanceMode: boolean;
+	/** Current request timestamp for performance monitoring */
+	requestStartTime: number;
+	/** User information if authenticated */
+	user?: {
+		id: string;
+		email: string;
+		role: string;
+	};
+	/** Request metadata */
+	requestId: string;
+	/** Whether maintenance mode is active */
+	maintenanceMode: boolean;
 }
 
 /**
@@ -30,73 +30,86 @@ export interface MiddlewareLocals {
  * This makes context.locals strongly typed throughout your app
  */
 declare global {
-  namespace App {
-    interface Locals extends MiddlewareLocals {}
-  }
+	namespace App {
+		interface Locals extends MiddlewareLocals {}
+	}
 }
 
 /**
  * Generate a unique request ID
  */
 function generateRequestId(): string {
-  return `req_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+	return `req_${Date.now()}_${Math.random().toString(36).substring(7)}`;
 }
 
 // Check maintenance mode from environment
-const maintenanceMode = import.meta.env.PUBLIC_MAINTENANCE_MODE === 'true';
+const maintenanceMode = import.meta.env.PUBLIC_MAINTENANCE_MODE === "true";
+const maintenancePublicPaths = new Set(["/maintenance", "/home"]);
 
 /**
  * Main middleware handler with typed context
  */
 export const onRequest = defineMiddleware(
-  async (context, next: MiddlewareNext) => {
-    const { url, request, redirect } = context;
-    const pathname = url.pathname;
-    const method = request.method;
-    const isMaintenancePage = pathname === '/maintenance';
+	async (context, next: MiddlewareNext) => {
+		const { url, request, redirect } = context;
+		const pathname = url.pathname;
+		const method = request.method;
+		const isMaintenancePublicPath = maintenancePublicPaths.has(pathname);
 
-    // Add typed data to context.locals
-    context.locals.requestStartTime = Date.now();
-    context.locals.requestId = generateRequestId();
-    context.locals.maintenanceMode = maintenanceMode;
+		// Add typed data to context.locals
+		context.locals.requestStartTime = Date.now();
+		context.locals.requestId = generateRequestId();
+		context.locals.maintenanceMode = maintenanceMode;
 
-    // Log request in development
-    if (isDevelopment()) {
-      console.log(`[${context.locals.requestId}] ${method} ${pathname}`);
-    }
+		// Log request in development
+		if (isDevelopment()) {
+			console.log(`[${context.locals.requestId}] ${method} ${pathname}`);
+		}
 
-    // Maintenance mode redirect
-    if (maintenanceMode && !isMaintenancePage) {
-      console.log(`[${context.locals.requestId}] Redirecting to maintenance page`);
-      return redirect('/maintenance');
-    }
+		// Maintenance mode redirect
+		if (maintenanceMode && pathname === "/terminal") {
+			console.log(
+				`[${context.locals.requestId}] Redirecting legacy terminal route to home page`,
+			);
+			return redirect("/home");
+		}
 
-    // Process the request
-    const response = await next();
+		if (maintenanceMode && !isMaintenancePublicPath) {
+			console.log(
+				`[${context.locals.requestId}] Redirecting to maintenance page`,
+			);
+			return redirect("/maintenance");
+		}
 
-    // Calculate request duration
-    const duration = Date.now() - context.locals.requestStartTime;
+		// Process the request
+		const response = await next();
 
-    // Log response in development
-    if (isDevelopment()) {
-      console.log(
-        `[${context.locals.requestId}] ${method} ${pathname} - ${response.status} (${duration}ms)`
-      );
-    }
+		// Calculate request duration
+		const duration = Date.now() - context.locals.requestStartTime;
 
-    // Add security headers (production and development)
-    response.headers.set('X-Content-Type-Options', 'nosniff');
-    response.headers.set('X-Frame-Options', 'DENY');
-    response.headers.set('X-XSS-Protection', '1; mode=block');
-    response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-    response.headers.set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+		// Log response in development
+		if (isDevelopment()) {
+			console.log(
+				`[${context.locals.requestId}] ${method} ${pathname} - ${response.status} (${duration}ms)`,
+			);
+		}
 
-    // Add performance headers in development
-    if (isDevelopment()) {
-      response.headers.set('X-Response-Time', `${duration}ms`);
-      response.headers.set('X-Request-ID', context.locals.requestId);
-    }
+		// Add security headers (production and development)
+		response.headers.set("X-Content-Type-Options", "nosniff");
+		response.headers.set("X-Frame-Options", "DENY");
+		response.headers.set("X-XSS-Protection", "1; mode=block");
+		response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+		response.headers.set(
+			"Permissions-Policy",
+			"geolocation=(), microphone=(), camera=()",
+		);
 
-    return response;
-  }
+		// Add performance headers in development
+		if (isDevelopment()) {
+			response.headers.set("X-Response-Time", `${duration}ms`);
+			response.headers.set("X-Request-ID", context.locals.requestId);
+		}
+
+		return response;
+	},
 );

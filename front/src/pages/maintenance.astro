@@ -3,20 +3,21 @@
  * Maintenance page - Displays maintenance message with animated marquee
  * Content managed via src/content/site.config.json (editable via Decap CMS)
  */
-import { getEntry } from 'astro:content';
-import BaseLayout from '../layouts/Layout.astro';
-import ThreeScene from '../components/scenes/ThreeScene.jsx';
-import WebGLGrid from '../components/scenes/WebGLGrid.jsx';
-import Marquee from '../components/ui/Marquee.astro';
-import Popin from '../components/ui/Popin.astro';
-import Link from '../components/ui/Link.astro';
-import CircleTextShape from '../components/shapes/CircleTextShape.astro';
+import { getEntry } from "astro:content";
+import ThreeScene from "../components/scenes/ThreeScene.jsx";
+import WebGLGrid from "../components/scenes/WebGLGrid.jsx";
+import CircleTextShape from "../components/shapes/CircleTextShape.astro";
+import Link from "../components/ui/Link.astro";
+import Marquee from "../components/ui/Marquee.astro";
+import Popin from "../components/ui/Popin.astro";
+import BaseLayout from "../layouts/Layout.astro";
 
-const entry = await getEntry('siteConfig', 'main');
-if (!entry) throw new Error('Site config not found: src/content/site.config.json');
+const entry = await getEntry("siteConfig", "main");
+if (!entry)
+	throw new Error("Site config not found: src/content/site.config.json");
 
 const { title, marquee, popinInfo, cta } = entry.data;
-const isCtaExternal = cta?.href?.startsWith('http');
+const isCtaExternal = cta?.href?.startsWith("http");
 const popin = popinInfo?.[0];
 ---
 
@@ -70,7 +71,7 @@ const popin = popinInfo?.[0];
 
   <script>
     import { initStaticCta } from '../lib/animations/ctaPosition';
-    import { initParticleScene } from '../lib/webgl/particleScene';
+    import { initCtaReveal } from '../lib/webgl/ctaRevealScene';
     import { initTransitionScene } from '../lib/webgl/transitionScene';
 
     function boot() {
@@ -79,52 +80,32 @@ const popin = popinInfo?.[0];
 
       const btnEl = ctaEl.querySelector<HTMLElement>('.btn');
 
-      // Static positioning + draw-on reveal animation
+      // Grid-aligned positioning + circle→square morph after 2 s
       initStaticCta(ctaEl);
 
-      // WebGL2 pixel particle system (mouse + CTA hover)
-      const particles = initParticleScene();
-
-      // Keep CTA state in sync with hover and position
-      if (particles && btnEl) {
-        let ctaHovered = false;
-
-        function updateCtaParticles() {
-          const rect = btnEl!.getBoundingClientRect();
-          particles!.setCtaState(
-            ctaHovered,
-            rect.left + rect.width  / 2,
-            rect.top  + rect.height / 2,
-            rect.width / 2,
-          );
+      // Pixel-creation overlay (synced with reveal)
+      if (btnEl) {
+        const ctaReveal = initCtaReveal(btnEl);
+        if (ctaReveal) {
+          setTimeout(() => ctaReveal.trigger(), 400);
         }
-
-        btnEl.addEventListener('pointerenter', () => {
-          ctaHovered = true;
-          updateCtaParticles();
-        });
-
-        btnEl.addEventListener('pointerleave', () => {
-          ctaHovered = false;
-          updateCtaParticles();
-        });
-
-        // Keep position fresh on scroll / resize
-        window.addEventListener('resize', updateCtaParticles);
       }
 
-      // WebGL2 pixel-wipe transition on CTA click → /terminal
+      // WebGL2 pixel-wipe transition on CTA click → /home
       const transition = initTransitionScene();
 
       if (btnEl && transition) {
         btnEl.addEventListener('click', (e) => {
           const href = (btnEl as HTMLAnchorElement).href;
-          if (!href || href.includes('/terminal')) {
-            e.preventDefault();
-            transition.trigger(() => {
-              window.location.href = '/terminal';
-            });
-          }
+          if (!href) return;
+
+          const destination = new URL(href, window.location.origin);
+          if (destination.origin !== window.location.origin) return;
+
+          e.preventDefault();
+          transition.trigger(() => {
+            window.location.href = `${destination.pathname}${destination.search}${destination.hash}`;
+          });
         });
       }
     }

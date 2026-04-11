@@ -21,14 +21,14 @@
  */
 
 interface Props {
-  class?: string;
-  'aria-hidden'?: 'true' | 'false';
-  focusable?: 'false' | 'true';
-  /** Text to display along the circular path. Auto-repeated to fill the circle. */
-  text?: string;
+	class?: string;
+	"aria-hidden"?: "true" | "false";
+	focusable?: "false" | "true";
+	/** Text to display along the circular path. Auto-repeated to fill the circle. */
+	text?: string;
 }
 
-const { class: className = '', text = '', ...rest } = Astro.props;
+const { class: className = "", text = "", ...rest } = Astro.props;
 
 // Unique ID for the <defs> path — avoids DOM conflicts when multiple instances exist.
 const pathId = `circle-text-${Math.random().toString(36).slice(2, 9)}`;
@@ -36,12 +36,13 @@ const pathId = `circle-text-${Math.random().toString(36).slice(2, 9)}`;
 // Auto-repeat the text with separators to fill the full circumference.
 // Circle path radius = 75 SVG units → circumference ≈ 471 units.
 // At font-size 14 + letter-spacing 2, each character ≈ 10 units → ~47 chars fill the circle.
-const SEPARATOR = ' \u00B7 '; // " · " (middle dot)
-const textWithSep = text ? `${text}${SEPARATOR}` : '';
+const SEPARATOR = " \u00B7 "; // " · " (middle dot)
+const textWithSep = text ? `${text}${SEPARATOR}` : "";
 const APPROX_CHARS_PER_CIRCLE = 47;
-const repeatCount = textWithSep.length > 0
-  ? Math.max(1, Math.ceil(APPROX_CHARS_PER_CIRCLE / textWithSep.length))
-  : 0;
+const repeatCount =
+	textWithSep.length > 0
+		? Math.max(1, Math.ceil(APPROX_CHARS_PER_CIRCLE / textWithSep.length))
+		: 0;
 const displayText = textWithSep.repeat(repeatCount).toUpperCase();
 ---
 
@@ -62,8 +63,9 @@ const displayText = textWithSep.repeat(repeatCount).toUpperCase();
     />
   </defs>
 
-  <!-- Background circle — fills the full viewBox, fades in after stroke draw -->
-  <circle class="btn__shape-fill" cx="100" cy="100" r="100" fill="var(--btn-shape-fill)" />
+  <!-- Background fill — rect covers the full viewBox so it works for both circle
+       (clipped by border-radius) and square (full coverage) states. -->
+  <rect class="btn__shape-fill" x="0" y="0" width="200" height="200" fill="var(--btn-shape-fill)" />
 
   <!-- Circular text following the path (decorative — parent SVG is aria-hidden) -->
   {displayText && (

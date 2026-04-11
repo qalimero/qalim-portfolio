@@ -139,32 +139,53 @@
   // It renders as <svg class="btn__shape"> — absolutely positioned
   // behind the label. To use a different shape, import any component
   // from shapes/ and pass it: <Button shape={MyShape} variant="shape-circle" />
+  //
+  // Shape lifecycle:
+  //  1. Pixel-creation overlay builds the fill visually
+  //  2. .is-revealed shows the CSS children (fill, text, content)
+  //  3. .is-morphed transitions from circle → square (desktop)
+  //     or circle → horizontal rectangle (tablet ≤ 768 px)
   // ============================================================
   &--shape-circle {
-    // Force the button into a perfect square so the circle isn't distorted
     aspect-ratio: 1;
     width: var(--btn-shape-circle-size);
+    height: var(--btn-shape-height, var(--btn-shape-circle-size));
     color: var(--btn-shape-color);
     padding: var(--btn-shape-padding-y);
     border-radius: 50%;
     overflow: hidden;
 
-    // Smooth size transitions when JS dynamically resizes the button
+    // Morph transitions (border-radius, aspect-ratio, height)
     transition:
       transform 200ms ease,
       opacity 200ms ease,
-      width 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      border-radius 600ms cubic-bezier(0.34, 1.56, 0.64, 1),
+      aspect-ratio 600ms cubic-bezier(0.34, 1.56, 0.64, 1),
+      height 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
-    // ── Initial hidden state for draw-on children ──
-    // Explicit opacity: 0 prevents any flash before animations kick in.
-    // The ring is hidden via its SVG stroke-dashoffset attribute.
-    .btn__shape-fill {
-      opacity: 0;
-    }
-
+    // ── Initial hidden state ──
+    // Children start invisible; pixel-creation overlay builds the visual.
+    .btn__shape-fill,
     .btn__shape-text,
     .btn__content {
       opacity: 0;
+    }
+
+    // ── Revealed state (pixel-creation done → show CSS children) ──
+    &.is-revealed {
+      .btn__shape-fill {
+        opacity: 1;
+      }
+
+      .btn__shape-text,
+      .btn__content {
+        animation: btn-circle-text-appear 0.525s cubic-bezier(0.33, 1, 0.68, 1) 0.1s both;
+      }
+    }
+
+    // ── Morphed state: circle → square ──
+    &.is-morphed {
+      border-radius: 0;
     }
 
     // Scale decorative SVG on hover
@@ -178,44 +199,28 @@
       transform: scale(0.97);
     }
 
-    // Focus ring follows the circular outline
+    // Focus ring follows the shape outline
     &:focus-visible {
       outline: 2px solid var(--color-neutral-lightest);
       outline-offset: 6px;
-      border-radius: 50%;
     }
   }
 
   // ============================================================
-  // Draw-on reveal animation
-  // Triggered by adding .is-visible to the CTA wrapper element.
-  // Four sequential stages for a "lively draw" feel:
-  //   1. Ring stroke draws itself    (0 → 0.9 s)
-  //   2. Subtle scale pop            (0.525 → 0.975 s)
-  //   3. Fill circle fades in        (0.6 → 1.05 s)
-  //   4. Text fades in + lifts up    (0.825 → 1.35 s)
-  // (all durations and delays ×1.5 for a more detailed, deliberate draw)
+  // Pixel-creation reveal animation
+  // The old draw-on reveal is replaced by a WebGL pixel-creation
+  // overlay (ctaRevealScene.ts). The `.is-visible` class on the
+  // wrapper triggers the overlay; `.is-revealed` is added to the
+  // `.btn` when the overlay finishes, fading in text + content.
   // ============================================================
 
   // The CTA wrapper starts invisible; JS adds .is-visible after REVEAL_DELAY.
   &--shape-circle.is-visible,
   .is-visible &--shape-circle {
+    // Ring is no longer drawn — hide it
     .btn__shape-ring {
-      animation: btn-circle-draw 0.9s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+      display: none;
     }
-
-    .btn__shape-fill {
-      animation: btn-circle-fill-appear 0.45s ease 0.6s both;
-    }
-
-    .btn__shape-text,
-    .btn__content {
-      animation: btn-circle-text-appear 0.525s cubic-bezier(0.33, 1, 0.68, 1)
-        0.825s both;
-    }
-
-    // Subtle scale pop after the ring draws — adds energy to the reveal
-    animation: btn-circle-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.525s both;
   }
 
   // ============================================================
@@ -239,14 +244,10 @@
     }
 
     &--shape-circle {
-      width: var(--btn-shape-circle-size-mobile, var(--btn-shape-circle-size));
-      // Morph circle → rounded square at tablet
-      border-radius: 12px !important;
-      transition:
-        transform 200ms ease,
-        opacity 200ms ease,
-        width 400ms cubic-bezier(0.34, 1.56, 0.64, 1),
-        border-radius 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      // On tablet the morphed state becomes a horizontal rectangle (2×1 cells)
+      &.is-morphed {
+        aspect-ratio: 2;
+      }
 
       .btn__shape-ring {
         display: none;

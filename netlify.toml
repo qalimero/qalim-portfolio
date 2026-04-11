@@ -12,6 +12,11 @@
   to     = "/maintenance"
   status = 301
 
+[[redirects]]
+  from   = "/terminal"
+  to     = "/home"
+  status = 301
+
 # Cache immutable hashed assets (_astro/ chunk files)
 [[headers]]
   for = "/_astro/*"

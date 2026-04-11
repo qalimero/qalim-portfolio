@@ -1,63 +1,63 @@
 ---
+import WebGLGrid from "../components/scenes/WebGLGrid.jsx";
 /**
- * Terminal page — accessible via the CTA pixel-wipe transition from /maintenance.
- * A minimal dark interface with a WebGL grid background, styled as a terminal.
+ * Home page — accessible via the CTA pixel-wipe transition from /maintenance.
+ * Keeps the terminal mood while acting as the first landing page.
  */
-import BaseLayout from '../layouts/Layout.astro';
-import WebGLGrid from '../components/scenes/WebGLGrid.jsx';
+import BaseLayout from "../layouts/Layout.astro";
 ---
 
 <BaseLayout
-  title="Qalim — Terminal"
-  description="Welcome to the terminal."
-  bodyClass="page-terminal"
+  title="Qalim — Home"
+  description="Welcome home."
+  bodyClass="page-home"
 >
   <WebGLGrid client:load />
 
-  <section class="terminal">
-    <div class="terminal__window">
-      <div class="terminal__bar">
-        <span class="terminal__dot terminal__dot--red"></span>
-        <span class="terminal__dot terminal__dot--yellow"></span>
-        <span class="terminal__dot terminal__dot--green"></span>
-        <span class="terminal__bar-title">qalim — terminal</span>
+  <section class="home">
+    <div class="home__window">
+      <div class="home__bar">
+        <span class="home__dot home__dot--red"></span>
+        <span class="home__dot home__dot--yellow"></span>
+        <span class="home__dot home__dot--green"></span>
+        <span class="home__bar-title">qalim — home</span>
       </div>
-      <div class="terminal__body" aria-label="Terminal interface">
-        <div class="terminal__line">
-          <span class="terminal__prompt">qalim@portfolio:~$</span>
-          <span class="terminal__command"> whoami</span>
+      <div class="home__body" aria-label="Home terminal interface">
+        <div class="home__line">
+          <span class="home__prompt">qalim@portfolio:~$</span>
+          <span class="home__command"> whoami</span>
         </div>
-        <div class="terminal__output">
-          Creative developer · Accessibility expert · RGAA/RAWEB/WCAG
+        <div class="home__output">
+          Creative developer · motion systems · accessible interfaces
         </div>
-        <div class="terminal__line">
-          <span class="terminal__prompt">qalim@portfolio:~$</span>
-          <span class="terminal__command"> ls projects/</span>
+        <div class="home__line">
+          <span class="home__prompt">qalim@portfolio:~$</span>
+          <span class="home__command"> cat status.txt</span>
         </div>
-        <div class="terminal__output">
-          Coming soon — portfolio under construction.
+        <div class="home__output">
+          Selected work landing soon. Arts, experiments, and crafted interfaces in progress.
         </div>
-        <div class="terminal__line terminal__line--active">
-          <span class="terminal__prompt">qalim@portfolio:~$</span>
-          <span class="terminal__command terminal__cursor"> _</span>
+        <div class="home__line home__line--active">
+          <span class="home__prompt">qalim@portfolio:~$</span>
+          <span class="home__command home__cursor"> _</span>
         </div>
       </div>
     </div>
 
-    <a href="/maintenance" class="terminal__back">
+    <a href="/maintenance" class="home__back">
       ← Back to maintenance
     </a>
   </section>
 </BaseLayout>
 
 <style lang="scss">
-.page-terminal {
+.page-home {
   background: #000;
   color: #fff;
   min-height: 100vh;
 }
 
-.terminal {
+.home {
   position: relative;
   z-index: 1;
   min-height: 100vh;

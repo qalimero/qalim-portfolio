@@ -1,40 +1,40 @@
 {
-  "title": "I'll arrive",
-  "marquee": [
-    { "listItem": "soon available", "linkItem": null, "linkTitle": null },
+	"title": "I'll arrive",
+	"marquee": [
+		{ "listItem": "soon available", "linkItem": null, "linkTitle": null },
 
-    {
-      "listItem": "Accessibility expert - RGAA/RAWEB/WCAG",
-      "linkItem": null,
-      "linkTitle": null
-    },
-    {
-      "listItem": "linkedin",
-      "linkTitle": "linkedin ouvre un nouvel onglet vers linkedin",
-      "linkItem": "https://www.linkedin.com/in/quentin-serda/"
-    },
-    {
-      "listItem": "Some arts",
-      "linkTitle": "instagram ouvre un nouvel onglet vers instagram",
-      "linkItem": "https://www.instagram.com/_qalim/"
-    },
-    {
-      "listItem": "bric-à-brac technologique",
-      "linkItem": null,
-      "linkTitle": null
-    }
-  ],
-  "popinInfo": [
-    {
-      "title": "Bienvenue, sur la page de maintenance ",
-      "text": "Bonjour et bienvenue ! Ce site est en cours de construction. Revenez bientôt pour découvrir mon portfolio. Vous pouvez me contacter en cliquant sur ma carte !",
-      "closable": true
-    }
-  ],
-  "cta": {
-    "label": "Let's connect",
-    "href": "/terminal",
-    "icon": "shuriken",
-    "shapeText": "Let's connect"
-  }
+		{
+			"listItem": "Accessibility expert - RGAA/RAWEB/WCAG",
+			"linkItem": null,
+			"linkTitle": null
+		},
+		{
+			"listItem": "linkedin",
+			"linkTitle": "linkedin ouvre un nouvel onglet vers linkedin",
+			"linkItem": "https://www.linkedin.com/in/quentin-serda/"
+		},
+		{
+			"listItem": "Some arts",
+			"linkTitle": "instagram ouvre un nouvel onglet vers instagram",
+			"linkItem": "https://www.instagram.com/_qalim/"
+		},
+		{
+			"listItem": "bric-à-brac technologique",
+			"linkItem": null,
+			"linkTitle": null
+		}
+	],
+	"popinInfo": [
+		{
+			"title": "Bienvenue, sur la page de maintenance ",
+			"text": "Bonjour et bienvenue ! Ce site est en cours de construction. Revenez bientôt pour découvrir mon portfolio. Vous pouvez me contacter en cliquant sur ma carte !",
+			"closable": true
+		}
+	],
+	"cta": {
+		"label": "go to terminal command",
+		"href": "/home",
+		"icon": "shuriken",
+		"shapeText": "go to terminal command"
+	}
 }

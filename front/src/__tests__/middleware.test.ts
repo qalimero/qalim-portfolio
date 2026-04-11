@@ -218,6 +218,28 @@ describe("middleware – maintenance mode redirect", () => {
 		expect(next).toHaveBeenCalled();
 	});
 
+	it("does not redirect /home when maintenance mode is on", async () => {
+		vi.stubEnv("PUBLIC_MAINTENANCE_MODE", "true");
+		const { onRequest } = await import("../middleware");
+		const ctx = createMockContext("/home");
+		const next = createMockNext();
+		await (onRequest as MiddlewareHandler)(ctx, next);
+
+		expect(ctx.redirect).not.toHaveBeenCalled();
+		expect(next).toHaveBeenCalled();
+	});
+
+	it("redirects legacy /terminal route to /home when maintenance mode is on", async () => {
+		vi.stubEnv("PUBLIC_MAINTENANCE_MODE", "true");
+		const { onRequest } = await import("../middleware");
+		const ctx = createMockContext("/terminal");
+		const next = createMockNext();
+		await (onRequest as MiddlewareHandler)(ctx, next);
+
+		expect(ctx.redirect).toHaveBeenCalledWith("/home");
+		expect(next).not.toHaveBeenCalled();
+	});
+
 	it("passes through all paths when maintenance mode is off", async () => {
 		vi.stubEnv("PUBLIC_MAINTENANCE_MODE", "false");
 		const { onRequest } = await import("../middleware");

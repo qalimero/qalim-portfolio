@@ -3,30 +3,31 @@
  * Marquee Component - Infinite scrolling marquee with rotating icons
  * Type-safe props without runtime validation to avoid SSR/client issues
  */
-import { Icon } from 'astro-icon/components';
-import type { MarqueeItem } from '../../content.config.ts';
+import { Icon } from "astro-icon/components";
+import type { MarqueeItem } from "../../content.config.ts";
 
 // Props interface (type-only, no runtime validation)
 export interface Props {
-  items?: MarqueeItem[];
-  text?: string;
-  className?: string;
-  speed?: number;
-  direction?: 'left' | 'right';
+	items?: MarqueeItem[];
+	text?: string;
+	className?: string;
+	speed?: number;
+	direction?: "left" | "right";
 }
 
 // Get props with defaults
 const {
-  items,
-  text,
-  className = '',
-  speed = 1,
-  direction = 'left'
+	items,
+	text,
+	className = "",
+	speed = 1,
+	direction = "left",
 } = Astro.props as Props;
 
 // Support both new items format and legacy text format
 // Keep the full item objects instead of just the text
-const displayItems: MarqueeItem[] = items || (text ? [{ listItem: text, linkItem: text }] : []);
+const displayItems: MarqueeItem[] =
+	items || (text ? [{ listItem: text, linkItem: text }] : []);
 ---
 
 <div class={`marquee ${className}`} data-direction={direction} style={`--marquee-speed: ${speed};`}>

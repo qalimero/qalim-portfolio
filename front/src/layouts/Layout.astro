@@ -1,5 +1,5 @@
 ---
-import '../styles/main.scss';
+import "../styles/main.scss";
 
 interface Props {
 	title?: string;
@@ -19,7 +19,7 @@ const {
 
 // Métadonnées pour SEO
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || Astro.url.origin;
-const ogImageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
+const ogImageUrl = image.startsWith("http") ? image : `${siteUrl}${image}`;
 ---
 
 <!DOCTYPE html>

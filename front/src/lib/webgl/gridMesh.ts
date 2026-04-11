@@ -13,56 +13,56 @@
  * @param extent   How far beyond [-1,1] clip space the grid extends.
  */
 export function generateGridVertices(
-  rows = 30,
-  cols = 30,
-  segments = 30,
-  extent = 1.4,
+	rows = 30,
+	cols = 30,
+	segments = 30,
+	extent = 1.4,
 ): Float32Array {
-  // Uniform spacing — every cell is the same size.
-  const rowPositions: number[] = [];
-  for (let i = 0; i < rows; i++) {
-    const t = rows === 1 ? 0 : (i / (rows - 1)) * 2 - 1; // -1 … 1
-    rowPositions.push(t * extent);
-  }
+	// Uniform spacing — every cell is the same size.
+	const rowPositions: number[] = [];
+	for (let i = 0; i < rows; i++) {
+		const t = rows === 1 ? 0 : (i / (rows - 1)) * 2 - 1; // -1 … 1
+		rowPositions.push(t * extent);
+	}
 
-  const colPositions: number[] = [];
-  for (let j = 0; j < cols; j++) {
-    const t = cols === 1 ? 0 : (j / (cols - 1)) * 2 - 1;
-    colPositions.push(t * extent);
-  }
+	const colPositions: number[] = [];
+	for (let j = 0; j < cols; j++) {
+		const t = cols === 1 ? 0 : (j / (cols - 1)) * 2 - 1;
+		colPositions.push(t * extent);
+	}
 
-  // Each line segment produces 2 vertices x 2 floats.
-  const verticesPerLine = segments * 2 * 2;
-  const totalFloats = (rows + cols) * verticesPerLine;
-  const data = new Float32Array(totalFloats);
+	// Each line segment produces 2 vertices x 2 floats.
+	const verticesPerLine = segments * 2 * 2;
+	const totalFloats = (rows + cols) * verticesPerLine;
+	const data = new Float32Array(totalFloats);
 
-  let offset = 0;
+	let offset = 0;
 
-  // Horizontal lines
-  for (let i = 0; i < rows; i++) {
-    const y = rowPositions[i];
-    for (let s = 0; s < segments; s++) {
-      const x0 = -extent + (s / segments) * (2 * extent);
-      const x1 = -extent + ((s + 1) / segments) * (2 * extent);
-      data[offset++] = x0;
-      data[offset++] = y;
-      data[offset++] = x1;
-      data[offset++] = y;
-    }
-  }
+	// Horizontal lines
+	for (let i = 0; i < rows; i++) {
+		const y = rowPositions[i];
+		for (let s = 0; s < segments; s++) {
+			const x0 = -extent + (s / segments) * (2 * extent);
+			const x1 = -extent + ((s + 1) / segments) * (2 * extent);
+			data[offset++] = x0;
+			data[offset++] = y;
+			data[offset++] = x1;
+			data[offset++] = y;
+		}
+	}
 
-  // Vertical lines
-  for (let j = 0; j < cols; j++) {
-    const x = colPositions[j];
-    for (let s = 0; s < segments; s++) {
-      const y0 = -extent + (s / segments) * (2 * extent);
-      const y1 = -extent + ((s + 1) / segments) * (2 * extent);
-      data[offset++] = x;
-      data[offset++] = y0;
-      data[offset++] = x;
-      data[offset++] = y1;
-    }
-  }
+	// Vertical lines
+	for (let j = 0; j < cols; j++) {
+		const x = colPositions[j];
+		for (let s = 0; s < segments; s++) {
+			const y0 = -extent + (s / segments) * (2 * extent);
+			const y1 = -extent + ((s + 1) / segments) * (2 * extent);
+			data[offset++] = x;
+			data[offset++] = y0;
+			data[offset++] = x;
+			data[offset++] = y1;
+		}
+	}
 
-  return data;
+	return data;
 }

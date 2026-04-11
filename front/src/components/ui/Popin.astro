@@ -3,21 +3,16 @@
  * Popin Component (Modal/Dialog)
  * Simple popin with text content and optional close button
  */
-import { Icon } from 'astro-icon/components';
+import { Icon } from "astro-icon/components";
 
 export interface Props {
-  id: string;
-  title?: string;
-  closeable?: boolean;
-  autoOpen?: boolean;
+	id: string;
+	title?: string;
+	closeable?: boolean;
+	autoOpen?: boolean;
 }
 
-const {
-  id,
-  title,
-  closeable = true,
-  autoOpen = false,
-} = Astro.props;
+const { id, title, closeable = true, autoOpen = false } = Astro.props;
 ---
 
 <dialog

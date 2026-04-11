@@ -1,39 +1,39 @@
 {
-  "name": "front",
-  "type": "module",
-  "version": "0.0.1",
-  "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro",
-    "type-check": "astro check",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "security:check": "../scripts/check-bundle-security.sh"
-  },
-  "dependencies": {
-    "@astrojs/check": "^0.9.8",
-    "@astrojs/react": "^5.0.1",
-    "@splinetool/loader": "^1.10.37",
-    "astro": "^6.0.8",
-    "astro-icon": "^1.1.5",
-    "gsap": "^3.13.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "rehype-external-links": "^3.0.0",
-    "remark-gfm": "^4.0.1",
-    "shiki": "^3.2.1",
-    "three": "^0.152.0",
-    "typescript": "^5.9.2",
-    "zod": "^3.25.76"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "2.2.4",
-    "@types/node": "^24.4.0",
-    "@types/three": "^0.175.0",
-    "jsdom": "^26.1.0",
-    "sass": "^1.86.0",
-    "vitest": "^4.1.2"
-  }
+	"name": "front",
+	"type": "module",
+	"version": "0.0.1",
+	"scripts": {
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"astro": "astro",
+		"type-check": "astro check",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"security:check": "../scripts/check-bundle-security.sh"
+	},
+	"dependencies": {
+		"@astrojs/check": "^0.9.8",
+		"@astrojs/react": "^5.0.1",
+		"@splinetool/loader": "^1.10.37",
+		"astro": "^6.0.8",
+		"astro-icon": "^1.1.5",
+		"gsap": "^3.13.0",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"rehype-external-links": "^3.0.0",
+		"remark-gfm": "^4.0.1",
+		"shiki": "^3.2.1",
+		"three": "^0.152.0",
+		"typescript": "^5.9.2",
+		"zod": "^3.25.76"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.2.4",
+		"@types/node": "^24.4.0",
+		"@types/three": "^0.175.0",
+		"jsdom": "^26.1.0",
+		"sass": "^1.86.0",
+		"vitest": "^4.1.2"
+	}
 }

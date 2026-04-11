@@ -1,51 +1,102 @@
 /**
  * ctaPosition.ts
  *
- * Positions the CTA button statically in the corridor between the card's
- * right edge and the viewport right edge, centered both vertically and
- * horizontally inside that space.
+ * Positions the CTA button on the grid — its edges snap to grid lines so
+ * the button fills exactly 2×2 cells on desktop and 2×1 cells below the
+ * tablet breakpoint.
  *
- * Responsive strategy:
- *  - Desktop (≥ 768 px): right corridor of the card.
- *  - Mobile (< 768 px): below the card, horizontally centered; or in a
- *    narrower side corridor when one exists.
- *
- * The `is-visible` class is added to the CTA element after REVEAL_DELAY ms,
- * which triggers the CSS draw-on animation defined in _button.scss.
+ * After a short reveal delay the button appears (CSS `is-visible`).
+ * After a further 2 s the button morphs from circle → square/rectangle
+ * via the CSS `is-morphed` class.
  */
+
+import { GRID_CELL_SIZE_CSS, snapToGrid } from "../webgl/gridConfig";
 
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
 
-/** Time before the CTA is revealed (ms) — "0.3–0.5 s after page load" */
+/** Delay before the CTA pixel-creation animation starts (ms) */
 const REVEAL_DELAY = 400;
+
+/** Delay after reveal before circle → square morph (ms) */
+const MORPH_DELAY = 2000;
+
+/** Viewport width at or below which "tablet" sizing applies */
+const TABLET_BREAKPOINT_PX = 768;
 
 /** Minimum gap from viewport edges (px) */
 const EDGE_PADDING = 16;
-
-/** Default CTA diameter matching --btn-shape-circle-size token (10rem @ 16px) */
-const FULL_SIZE_PX = 160;
-
-/** Minimum CTA diameter on very tight screens */
-const MIN_SIZE_PX = 64;
-
-/** Viewport width below which "mobile" positioning applies */
-const MOBILE_BREAKPOINT_PX = 768;
 
 // ---------------------------------------------------------------------------
 // Global type declarations
 // ---------------------------------------------------------------------------
 
 declare global {
-  interface Window {
-    __getCardScreenBounds?: () => {
-      x: number;
-      y: number;
-      width: number;
-      height: number;
-    } | null;
-  }
+	interface Window {
+		__getCardScreenBounds?: () => {
+			x: number;
+			y: number;
+			width: number;
+			height: number;
+		} | null;
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+interface CtaLayout {
+	/** CTA width in CSS px */
+	w: number;
+	/** CTA height in CSS px */
+	h: number;
+	/** Left position in CSS px */
+	x: number;
+	/** Top position in CSS px */
+	y: number;
+}
+
+function computeLayout(): CtaLayout {
+	const viewW = window.innerWidth;
+	const viewH = window.innerHeight;
+	const cell = GRID_CELL_SIZE_CSS;
+	const isTablet = viewW <= TABLET_BREAKPOINT_PX;
+
+	// CTA spans 2×2 cells on desktop, 2×1 on tablet
+	const ctaW = cell * 2;
+	const ctaH = isTablet ? cell : cell * 2;
+
+	const card = window.__getCardScreenBounds?.();
+	const cx = viewW / 2;
+	const cy = viewH / 2;
+
+	let x: number;
+	let y: number;
+
+	if (card) {
+		const corridorLeft = card.x + card.width;
+		const corridorW = viewW - corridorLeft;
+
+		// Desired centre of the CTA inside the right corridor
+		const desiredCx = corridorLeft + corridorW / 2;
+		const desiredCy = viewH / 2;
+
+		// Snap top-left to grid
+		x = snapToGrid(desiredCx - ctaW / 2, cx, cell);
+		y = snapToGrid(desiredCy - ctaH / 2, cy, cell);
+	} else {
+		// Card not loaded — right-of-centre fallback
+		x = snapToGrid(viewW * 0.65, cx, cell);
+		y = snapToGrid((viewH - ctaH) / 2, cy, cell);
+	}
+
+	// Clamp within viewport
+	x = Math.max(EDGE_PADDING, Math.min(viewW - ctaW - EDGE_PADDING, x));
+	y = Math.max(EDGE_PADDING, Math.min(viewH - ctaH - EDGE_PADDING, y));
+
+	return { w: ctaW, h: ctaH, x, y };
 }
 
 // ---------------------------------------------------------------------------
@@ -53,102 +104,49 @@ declare global {
 // ---------------------------------------------------------------------------
 
 export function initStaticCta(ctaEl: HTMLElement): { cleanup: () => void } {
-  // Override any previous float transform; JS controls position from here on.
-  ctaEl.style.position = "fixed";
-  ctaEl.style.left = "0";
-  ctaEl.style.top = "0";
-  ctaEl.style.willChange = "transform";
-  // The CSS opacity / visibility is handled by the is-visible class.
+	ctaEl.style.position = "fixed";
+	ctaEl.style.left = "0";
+	ctaEl.style.top = "0";
+	ctaEl.style.willChange = "transform";
 
-  // ---- Position helpers ---------------------------------------------------
+	const btnEl = ctaEl.querySelector<HTMLElement>(".btn");
 
-  function computeAndApply(): void {
-    const viewW = window.innerWidth;
-    const viewH = window.innerHeight;
-    const card = window.__getCardScreenBounds?.();
+	function applyLayout(): void {
+		const { w, h, x, y } = computeLayout();
 
-    let size = FULL_SIZE_PX;
-    let x: number;
-    let y: number;
+		// Size the button (CSS custom properties)
+		ctaEl.style.setProperty("--btn-shape-circle-size", `${w}px`);
+		ctaEl.style.setProperty("--btn-shape-height", `${h}px`);
 
-    /** Centre `size` horizontally inside the right corridor. */
-    const centerInCorridor = (
-      cLeft: number,
-      cWidth: number,
-      s: number,
-    ): number => cLeft + (cWidth + EDGE_PADDING - s) / 2;
+		ctaEl.style.transform = `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
+	}
 
-    if (card) {
-      const isMobile = viewW < MOBILE_BREAKPOINT_PX;
-      const corridorLeft = card.x + card.width;
-      const rightCorridorWidth = viewW - corridorLeft - EDGE_PADDING;
+	// Initial silent positioning (before reveal — no visual jump)
+	applyLayout();
 
-      if (!isMobile && rightCorridorWidth >= MIN_SIZE_PX + EDGE_PADDING * 2) {
-        // ── Desktop: right corridor ──────────────────────────────────────
-        size = Math.min(FULL_SIZE_PX, rightCorridorWidth - EDGE_PADDING * 2);
-        size = Math.max(MIN_SIZE_PX, Math.round(size));
-        // Centre horizontally in the corridor
-        x = centerInCorridor(corridorLeft, rightCorridorWidth, size);
-        // Centre vertically in the viewport
-        y = (viewH - size) / 2;
-      } else if (!isMobile) {
-        // ── Desktop fallback: right edge of viewport ─────────────────────
-        size = MIN_SIZE_PX;
-        x = viewW - size - EDGE_PADDING;
-        y = (viewH - size) / 2;
-      } else {
-        // ── Mobile: try right side-corridor first, else below card ───────
-        if (rightCorridorWidth >= MIN_SIZE_PX + EDGE_PADDING * 2) {
-          size = Math.min(
-            FULL_SIZE_PX,
-            Math.min(viewW * 0.28, rightCorridorWidth - EDGE_PADDING * 2),
-          );
-          size = Math.max(MIN_SIZE_PX, Math.round(size));
-          x = centerInCorridor(corridorLeft, rightCorridorWidth, size);
-          y = (viewH - size) / 2;
-        } else {
-          // Below the card, horizontally centred
-          size = Math.min(FULL_SIZE_PX, viewW * 0.35);
-          size = Math.max(MIN_SIZE_PX, Math.round(size));
-          x = (viewW - size) / 2;
-          y = card.y + card.height + EDGE_PADDING * 2;
-          // Clamp within viewport
-          if (y + size > viewH - EDGE_PADDING) {
-            y = viewH - size - EDGE_PADDING;
-          }
-        }
-      }
-    } else {
-      // Card not loaded yet — place in the right third of the viewport
-      x = viewW * 0.75 - size / 2;
-      y = (viewH - size) / 2;
-    }
+	// ---- Reveal → Morph timeline -------------------------------------------
 
-    ctaEl.style.setProperty("--btn-shape-circle-size", `${size}px`);
-    ctaEl.style.transform = `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
-  }
+	const revealTimer = setTimeout(() => {
+		applyLayout();
+		ctaEl.classList.add("is-visible");
+	}, REVEAL_DELAY);
 
-  // Initial silent positioning (before reveal, so there's no "jump" on show)
-  computeAndApply();
+	const morphTimer = setTimeout(() => {
+		if (btnEl) btnEl.classList.add("is-morphed");
+	}, REVEAL_DELAY + MORPH_DELAY);
 
-  // ---- Reveal after delay -------------------------------------------------
+	// ---- Resize -------------------------------------------------------------
 
-  const revealTimer = setTimeout(() => {
-    computeAndApply(); // Recompute — card might have loaded by now
-    ctaEl.classList.add("is-visible");
-  }, REVEAL_DELAY);
+	const onResize = () => applyLayout();
+	window.addEventListener("resize", onResize);
 
-  // ---- Recompute on resize ------------------------------------------------
+	// ---- Cleanup ------------------------------------------------------------
 
-  const onResize = () => computeAndApply();
-  window.addEventListener("resize", onResize);
+	function cleanup(): void {
+		clearTimeout(revealTimer);
+		clearTimeout(morphTimer);
+		window.removeEventListener("resize", onResize);
+	}
 
-  // ---- Cleanup ------------------------------------------------------------
-
-  function cleanup(): void {
-    clearTimeout(revealTimer);
-    window.removeEventListener("resize", onResize);
-  }
-
-  return { cleanup };
+	return { cleanup };
 }
