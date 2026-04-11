@@ -151,4 +151,17 @@
 	--btn-shape-padding-x: var(--spacing-2xl);
 	--btn-shape-padding-y: var(--spacing-lg);
 	--btn-shape-circle-size: 10rem;
+
+	/* TextMaintenance Component */
+	--text-maintenance-border-color: var(--color-brand-secondary);
+	--text-maintenance-border-width: 2px;
+	--text-maintenance-color: var(--color-neutral-lightest);
+	--text-maintenance-font-family: var(--font-family-mono);
+	--text-maintenance-font-size: var(--font-size-xxs);
+	--text-maintenance-font-weight: 700;
+	--text-maintenance-letter-spacing: -0.02em;
+	--text-maintenance-text-transform: uppercase;
+	--text-maintenance-padding-x: var(--spacing-xl);
+	--text-maintenance-padding-y: var(--spacing-md);
+	--text-maintenance-icon-size: 1.25em;
 }

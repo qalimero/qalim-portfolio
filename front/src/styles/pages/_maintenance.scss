@@ -1,132 +1,166 @@
-// Maintenance page specific styles
+// Maintenance page — split-screen layout
+// Desktop (≥ lg): Spline card left half, content right half.
+// Mobile (< lg): Horizontal snap-scroll — card first, content second.
 @use "../abstracts/variables" as vars;
 @use "../abstracts/mixins" as mix;
 
 .maintenance {
-  position: relative; // For absolute positioning of children
-  z-index: 1; // Above the background
-  min-height: 100vh;
+	position: relative;
+	z-index: 1;
+	min-height: 100vh;
+	overflow: hidden;
 
-  // Mobile: grid layout
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  column-gap: 1rem;
-  justify-content: center;
-  align-content: start;
+	// Marquee — sticky top overlay
+	.marquee-container {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 20;
+		width: 100%;
+	}
 
-  // Desktop: CSS Grid layout (lg+, 992px)
-  @media (min-width: vars.$breakpoint-lg) {
-    grid-template-columns: repeat(12, 5.75rem);
-    align-content: start;
-  }
+	// Popin positioning
+	.popin {
+		position: fixed;
+		bottom: 0;
+		z-index: 30;
 
-  .title-container {
-    position: relative;
-    z-index: 25; // Above everything
-    width: 100%;
-    margin-bottom: 2rem;
-    text-align: center;
-  }
+		@media (max-width: vars.$breakpoint-md) {
+			bottom: auto;
+			top: 0;
+		}
 
-  .maintenance-title {
-    font-family: var(--typography-h1-font-family);
-    font-size: var(--typography-h1-font-size);
-    font-weight: var(--typography-h1-font-weight);
-    line-height: var(--typography-h1-line-height);
-    letter-spacing: var(--typography-h1-letter-spacing);
-    text-transform: var(--typography-h1-text-transform);
-    color: white;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    margin: 0;
-  }
+		@media (min-width: vars.$breakpoint-lg) {
+			left: calc((100vw - 95rem) / 2 + 6.75rem);
+			width: calc(5.75rem * 4 + 1rem * 3);
+		}
+	}
 
-  .marquee-container {
-    position: absolute;
-    top: 0;
-    z-index: 1; // Above the 3D scene
-    width: 100%;
-  }
+	// ============================================================
+	// Horizontal panels container
+	// ============================================================
+	&__panels {
+		display: flex;
+		width: 100%;
+		height: 100vh;
 
-  .canvas-host {
-    grid-column: 1/-1;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-    z-index: 0; // Behind marquee and popin
-  }
+		// Mobile: horizontal snap-scroll
+		@media (max-width: vars.$breakpoint-lg - 1) {
+			overflow-x: auto;
+			overflow-y: hidden;
+			scroll-snap-type: x mandatory;
+			-webkit-overflow-scrolling: touch;
+			scroll-behavior: smooth;
+		}
+	}
 
-  // CTA button — positioned statically by JS to the right of the 3D card,
-  // centred in the corridor between the card and the viewport edge.
-  // Starts invisible; JS adds `.is-visible` after REVEAL_DELAY ms, which
-  // triggers the draw-on animation defined in _button.scss.
-  &__cta {
-    position: fixed;
-    z-index: 10;
-    pointer-events: auto;
+	// ============================================================
+	// Individual panel
+	// ============================================================
+	&__panel {
+		flex-shrink: 0;
+		height: 100vh;
 
-    // Start invisible — the draw-on animation reveals it.
-    // Using opacity + visibility keeps the element accessible but hidden,
-    // and prevents it from flickering at position (0,0) before JS runs.
-    opacity: 0;
-    visibility: hidden;
-    // Disable interactions until visible so the button can't be accidentally
-    // triggered during the pre-reveal window.
-    pointer-events: none;
+		// Mobile: each panel = full viewport width
+		@media (max-width: vars.$breakpoint-lg - 1) {
+			width: 100vw;
+			scroll-snap-align: start;
+			scroll-snap-stop: always;
+		}
+	}
 
-    &.is-visible {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-      // No opacity transition here — the draw animation IS the reveal.
-    }
+	// ── Card panel (left) ──
+	&__panel--card {
+		position: relative;
 
-    // Responsive: shrink the circle below 1200px so it fits around the card
-    @media (max-width: 1200px) {
-      --btn-shape-circle-size: clamp(4rem, 8vw, 7rem);
-    }
-  }
+		// Desktop: left half
+		@media (min-width: vars.$breakpoint-lg) {
+			width: 50vw;
+		}
 
-  // Ensure the 3D scene container fills its parent
-  #three-container {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-  }
+		.canvas-host {
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
 
-  // Popin positioning within maintenance page
-  .popin {
-    // Fixed at bottom of viewport
-    position: fixed;
-    bottom: 0;
-    z-index: 1;
+		#three-container {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+		}
+	}
 
-    // Tablet and below: pin to top
-    @media (max-width: vars.$breakpoint-md) {
-      bottom: auto;
-      top: 0;
-    }
+	// ── Content panel (right) ──
+	&__panel--content {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 
-    // Desktop: fixed positioning aligned with grid column 2 (>= lg, 992px)
-    @media (min-width: vars.$breakpoint-lg) {
-      // Grid: 12 × 5.75rem columns + 11 × 1rem gutters = 80rem (1280px at base 16px)
-      // Centered container: (100vw - 80rem) / 2
-      // Column 2 start: col 1 (5.75rem) + gutter (1rem) = 6.75rem → 108px at 1280px
-      left: calc((100vw - 95rem) / 2 + 6.75rem);
+		// Desktop: right half
+		@media (min-width: vars.$breakpoint-lg) {
+			width: 50vw;
+		}
+	}
 
-      // 4 columns + 3 gutters = 4×5.75rem + 3×1rem = 26rem → 416px at 1280px
-      width: calc(5.75rem * 4 + 1rem * 3);
-    }
-  }
+	// ============================================================
+	// CTA wrapper — positions the TextMaintenance link
+	// ============================================================
+	&__cta {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 
-  // Responsive adjustments
-  @include mix.respond-to(medium) {
-    .title-container {
-      margin-bottom: 1.5rem;
-    }
+	// ============================================================
+	// Mobile scroll indicator
+	// ============================================================
+	&__scroll-indicator {
+		position: absolute;
+		bottom: var(--spacing-xl);
+		right: var(--spacing-xl);
+		display: flex;
+		align-items: center;
+		gap: var(--spacing-xs);
+		color: var(--color-neutral-lightest);
+		opacity: 0.6;
+		transition: opacity 400ms ease;
+		animation: scroll-indicator-pulse 2s ease-in-out infinite;
 
-    .maintenance-title {
-      font-size: var(--typography-h2-font-size);
-    }
-  }
+		// Only visible on mobile (< lg)
+		@media (min-width: vars.$breakpoint-lg) {
+			display: none;
+		}
+	}
+
+	&__scroll-indicator-text {
+		font-family: var(--font-family-mono);
+		font-size: var(--font-size-xxs);
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+	}
+
+	&__scroll-indicator-arrow {
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Scroll indicator pulse animation
+// ---------------------------------------------------------------------------
+
+@keyframes scroll-indicator-pulse {
+	0%,
+	100% {
+		transform: translateX(0);
+		opacity: 0.6;
+	}
+
+	50% {
+		transform: translateX(6px);
+		opacity: 1;
+	}
 }

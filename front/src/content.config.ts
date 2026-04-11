@@ -17,6 +17,13 @@ export const buttonCtaSchema = z.object({
 });
 export type ButtonCta = z.infer<typeof buttonCtaSchema>;
 
+export const maintenanceTextSchema = z.object({
+	label: z.string().min(1),
+	href: z.string().optional(),
+	icon: z.string().optional(),
+});
+export type MaintenanceText = z.infer<typeof maintenanceTextSchema>;
+
 const siteConfigCollection = defineCollection({
 	loader: file("src/content/site.config.json", {
 		parser: (text) => {
@@ -37,6 +44,7 @@ const siteConfigCollection = defineCollection({
 			)
 			.optional(),
 		cta: buttonCtaSchema.optional(),
+		maintenanceText: maintenanceTextSchema.optional(),
 	}),
 });
 

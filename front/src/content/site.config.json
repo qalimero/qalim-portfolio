@@ -36,5 +36,10 @@
 		"href": "/home",
 		"icon": "shuriken",
 		"shapeText": "go to terminal command"
+	},
+	"maintenanceText": {
+		"label": "go to terminal command",
+		"href": "/home",
+		"icon": "terminal"
 	}
 }

@@ -1,23 +1,27 @@
 ---
 /**
- * Maintenance page - Displays maintenance message with animated marquee
- * Content managed via src/content/site.config.json (editable via Decap CMS)
+ * Maintenance page — Split-screen layout.
+ *
+ * Desktop (≥ lg): Spline card on the left half, TextMaintenance link on the right.
+ * Mobile (< lg): Horizontal snap-scroll — card fills first viewport, scroll right
+ * reveals content panel with TextMaintenance link + scroll indicator.
+ *
+ * Content managed via src/content/site.config.json (editable via Decap CMS).
  */
 import { getEntry } from "astro:content";
 import ThreeScene from "../components/scenes/ThreeScene.jsx";
 import WebGLGrid from "../components/scenes/WebGLGrid.jsx";
-import CircleTextShape from "../components/shapes/CircleTextShape.astro";
-import Link from "../components/ui/Link.astro";
 import Marquee from "../components/ui/Marquee.astro";
 import Popin from "../components/ui/Popin.astro";
+import TextMaintenance from "../components/ui/TextMaintenance.astro";
 import BaseLayout from "../layouts/Layout.astro";
 
 const entry = await getEntry("siteConfig", "main");
 if (!entry)
 	throw new Error("Site config not found: src/content/site.config.json");
 
-const { title, marquee, popinInfo, cta } = entry.data;
-const isCtaExternal = cta?.href?.startsWith("http");
+const { title, marquee, popinInfo, maintenanceText } = entry.data;
+const isExternal = maintenanceText?.href?.startsWith("http");
 const popin = popinInfo?.[0];
 ---
 
@@ -48,23 +52,39 @@ const popin = popinInfo?.[0];
       <Marquee items={marquee} />
     </div>
 
-    {cta && cta.href && (
-      <div class="maintenance__cta">
-        <Link
-          label={cta.label}
-          href={cta.href}
-          variant="shape-circle"
-          shape={CircleTextShape}
-          shapeProps={{ text: cta.shapeText }}
-          srOnly={true}
-          external={isCtaExternal}
-        />
-      </div>
-    )}
+    <!-- Horizontal scroll wrapper: two panels -->
+    <div class="maintenance__panels">
 
-    <!-- Three.js Scene (must be before CTA so card bounds are available) -->
-    <div class="canvas-host">
-      <ThreeScene client:load />
+      <!-- Left panel: Spline 3D card -->
+      <div class="maintenance__panel maintenance__panel--card">
+        <div class="canvas-host">
+          <ThreeScene client:load />
+        </div>
+      </div>
+
+      <!-- Right panel: TextMaintenance link -->
+      <div class="maintenance__panel maintenance__panel--content">
+        {maintenanceText && maintenanceText.href && (
+          <div class="maintenance__cta">
+            <TextMaintenance
+              label={maintenanceText.label}
+              href={maintenanceText.href}
+              icon={maintenanceText.icon}
+              external={isExternal ?? false}
+            />
+          </div>
+        )}
+
+        <!-- Mobile scroll indicator -->
+        <div class="maintenance__scroll-indicator" aria-hidden="true">
+          <span class="maintenance__scroll-indicator-text">scroll</span>
+          <svg class="maintenance__scroll-indicator-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </div>
+      </div>
+
     </div>
 
   </section>
@@ -78,25 +98,25 @@ const popin = popinInfo?.[0];
       const ctaEl = document.querySelector('.maintenance__cta') as HTMLElement | null;
       if (!ctaEl) return;
 
-      const btnEl = ctaEl.querySelector<HTMLElement>('.btn');
+      const linkEl = ctaEl.querySelector<HTMLElement>('.text-maintenance');
 
-      // Grid-aligned positioning + circle→square morph after 2 s
+      // Grid-aligned positioning within right panel
       initStaticCta(ctaEl);
 
       // Pixel-creation overlay (synced with reveal)
-      if (btnEl) {
-        const ctaReveal = initCtaReveal(btnEl);
+      if (linkEl) {
+        const ctaReveal = initCtaReveal(linkEl);
         if (ctaReveal) {
           setTimeout(() => ctaReveal.trigger(), 400);
         }
       }
 
-      // WebGL2 pixel-wipe transition on CTA click → /home
+      // WebGL2 pixel-wipe transition on link click → /home
       const transition = initTransitionScene();
 
-      if (btnEl && transition) {
-        btnEl.addEventListener('click', (e) => {
-          const href = (btnEl as HTMLAnchorElement).href;
+      if (linkEl && transition) {
+        linkEl.addEventListener('click', (e) => {
+          const href = (linkEl as HTMLAnchorElement).href;
           if (!href) return;
 
           const destination = new URL(href, window.location.origin);
@@ -108,9 +128,30 @@ const popin = popinInfo?.[0];
           });
         });
       }
+
+      // Mobile: magnetic snap scroll
+      initMagneticScroll();
     }
 
-    // Astro scripts are type="module" → deferred, DOM is ready
+    function initMagneticScroll() {
+      const panels = document.querySelector('.maintenance__panels');
+      if (!panels || window.innerWidth >= 992) return;
+
+      const indicator = document.querySelector('.maintenance__scroll-indicator');
+      if (!indicator) return;
+
+      // Hide indicator once user scrolls past 10% of content panel
+      let indicatorHidden = false;
+      panels.addEventListener('scroll', () => {
+        if (indicatorHidden) return;
+        const scrollRatio = panels.scrollLeft / (panels.scrollWidth - panels.clientWidth);
+        if (scrollRatio > 0.1) {
+          (indicator as HTMLElement).style.opacity = '0';
+          indicatorHidden = true;
+        }
+      }, { passive: true });
+    }
+
     boot();
   </script>
 </BaseLayout>

@@ -1,16 +1,16 @@
 /**
  * ctaRevealScene.ts
  *
- * WebGL2 pixel-creation overlay for the CTA button.
+ * WebGL2 pixel-creation overlay for the TextMaintenance link.
  *
- * Creates a canvas overlay inside the CTA that starts fully transparent
- * and progressively materialises pixel blocks of the fill colour
- * (center-outward). When complete, the underlying CSS children fade in
- * and the overlay canvas is removed.
+ * Creates a canvas overlay inside the target element that starts fully
+ * transparent and progressively materialises pixel blocks of the fill
+ * colour (center-outward). When complete, the `.is-revealed` class is
+ * added and the canvas overlay is removed.
  *
  * Usage:
- *   const reveal = initCtaReveal(btnEl);
- *   reveal?.trigger();          // start the pixel build-up
+ *   const reveal = initCtaReveal(linkEl);
+ *   reveal?.trigger();
  *   // canvas auto-removes on completion
  */
 
@@ -50,6 +50,10 @@ void main() {
     vec2  pxCell   = floor(v_uv * u_resolution / blockPx);
     vec2  pxCentre = (pxCell + 0.5) * blockPx / u_resolution;
 
+    // Oval mask: discard pixels outside the ellipse
+    vec2 d = (pxCentre - 0.5) * 2.0;
+    if (d.x * d.x + d.y * d.y > 1.0) discard;
+
     // Center-outward: blocks near the center appear first
     float dist = length(pxCentre - 0.5) * 1.6;
     float jitter = hash(pxCell) * 0.15;
@@ -69,7 +73,7 @@ void main() {
 /** Total creation duration in seconds */
 const REVEAL_DURATION = 0.9;
 
-/** CTA fill color — matches --color-brand-secondary (#ff602f) */
+/** Border color — matches --color-brand-secondary (#ff602f) */
 const FILL_COLOR = { r: 1.0, g: 96 / 255, b: 47 / 255 };
 
 // ---------------------------------------------------------------------------
@@ -84,10 +88,10 @@ export interface CtaRevealScene {
 }
 
 /**
- * Mount a pixel-creation overlay inside `targetEl` (the `.btn` element).
+ * Mount a pixel-creation overlay inside `targetEl` (the `.text-maintenance` link).
  *
- * The overlay builds up the fill colour pixel-by-pixel, then hands off to
- * the CSS children (which are initially hidden at opacity:0).
+ * The overlay builds up the fill colour pixel-by-pixel in an oval mask,
+ * then hands off to CSS (`.is-revealed` class).
  *
  * Returns `null` if WebGL2 is unavailable.
  */
@@ -100,6 +104,7 @@ export function initCtaReveal(targetEl: HTMLElement): CtaRevealScene | null {
 		"height:100%",
 		"pointer-events:none",
 		"z-index:10",
+		"border-radius:50%",
 	].join(";");
 
 	const maybeGl = canvas.getContext("webgl2", {
