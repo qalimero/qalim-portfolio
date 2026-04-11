@@ -12,9 +12,6 @@
  *
  * The `is-visible` class is added to the CTA element after REVEAL_DELAY ms,
  * which triggers the CSS draw-on animation defined in _button.scss.
- *
- * window.__ctaScreenBounds is kept up-to-date every rAF frame so the
- * WebGL grid cursor-magnetize effect continues to work.
  */
 
 // ---------------------------------------------------------------------------

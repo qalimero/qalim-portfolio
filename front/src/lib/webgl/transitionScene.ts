@@ -130,11 +130,13 @@ export function initTransitionScene(): TransitionScene | null {
   let animId  = 0;
   const dpr   = Math.min(window.devicePixelRatio, 2);
 
-  window.addEventListener("resize", () => {
+  function onResize(): void {
     canvas.width  = Math.round(window.innerWidth  * dpr);
     canvas.height = Math.round(window.innerHeight * dpr);
     gl.viewport(0, 0, canvas.width, canvas.height);
-  });
+  }
+
+  window.addEventListener("resize", onResize);
 
   // ---- Trigger -------------------------------------------------------------
 
@@ -181,6 +183,7 @@ export function initTransitionScene(): TransitionScene | null {
 
   function cleanup(): void {
     cancelAnimationFrame(animId);
+    window.removeEventListener("resize", onResize);
     gl.deleteVertexArray(vao);
     gl.deleteBuffer(quadBuf);
     gl.deleteProgram(prog);
