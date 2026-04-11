@@ -79,6 +79,11 @@
       pointer-events: auto;
       // No opacity transition here — the draw animation IS the reveal.
     }
+
+    // Responsive: shrink the circle below 1200px so it fits around the card
+    @media (max-width: 1200px) {
+      --btn-shape-circle-size: clamp(4rem, 8vw, 7rem);
+    }
   }
 
   // Ensure the 3D scene container fills its parent

@@ -218,6 +218,17 @@
   }
 
   // ============================================================
+  // Bounce distortion: squish / stretch animation applied by JS
+  // on each collision. Applied to the inner .btn element so it
+  // does not interfere with the translate3d position on the wrapper.
+  //
+  // btn--squish-v  → CTA hits a horizontal surface (top/bottom)
+  //                  → squishes vertically (wider, shorter)
+  // btn--squish-h  → CTA hits a vertical surface (left/right)
+  //                  → squishes horizontally (narrower, taller)
+  // ============================================================
+
+  // ============================================================
   // Responsive
   // ============================================================
   @include mix.respond-to(medium) {
@@ -278,5 +289,41 @@
   }
   to {
     transform: scale(1);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Bounce distortion keyframes
+// cta-squish-v: hitting a horizontal surface (top / bottom) — CTA flattens
+// cta-squish-h: hitting a vertical surface   (left / right) — CTA narrows
+// ---------------------------------------------------------------------------
+
+@keyframes cta-squish-v {
+  0% {
+    transform: scaleX(1.25) scaleY(0.72);
+  }
+  35% {
+    transform: scaleX(0.9) scaleY(1.14);
+  }
+  65% {
+    transform: scaleX(1.04) scaleY(0.97);
+  }
+  100% {
+    transform: scaleX(1) scaleY(1);
+  }
+}
+
+@keyframes cta-squish-h {
+  0% {
+    transform: scaleX(0.72) scaleY(1.25);
+  }
+  35% {
+    transform: scaleX(1.14) scaleY(0.9);
+  }
+  65% {
+    transform: scaleX(0.97) scaleY(1.04);
+  }
+  100% {
+    transform: scaleX(1) scaleY(1);
   }
 }

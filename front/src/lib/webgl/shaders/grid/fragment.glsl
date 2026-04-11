@@ -4,7 +4,7 @@ precision highp float;
 uniform vec2 u_mouse;
 uniform float u_aspect;
 uniform vec4 u_color;
-uniform float u_mode;   // 0.0 = grid, 1.0 = circle border
+uniform float u_mode; // 0.0 = grid, 1.0 = circle border
 uniform float u_radius; // dynamic circle radius (default 0.25)
 
 in vec2 v_origPos;
