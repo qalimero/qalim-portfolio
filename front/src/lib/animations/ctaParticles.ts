@@ -37,6 +37,18 @@ const DRIP_COUNT = 3;
 const COLOR_BLUE = "#3200f2";
 const COLOR_WHITE = "#ffffff";
 
+/** Spawn radius as a fraction of button radius: 0.85–1.15× (particles start at the edge) */
+const SPAWN_RADIUS_MIN_RATIO = 0.85;
+const SPAWN_RADIUS_VARIANCE = 0.3;
+
+/** Particle launch speed range (px/s): MIN_SPEED to MIN_SPEED + SPEED_VARIANCE */
+const MIN_PARTICLE_SPEED = 40;
+const SPEED_VARIANCE = 80;
+
+/** Particle lifetime range (s): MIN_LIFETIME to MIN_LIFETIME + LIFETIME_VARIANCE */
+const MIN_LIFETIME_SEC = 0.4;
+const LIFETIME_VARIANCE_SEC = 0.6;
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -75,9 +87,11 @@ function spawnBurst(
 		if (particles.length >= MAX_PARTICLES) break;
 
 		const angle = Math.random() * Math.PI * 2;
-		// Spawn slightly outside the circle edge for a "emanating" look
-		const spawnR = btnRadius * (0.85 + Math.random() * 0.3);
-		const speed = 40 + Math.random() * 80;
+		// Spawn at the circle edge (SPAWN_RADIUS_MIN_RATIO to ~1.15× button radius)
+		const spawnR =
+			btnRadius *
+			(SPAWN_RADIUS_MIN_RATIO + Math.random() * SPAWN_RADIUS_VARIANCE);
+		const speed = MIN_PARTICLE_SPEED + Math.random() * SPEED_VARIANCE;
 
 		particles.push({
 			x: cx + Math.cos(angle) * spawnR,
@@ -85,7 +99,7 @@ function spawnBurst(
 			vx: Math.cos(angle) * speed,
 			vy: Math.sin(angle) * speed,
 			life: 1,
-			drain: 1 / (0.4 + Math.random() * 0.6),
+			drain: 1 / (MIN_LIFETIME_SEC + Math.random() * LIFETIME_VARIANCE_SEC),
 			radius: 1 + Math.random() * 1.5,
 			color: Math.random() > 0.4 ? COLOR_WHITE : COLOR_BLUE,
 		});

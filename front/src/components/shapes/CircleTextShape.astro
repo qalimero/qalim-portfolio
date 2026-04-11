@@ -80,8 +80,9 @@ const displayText = textWithSep.repeat(repeatCount).toUpperCase();
 
   <!--
     Draw-on ring: animated stroke that traces the circle outline on reveal.
-    r=98 keeps it inside the fill circle (circumference ≈ 616 SVG units).
-    stroke-dashoffset is controlled via CSS animation.
+    r=98 keeps it inside the fill circle.
+    stroke-dasharray/dashoffset = circumference = 2π × 98 ≈ 616 SVG units.
+    The CSS draw-on animation overrides stroke-dashoffset from 616 → 0.
   -->
   <circle
     class="btn__shape-ring"

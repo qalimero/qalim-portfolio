@@ -81,6 +81,13 @@ export function initStaticCta(ctaEl: HTMLElement): { cleanup: () => void } {
 		let x: number;
 		let y: number;
 
+		/** Centre `size` horizontally inside the right corridor. */
+		const centerInCorridor = (
+			cLeft: number,
+			cWidth: number,
+			s: number,
+		): number => cLeft + (cWidth + EDGE_PADDING - s) / 2;
+
 		if (card) {
 			const isMobile = viewW < MOBILE_BREAKPOINT_PX;
 			const corridorLeft = card.x + card.width;
@@ -91,7 +98,7 @@ export function initStaticCta(ctaEl: HTMLElement): { cleanup: () => void } {
 				size = Math.min(FULL_SIZE_PX, rightCorridorWidth - EDGE_PADDING * 2);
 				size = Math.max(MIN_SIZE_PX, Math.round(size));
 				// Centre horizontally in the corridor
-				x = corridorLeft + (rightCorridorWidth + EDGE_PADDING - size) / 2;
+				x = centerInCorridor(corridorLeft, rightCorridorWidth, size);
 				// Centre vertically in the viewport
 				y = (viewH - size) / 2;
 			} else if (!isMobile) {
@@ -107,7 +114,7 @@ export function initStaticCta(ctaEl: HTMLElement): { cleanup: () => void } {
 						Math.min(viewW * 0.28, rightCorridorWidth - EDGE_PADDING * 2),
 					);
 					size = Math.max(MIN_SIZE_PX, Math.round(size));
-					x = corridorLeft + (rightCorridorWidth + EDGE_PADDING - size) / 2;
+					x = centerInCorridor(corridorLeft, rightCorridorWidth, size);
 					y = (viewH - size) / 2;
 				} else {
 					// Below the card, horizontally centred
