@@ -41,21 +41,21 @@ const MOBILE_BREAKPOINT_PX = 768;
 // ---------------------------------------------------------------------------
 
 declare global {
-	interface Window {
-		__getCardScreenBounds?: () => {
-			x: number;
-			y: number;
-			width: number;
-			height: number;
-		} | null;
-		__ctaScreenBounds?: {
-			x: number;
-			y: number;
-			width: number;
-			height: number;
-			radius: number;
-		} | null;
-	}
+  interface Window {
+    __getCardScreenBounds?: () => {
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+    } | null;
+    __ctaScreenBounds?: {
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+      radius: number;
+    } | null;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -63,122 +63,122 @@ declare global {
 // ---------------------------------------------------------------------------
 
 export function initStaticCta(ctaEl: HTMLElement): { cleanup: () => void } {
-	// Override any previous float transform; JS controls position from here on.
-	ctaEl.style.position = "fixed";
-	ctaEl.style.left = "0";
-	ctaEl.style.top = "0";
-	ctaEl.style.willChange = "transform";
-	// The CSS opacity / visibility is handled by the is-visible class.
+  // Override any previous float transform; JS controls position from here on.
+  ctaEl.style.position = "fixed";
+  ctaEl.style.left = "0";
+  ctaEl.style.top = "0";
+  ctaEl.style.willChange = "transform";
+  // The CSS opacity / visibility is handled by the is-visible class.
 
-	// ---- Position helpers ---------------------------------------------------
+  // ---- Position helpers ---------------------------------------------------
 
-	function computeAndApply(): void {
-		const viewW = window.innerWidth;
-		const viewH = window.innerHeight;
-		const card = window.__getCardScreenBounds?.();
+  function computeAndApply(): void {
+    const viewW = window.innerWidth;
+    const viewH = window.innerHeight;
+    const card = window.__getCardScreenBounds?.();
 
-		let size = FULL_SIZE_PX;
-		let x: number;
-		let y: number;
+    let size = FULL_SIZE_PX;
+    let x: number;
+    let y: number;
 
-		/** Centre `size` horizontally inside the right corridor. */
-		const centerInCorridor = (
-			cLeft: number,
-			cWidth: number,
-			s: number,
-		): number => cLeft + (cWidth + EDGE_PADDING - s) / 2;
+    /** Centre `size` horizontally inside the right corridor. */
+    const centerInCorridor = (
+      cLeft: number,
+      cWidth: number,
+      s: number,
+    ): number => cLeft + (cWidth + EDGE_PADDING - s) / 2;
 
-		if (card) {
-			const isMobile = viewW < MOBILE_BREAKPOINT_PX;
-			const corridorLeft = card.x + card.width;
-			const rightCorridorWidth = viewW - corridorLeft - EDGE_PADDING;
+    if (card) {
+      const isMobile = viewW < MOBILE_BREAKPOINT_PX;
+      const corridorLeft = card.x + card.width;
+      const rightCorridorWidth = viewW - corridorLeft - EDGE_PADDING;
 
-			if (!isMobile && rightCorridorWidth >= MIN_SIZE_PX + EDGE_PADDING * 2) {
-				// ── Desktop: right corridor ──────────────────────────────────────
-				size = Math.min(FULL_SIZE_PX, rightCorridorWidth - EDGE_PADDING * 2);
-				size = Math.max(MIN_SIZE_PX, Math.round(size));
-				// Centre horizontally in the corridor
-				x = centerInCorridor(corridorLeft, rightCorridorWidth, size);
-				// Centre vertically in the viewport
-				y = (viewH - size) / 2;
-			} else if (!isMobile) {
-				// ── Desktop fallback: right edge of viewport ─────────────────────
-				size = MIN_SIZE_PX;
-				x = viewW - size - EDGE_PADDING;
-				y = (viewH - size) / 2;
-			} else {
-				// ── Mobile: try right side-corridor first, else below card ───────
-				if (rightCorridorWidth >= MIN_SIZE_PX + EDGE_PADDING * 2) {
-					size = Math.min(
-						FULL_SIZE_PX,
-						Math.min(viewW * 0.28, rightCorridorWidth - EDGE_PADDING * 2),
-					);
-					size = Math.max(MIN_SIZE_PX, Math.round(size));
-					x = centerInCorridor(corridorLeft, rightCorridorWidth, size);
-					y = (viewH - size) / 2;
-				} else {
-					// Below the card, horizontally centred
-					size = Math.min(FULL_SIZE_PX, viewW * 0.35);
-					size = Math.max(MIN_SIZE_PX, Math.round(size));
-					x = (viewW - size) / 2;
-					y = card.y + card.height + EDGE_PADDING * 2;
-					// Clamp within viewport
-					if (y + size > viewH - EDGE_PADDING) {
-						y = viewH - size - EDGE_PADDING;
-					}
-				}
-			}
-		} else {
-			// Card not loaded yet — place in the right third of the viewport
-			x = viewW * 0.75 - size / 2;
-			y = (viewH - size) / 2;
-		}
+      if (!isMobile && rightCorridorWidth >= MIN_SIZE_PX + EDGE_PADDING * 2) {
+        // ── Desktop: right corridor ──────────────────────────────────────
+        size = Math.min(FULL_SIZE_PX, rightCorridorWidth - EDGE_PADDING * 2);
+        size = Math.max(MIN_SIZE_PX, Math.round(size));
+        // Centre horizontally in the corridor
+        x = centerInCorridor(corridorLeft, rightCorridorWidth, size);
+        // Centre vertically in the viewport
+        y = (viewH - size) / 2;
+      } else if (!isMobile) {
+        // ── Desktop fallback: right edge of viewport ─────────────────────
+        size = MIN_SIZE_PX;
+        x = viewW - size - EDGE_PADDING;
+        y = (viewH - size) / 2;
+      } else {
+        // ── Mobile: try right side-corridor first, else below card ───────
+        if (rightCorridorWidth >= MIN_SIZE_PX + EDGE_PADDING * 2) {
+          size = Math.min(
+            FULL_SIZE_PX,
+            Math.min(viewW * 0.28, rightCorridorWidth - EDGE_PADDING * 2),
+          );
+          size = Math.max(MIN_SIZE_PX, Math.round(size));
+          x = centerInCorridor(corridorLeft, rightCorridorWidth, size);
+          y = (viewH - size) / 2;
+        } else {
+          // Below the card, horizontally centred
+          size = Math.min(FULL_SIZE_PX, viewW * 0.35);
+          size = Math.max(MIN_SIZE_PX, Math.round(size));
+          x = (viewW - size) / 2;
+          y = card.y + card.height + EDGE_PADDING * 2;
+          // Clamp within viewport
+          if (y + size > viewH - EDGE_PADDING) {
+            y = viewH - size - EDGE_PADDING;
+          }
+        }
+      }
+    } else {
+      // Card not loaded yet — place in the right third of the viewport
+      x = viewW * 0.75 - size / 2;
+      y = (viewH - size) / 2;
+    }
 
-		ctaEl.style.setProperty("--btn-shape-circle-size", `${size}px`);
-		ctaEl.style.transform = `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
-	}
+    ctaEl.style.setProperty("--btn-shape-circle-size", `${size}px`);
+    ctaEl.style.transform = `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
+  }
 
-	// Initial silent positioning (before reveal, so there's no "jump" on show)
-	computeAndApply();
+  // Initial silent positioning (before reveal, so there's no "jump" on show)
+  computeAndApply();
 
-	// ---- Reveal after delay -------------------------------------------------
+  // ---- Reveal after delay -------------------------------------------------
 
-	const revealTimer = setTimeout(() => {
-		computeAndApply(); // Recompute — card might have loaded by now
-		ctaEl.classList.add("is-visible");
-	}, REVEAL_DELAY);
+  const revealTimer = setTimeout(() => {
+    computeAndApply(); // Recompute — card might have loaded by now
+    ctaEl.classList.add("is-visible");
+  }, REVEAL_DELAY);
 
-	// ---- Keep __ctaScreenBounds fresh (WebGL cursor magnetize) --------------
+  // ---- Keep __ctaScreenBounds fresh (WebGL cursor magnetize) --------------
 
-	let animId = 0;
+  let animId = 0;
 
-	function tick(): void {
-		const rect = ctaEl.getBoundingClientRect();
-		window.__ctaScreenBounds = {
-			x: rect.left,
-			y: rect.top,
-			width: rect.width,
-			height: rect.height,
-			radius: rect.width / 2,
-		};
-		animId = requestAnimationFrame(tick);
-	}
+  function tick(): void {
+    const rect = ctaEl.getBoundingClientRect();
+    window.__ctaScreenBounds = {
+      x: rect.left,
+      y: rect.top,
+      width: rect.width,
+      height: rect.height,
+      radius: rect.width / 2,
+    };
+    animId = requestAnimationFrame(tick);
+  }
 
-	animId = requestAnimationFrame(tick);
+  animId = requestAnimationFrame(tick);
 
-	// ---- Recompute on resize ------------------------------------------------
+  // ---- Recompute on resize ------------------------------------------------
 
-	const onResize = () => computeAndApply();
-	window.addEventListener("resize", onResize);
+  const onResize = () => computeAndApply();
+  window.addEventListener("resize", onResize);
 
-	// ---- Cleanup ------------------------------------------------------------
+  // ---- Cleanup ------------------------------------------------------------
 
-	function cleanup(): void {
-		clearTimeout(revealTimer);
-		cancelAnimationFrame(animId);
-		window.removeEventListener("resize", onResize);
-		window.__ctaScreenBounds = null;
-	}
+  function cleanup(): void {
+    clearTimeout(revealTimer);
+    cancelAnimationFrame(animId);
+    window.removeEventListener("resize", onResize);
+    window.__ctaScreenBounds = null;
+  }
 
-	return { cleanup };
+  return { cleanup };
 }
