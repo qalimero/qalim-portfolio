@@ -1,7 +1,7 @@
 /**
  * ctaPosition.ts
  *
- * Manages the reveal timeline for the TextMaintenance link.
+ * Manages the reveal timeline for the maintenance CTA link.
  *
  * The link is positioned by CSS flexbox within the right panel.
  * This module handles:
@@ -17,7 +17,7 @@ const REVEAL_DELAY = 400;
 // ---------------------------------------------------------------------------
 
 export function initStaticCta(ctaEl: HTMLElement): { cleanup: () => void } {
-	const linkEl = ctaEl.querySelector<HTMLElement>(".text-maintenance");
+	const linkEl = ctaEl.querySelector<HTMLElement>(".maintenance-link");
 
 	// ---- Reveal timeline ---------------------------------------------------
 

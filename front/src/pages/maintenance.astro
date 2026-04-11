@@ -2,13 +2,14 @@
 /**
  * Maintenance page — Split-screen layout.
  *
- * Desktop (≥ lg): Spline card on the left half, TextMaintenance link on the right.
+ * Desktop (≥ lg): Spline card on the left half, text block + CTA on the right.
  * Mobile (< lg): Horizontal snap-scroll — card fills first viewport, scroll right
- * reveals content panel with TextMaintenance link + scroll indicator.
+ * reveals content panel with text block + CTA + scroll indicator.
  *
  * Content managed via src/content/site.config.json (editable via Decap CMS).
  */
 import { getEntry } from "astro:content";
+import { Icon } from "astro-icon/components";
 import ThreeScene from "../components/scenes/ThreeScene.jsx";
 import WebGLGrid from "../components/scenes/WebGLGrid.jsx";
 import Marquee from "../components/ui/Marquee.astro";
@@ -62,18 +63,42 @@ const popin = popinInfo?.[0];
         </div>
       </div>
 
-      <!-- Right panel: TextMaintenance link -->
+      <!-- Right panel: text block + square CTA link -->
       <div class="maintenance__panel maintenance__panel--content">
-        {maintenanceText && maintenanceText.href && (
-          <div class="maintenance__cta">
-            <TextMaintenance
-              label={maintenanceText.label}
-              href={maintenanceText.href}
-              icon={maintenanceText.icon}
-              external={isExternal ?? false}
-            />
-          </div>
-        )}
+        <div class="maintenance__content-stack">
+          {maintenanceText && (
+            <TextMaintenance text={maintenanceText.text} />
+          )}
+
+          {maintenanceText && maintenanceText.href && (
+            <div class="maintenance__cta">
+              <a
+                class="maintenance-link"
+                href={maintenanceText.href}
+                {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              >
+                <span class="maintenance-link__content">
+                  <span class="maintenance-link__label">{maintenanceText.label}</span>
+                  {maintenanceText.icon && (
+                    <span class="maintenance-link__icon-wrapper">
+                      <Icon
+                        class="maintenance-link__icon"
+                        name={maintenanceText.icon}
+                        aria-hidden="true"
+                        focusable="false"
+                        width="1em"
+                        height="1em"
+                      />
+                    </span>
+                  )}
+                  {isExternal && (
+                    <span class="maintenance-link__sr-hint">{' '}(nouvelle fenêtre)</span>
+                  )}
+                </span>
+              </a>
+            </div>
+          )}
+        </div>
 
         <!-- Mobile scroll indicator -->
         <div class="maintenance__scroll-indicator" aria-hidden="true">
@@ -98,9 +123,9 @@ const popin = popinInfo?.[0];
       const ctaEl = document.querySelector('.maintenance__cta') as HTMLElement | null;
       if (!ctaEl) return;
 
-      const linkEl = ctaEl.querySelector<HTMLElement>('.text-maintenance');
+      const linkEl = ctaEl.querySelector<HTMLElement>('.maintenance-link');
 
-      // Grid-aligned positioning within right panel
+      // Visibility timeline
       initStaticCta(ctaEl);
 
       // Pixel-creation overlay (synced with reveal)

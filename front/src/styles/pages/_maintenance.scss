@@ -73,9 +73,14 @@
 	&__panel--card {
 		position: relative;
 
-		// Desktop: left half
+		// Desktop: full viewport behind content — card keeps natural proportions,
+		// camera offset shifts it to the left half.
 		@media (min-width: vars.$breakpoint-lg) {
-			width: 50vw;
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 0;
 		}
 
 		.canvas-host {
@@ -99,14 +104,26 @@
 		align-items: center;
 		justify-content: center;
 
-		// Desktop: right half
+		// Desktop: right half, above card canvas
 		@media (min-width: vars.$breakpoint-lg) {
 			width: 50vw;
+			margin-left: auto;
+			z-index: 1;
 		}
 	}
 
 	// ============================================================
-	// CTA wrapper — positions the TextMaintenance link
+	// Content stack — text block above CTA
+	// ============================================================
+	&__content-stack {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: var(--spacing-xl);
+	}
+
+	// ============================================================
+	// CTA wrapper
 	// ============================================================
 	&__cta {
 		display: flex;
@@ -162,5 +179,164 @@
 	50% {
 		transform: translateX(6px);
 		opacity: 1;
+	}
+}
+
+// ===========================================================================
+// .maintenance-link — Square CTA link aligned to grid cells
+// Desktop: 2×2 grid cells (160×160px). Tablet/mobile: 4×1 (320×80px).
+// ===========================================================================
+
+.maintenance-link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	overflow: hidden;
+	text-decoration: none;
+	cursor: pointer;
+
+	// Grid-aligned square: 2×2 cells on desktop
+	$cell: var(--grid-cell-size, 80px);
+	width: calc(#{$cell} * 2);
+	height: calc(#{$cell} * 2);
+
+	// Square — NO border-radius
+	border: var(--text-maintenance-border-width) solid transparent;
+	background: transparent;
+
+	// Typography
+	font-family: var(--text-maintenance-font-family);
+	font-size: var(--text-maintenance-font-size);
+	font-weight: var(--text-maintenance-font-weight);
+	letter-spacing: var(--text-maintenance-letter-spacing);
+	text-transform: uppercase;
+	color: var(--text-maintenance-color);
+
+	// Transitions
+	transition:
+		transform 200ms ease,
+		border-color 300ms ease;
+
+	// ── Initial hidden state ──
+	visibility: hidden;
+	pointer-events: none;
+
+	// ── Visible state (pixel-creation playing) ──
+	&.is-visible {
+		visibility: visible;
+	}
+
+	// ── Revealed state (pixel-creation done) ──
+	&.is-revealed {
+		border-color: var(--text-maintenance-border-color);
+		pointer-events: auto;
+
+		.maintenance-link__content {
+			animation: ml-content-appear 0.525s cubic-bezier(0.33, 1, 0.68, 1) 0.15s both;
+		}
+
+		.maintenance-link__icon-wrapper {
+			animation:
+				ml-content-appear 0.525s cubic-bezier(0.33, 1, 0.68, 1) 0.3s both,
+				ml-icon-spin 4s linear 0.8s infinite;
+		}
+	}
+
+	// Tablet & mobile: 4×1 cells (320×80)
+	@media (max-width: vars.$breakpoint-lg - 1) {
+		width: calc(#{$cell} * 4);
+		height: calc(#{$cell} * 1);
+	}
+
+	// ── Focus ring ──
+	&:focus-visible {
+		outline: 2px solid var(--color-neutral-lightest);
+		outline-offset: 6px;
+	}
+
+	// ── Hover ──
+	&:hover:not([disabled]) {
+		transform: scale(1.03);
+	}
+
+	&:active:not([disabled]) {
+		transform: scale(0.97);
+	}
+
+	// ── Content wrapper ──
+	&__content {
+		display: inline-flex;
+		flex-direction: column;
+		align-items: center;
+		gap: var(--spacing-xs);
+		opacity: 0;
+		text-align: center;
+
+		// Tablet: horizontal layout
+		@media (max-width: vars.$breakpoint-lg - 1) {
+			flex-direction: row;
+			gap: var(--spacing-sm);
+		}
+	}
+
+	// ── Label ──
+	&__label {
+		display: inline-block;
+	}
+
+	// ── Icon wrapper (3D rotation container) ──
+	&__icon-wrapper {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		perspective: 200px;
+		opacity: 0;
+	}
+
+	// ── Icon ──
+	&__icon {
+		flex-shrink: 0;
+		width: var(--text-maintenance-icon-size);
+		height: var(--text-maintenance-icon-size);
+	}
+
+	// ── SR-only hint for external links ──
+	&__sr-hint {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+		border-width: 0;
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Maintenance-link keyframes
+// ---------------------------------------------------------------------------
+
+@keyframes ml-content-appear {
+	from {
+		opacity: 0;
+		transform: translateY(4px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes ml-icon-spin {
+	from {
+		transform: rotateY(0deg);
+	}
+
+	to {
+		transform: rotateY(360deg);
 	}
 }

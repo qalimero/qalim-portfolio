@@ -1,155 +1,27 @@
 // TextMaintenance Component Styles
-// Oval-shaped link with orange border, inline text, and 3D rotating icon.
+// Text block with orange border — displays configurable maintenance text.
 @use "../abstracts/variables" as vars;
 @use "../abstracts/mixins" as mix;
 
 .text-maintenance {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	position: relative;
-	overflow: hidden;
-
-	// Fixed width: 4 grid cells (80px × 4 = 320px)
+	// Grid-aligned width: 4 cells
 	width: calc(var(--grid-cell-size, 80px) * 4);
 
-	// Oval shape: border-radius 50% on non-square = ellipse
+	// Orange border, no fill
 	border: var(--text-maintenance-border-width) solid var(--text-maintenance-border-color);
-	border-radius: 50%;
 	background: transparent;
 
-	// Typography
-	font-family: var(--text-maintenance-font-family);
-	font-size: var(--text-maintenance-font-size);
-	font-weight: var(--text-maintenance-font-weight);
-	letter-spacing: var(--text-maintenance-letter-spacing);
-	text-transform: var(--text-maintenance-text-transform);
-	color: var(--text-maintenance-color);
-	text-decoration: none;
+	// Height adapts to content
+	padding: var(--spacing-lg) var(--spacing-xl);
 
-	// Padding — vertical determines height (content-adaptive)
-	padding: var(--text-maintenance-padding-y) var(--text-maintenance-padding-x);
-
-	// Cursor
-	cursor: pointer;
-
-	// Transitions for reveal
-	transition:
-		transform 200ms ease,
-		opacity 200ms ease,
-		border-color 300ms ease;
-
-	// ── Initial hidden state ──
-	// Border and content start invisible; pixel-creation overlay builds the shape.
-	opacity: 0;
-	visibility: hidden;
-	pointer-events: none;
-
-	// ── Visible state (positioned by JS) ──
-	&.is-visible {
-		visibility: visible;
-		// Opacity still 0 — pixel creation overlay is rendering
-	}
-
-	// ── Revealed state (pixel-creation done) ──
-	&.is-revealed {
-		opacity: 1;
-		pointer-events: auto;
-
-		.text-maintenance__content {
-			animation: tm-content-appear 0.525s cubic-bezier(0.33, 1, 0.68, 1) 0.15s both;
-		}
-
-		.text-maintenance__icon-wrapper {
-			animation:
-				tm-content-appear 0.525s cubic-bezier(0.33, 1, 0.68, 1) 0.3s both,
-				tm-icon-spin 4s linear 0.8s infinite;
-		}
-	}
-
-	// ── Focus ring ──
-	&:focus-visible {
-		outline: 2px solid var(--color-neutral-lightest);
-		outline-offset: 6px;
-	}
-
-	// ── Hover ──
-	&:hover:not([disabled]) {
-		transform: scale(1.03);
-	}
-
-	&:active:not([disabled]) {
-		transform: scale(0.97);
-	}
-
-	// ── Content wrapper ──
-	&__content {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--spacing-sm);
-		opacity: 0;
-		white-space: nowrap;
-	}
-
-	// ── Label ──
-	&__label {
-		display: inline-block;
-	}
-
-	// ── Icon wrapper (3D rotation container) ──
-	&__icon-wrapper {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		perspective: 200px;
-		opacity: 0;
-	}
-
-	// ── Icon ──
-	&__icon {
-		flex-shrink: 0;
-		width: var(--text-maintenance-icon-size);
-		height: var(--text-maintenance-icon-size);
-	}
-
-	// ── SR-only hint for external links ──
-	&__sr-hint {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		padding: 0;
-		margin: -1px;
-		overflow: hidden;
-		clip-path: inset(50%);
-		white-space: nowrap;
-		border-width: 0;
-	}
-}
-
-// ---------------------------------------------------------------------------
-// Keyframes
-// ---------------------------------------------------------------------------
-
-// Content fade-in with subtle lift
-@keyframes tm-content-appear {
-	from {
-		opacity: 0;
-		transform: translateY(4px);
-	}
-
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-// 3D Y-axis rotation for the terminal icon (wireframe feel)
-@keyframes tm-icon-spin {
-	from {
-		transform: rotateY(0deg);
-	}
-
-	to {
-		transform: rotateY(360deg);
+	// ── Text ──
+	&__text {
+		margin: 0;
+		font-family: var(--text-maintenance-font-family);
+		font-size: var(--text-maintenance-font-size);
+		font-weight: var(--text-maintenance-font-weight);
+		letter-spacing: var(--text-maintenance-letter-spacing);
+		color: var(--text-maintenance-color);
+		line-height: 1.6;
 	}
 }

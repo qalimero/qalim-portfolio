@@ -233,6 +233,23 @@ function fitCameraToCard(
 	);
 	camera.lookAt(sphere.center);
 
+	// Desktop (≥ 992px): offset camera to place card in the left half.
+	// Pure lateral shift — no rotation — keeps card proportions intact.
+	const LG_BREAKPOINT = 992;
+	if (window.innerWidth >= LG_BREAKPOINT) {
+		const visibleHeight = 2 * finalDistance * Math.tan(vFov / 2);
+		const visibleWidth = visibleHeight * aspect;
+		const xShift = visibleWidth * 0.25;
+
+		camera.position.x = sphere.center.x + xShift;
+		// Look straight ahead (parallel to -Z), not at the card
+		camera.lookAt(
+			sphere.center.x + xShift,
+			sphere.center.y,
+			sphere.center.z,
+		);
+	}
+
 	// Set appropriate near and far planes
 	camera.near = Math.max(0.1, finalDistance - sphere.radius * 2);
 	camera.far = finalDistance + sphere.radius * 3;

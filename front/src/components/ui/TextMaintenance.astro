@@ -1,68 +1,31 @@
 ---
 /**
- * TextMaintenance — Oval-shaped link with inline text and rotating icon.
+ * TextMaintenance — Text block with orange border.
  *
- * Renders as an <a> with:
+ * Renders a container with:
  *  - Orange border (no fill), from design tokens
  *  - Width = 4 grid cells (320px)
- *  - Oval shape (border-radius: 50% on non-square element)
- *  - Inline label text + optional 3D-rotating icon
+ *  - Height adapts to content
  *
- * Animation lifecycle (driven by JS):
- *  1. Starts hidden (opacity 0)
- *  2. WebGL pixel-creation overlay builds the shape
- *  3. `.is-revealed` — border appears, text + icon fade in
- *
- * Content is configurable via site.config.json `maintenanceText` field.
+ * Content is configurable via site.config.json `maintenanceText.text` field.
  *
  * RGAA compliance:
- *  - Criterion 6.1: explicit accessible name via label prop
- *  - Criterion 13.2: external links indicate new window
+ *  - Criterion 8.9: proper use of semantic markup
  */
-import { Icon } from "astro-icon/components";
 
 export interface Props {
-	label: string;
-	href: string;
-	icon?: string;
-	external?: boolean;
+	text: string;
 	class?: string;
 }
 
 const {
-	label,
-	href,
-	icon,
-	external = false,
+	text,
 	class: className = "",
 } = Astro.props;
-
-const attrs: Record<string, string | undefined> = { href };
-if (external) {
-	attrs.target = "_blank";
-	attrs.rel = "noopener noreferrer";
-}
 
 const classes = ["text-maintenance", className].filter(Boolean).join(" ");
 ---
 
-<a class={classes} {...attrs}>
-  <span class="text-maintenance__content">
-    <span class="text-maintenance__label">{label}</span>
-    {icon && (
-      <span class="text-maintenance__icon-wrapper">
-        <Icon
-          class="text-maintenance__icon"
-          name={icon}
-          aria-hidden="true"
-          focusable="false"
-          width="1em"
-          height="1em"
-        />
-      </span>
-    )}
-    {external && (
-      <span class="text-maintenance__sr-hint">{' '}(nouvelle fenêtre)</span>
-    )}
-  </span>
-</a>
+<div class={classes}>
+  <p class="text-maintenance__text">{text}</p>
+</div>

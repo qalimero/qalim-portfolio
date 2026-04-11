@@ -160,8 +160,5 @@
 	--text-maintenance-font-size: var(--font-size-xxs);
 	--text-maintenance-font-weight: 700;
 	--text-maintenance-letter-spacing: -0.02em;
-	--text-maintenance-text-transform: uppercase;
-	--text-maintenance-padding-x: var(--spacing-xl);
-	--text-maintenance-padding-y: var(--spacing-md);
 	--text-maintenance-icon-size: 1.25em;
 }

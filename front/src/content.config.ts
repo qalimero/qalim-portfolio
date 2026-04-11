@@ -18,6 +18,7 @@ export const buttonCtaSchema = z.object({
 export type ButtonCta = z.infer<typeof buttonCtaSchema>;
 
 export const maintenanceTextSchema = z.object({
+	text: z.string().min(1),
 	label: z.string().min(1),
 	href: z.string().optional(),
 	icon: z.string().optional(),
