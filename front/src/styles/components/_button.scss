@@ -175,21 +175,31 @@
   }
 
   // ============================================================
-  // Bounce distortion: squish / stretch animation applied by JS
-  // on each collision. Applied to the inner .btn element so it
-  // does not interfere with the translate3d position on the wrapper.
-  //
-  // btn--squish-v  → CTA hits a horizontal surface (top/bottom)
-  //                  → squishes vertically (wider, shorter)
-  // btn--squish-h  → CTA hits a vertical surface (left/right)
-  //                  → squishes horizontally (narrower, taller)
+  // Draw-on reveal animation
+  // Triggered by adding .is-visible to the CTA wrapper element.
+  // Three sequential stages:
+  //   1. Ring stroke draws itself    (0 → 0.7 s)
+  //   2. Fill circle fades in        (0.5 → 0.9 s)
+  //   3. Text fades in               (0.65 → 1.0 s)
   // ============================================================
-  &--squish-v {
-    animation: cta-squish-v 400ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-  }
 
-  &--squish-h {
-    animation: cta-squish-h 400ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  // The CTA wrapper starts invisible; JS adds .is-visible after REVEAL_DELAY.
+  // Using visibility + opacity avoids a FOUC while keeping the element
+  // accessible to assistive technologies after reveal.
+  &--shape-circle.is-visible,
+  .is-visible &--shape-circle {
+    .btn__shape-ring {
+      animation: btn-circle-draw 0.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    }
+
+    .btn__shape-fill {
+      animation: btn-circle-fill-appear 0.4s ease 0.5s both;
+    }
+
+    .btn__shape-text,
+    .btn__content {
+      animation: btn-circle-text-appear 0.35s ease 0.65s both;
+    }
   }
 
   // ============================================================
@@ -208,21 +218,24 @@
 }
 
 // ---------------------------------------------------------------------------
-// Bounce distortion keyframes
-// cta-squish-v: hitting a horizontal surface (top / bottom) — CTA flattens
-// cta-squish-h: hitting a vertical surface   (left / right) — CTA narrows
+// Draw-on keyframes for the shape-circle reveal animation
+//
+// btn-circle-draw        : traces the ring stroke from invisible to complete.
+// btn-circle-fill-appear : fades the fill circle in after the ring is drawn.
+// btn-circle-text-appear : fades the text + label in last.
 // ---------------------------------------------------------------------------
 
-@keyframes cta-squish-v {
-  0%   { transform: scaleX(1.25) scaleY(0.72); }
-  35%  { transform: scaleX(0.90) scaleY(1.14); }
-  65%  { transform: scaleX(1.04) scaleY(0.97); }
-  100% { transform: scaleX(1)    scaleY(1); }
+@keyframes btn-circle-draw {
+  from { stroke-dashoffset: 616; }
+  to   { stroke-dashoffset: 0;   }
 }
 
-@keyframes cta-squish-h {
-  0%   { transform: scaleX(0.72) scaleY(1.25); }
-  35%  { transform: scaleX(1.14) scaleY(0.90); }
-  65%  { transform: scaleX(0.97) scaleY(1.04); }
-  100% { transform: scaleX(1)    scaleY(1); }
+@keyframes btn-circle-fill-appear {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes btn-circle-text-appear {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
