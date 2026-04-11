@@ -37,7 +37,7 @@ const MIN_SIZE_PX = 64;
 const MOBILE_BREAKPOINT_PX = 768;
 
 // ---------------------------------------------------------------------------
-// Global type declarations (shared with gridScene.ts)
+// Global type declarations
 // ---------------------------------------------------------------------------
 
 declare global {
@@ -47,13 +47,6 @@ declare global {
       y: number;
       width: number;
       height: number;
-    } | null;
-    __ctaScreenBounds?: {
-      x: number;
-      y: number;
-      width: number;
-      height: number;
-      radius: number;
     } | null;
   }
 }
@@ -148,24 +141,6 @@ export function initStaticCta(ctaEl: HTMLElement): { cleanup: () => void } {
     ctaEl.classList.add("is-visible");
   }, REVEAL_DELAY);
 
-  // ---- Keep __ctaScreenBounds fresh (WebGL cursor magnetize) --------------
-
-  let animId = 0;
-
-  function tick(): void {
-    const rect = ctaEl.getBoundingClientRect();
-    window.__ctaScreenBounds = {
-      x: rect.left,
-      y: rect.top,
-      width: rect.width,
-      height: rect.height,
-      radius: rect.width / 2,
-    };
-    animId = requestAnimationFrame(tick);
-  }
-
-  animId = requestAnimationFrame(tick);
-
   // ---- Recompute on resize ------------------------------------------------
 
   const onResize = () => computeAndApply();
@@ -175,9 +150,7 @@ export function initStaticCta(ctaEl: HTMLElement): { cleanup: () => void } {
 
   function cleanup(): void {
     clearTimeout(revealTimer);
-    cancelAnimationFrame(animId);
     window.removeEventListener("resize", onResize);
-    window.__ctaScreenBounds = null;
   }
 
   return { cleanup };

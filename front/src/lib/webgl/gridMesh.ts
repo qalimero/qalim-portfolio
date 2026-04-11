@@ -66,27 +66,3 @@ export function generateGridVertices(
 
   return data;
 }
-
-/**
- * Generates a unit-circle ring as `gl.LINES` pairs.
- * Centered at origin, radius 1.0 — the vertex shader scales
- * and positions it using uniforms.
- *
- * @param segments Number of line segments forming the ring.
- */
-export function generateCircleVertices(segments = 128): Float32Array {
-  // Each segment = 2 vertices x 2 floats
-  const data = new Float32Array(segments * 2 * 2);
-  let offset = 0;
-
-  for (let i = 0; i < segments; i++) {
-    const a0 = (i / segments) * Math.PI * 2;
-    const a1 = ((i + 1) / segments) * Math.PI * 2;
-    data[offset++] = Math.cos(a0);
-    data[offset++] = Math.sin(a0);
-    data[offset++] = Math.cos(a1);
-    data[offset++] = Math.sin(a1);
-  }
-
-  return data;
-}

@@ -70,7 +70,8 @@ const popin = popinInfo?.[0];
 
   <script>
     import { initStaticCta } from '../lib/animations/ctaPosition';
-    import { initCtaParticles } from '../lib/animations/ctaParticles';
+    import { initParticleScene } from '../lib/webgl/particleScene';
+    import { initTransitionScene } from '../lib/webgl/transitionScene';
 
     function boot() {
       const ctaEl = document.querySelector('.maintenance__cta') as HTMLElement | null;
@@ -81,9 +82,50 @@ const popin = popinInfo?.[0];
       // Static positioning + draw-on reveal animation
       initStaticCta(ctaEl);
 
-      // Particle diffusion on hover (attached to the inner .btn element)
-      if (btnEl) {
-        initCtaParticles(btnEl);
+      // WebGL2 pixel particle system (mouse + CTA hover)
+      const particles = initParticleScene();
+
+      // Keep CTA state in sync with hover and position
+      if (particles && btnEl) {
+        let ctaHovered = false;
+
+        function updateCtaParticles() {
+          const rect = btnEl!.getBoundingClientRect();
+          particles!.setCtaState(
+            ctaHovered,
+            rect.left + rect.width  / 2,
+            rect.top  + rect.height / 2,
+            rect.width / 2,
+          );
+        }
+
+        btnEl.addEventListener('pointerenter', () => {
+          ctaHovered = true;
+          updateCtaParticles();
+        });
+
+        btnEl.addEventListener('pointerleave', () => {
+          ctaHovered = false;
+          updateCtaParticles();
+        });
+
+        // Keep position fresh on scroll / resize
+        window.addEventListener('resize', updateCtaParticles);
+      }
+
+      // WebGL2 pixel-wipe transition on CTA click → /terminal
+      const transition = initTransitionScene();
+
+      if (btnEl && transition) {
+        btnEl.addEventListener('click', (e) => {
+          const href = (btnEl as HTMLAnchorElement).href;
+          if (!href || href.includes('/terminal')) {
+            e.preventDefault();
+            transition.trigger(() => {
+              window.location.href = '/terminal';
+            });
+          }
+        });
       }
     }
 
