@@ -4,6 +4,11 @@
  * Pure WebGL2 distortion-grid background scene.
  * Orchestrates shader compilation, mesh creation, and the render loop.
  *
+ * Features:
+ * - Stretched grid (non-uniform line spacing — denser at edges, wider at center)
+ * - Mouse-following distortion with gaussian falloff
+ * - Subtle breathing animation (slow sine oscillation)
+ *
  * Two draw calls per frame:
  * 1. Grid lines — white, with magnification inside the mouse circle.
  * 2. Circle border — brand blue (#3200f2), follows the mouse.
@@ -86,6 +91,7 @@ export function initGridScene(
   // ---- Uniform & attribute locations ---------------------------------------
 
   const uMouse = gl.getUniformLocation(program, "u_mouse");
+  const uTime = gl.getUniformLocation(program, "u_time");
   const uAspect = gl.getUniformLocation(program, "u_aspect");
   const uMode = gl.getUniformLocation(program, "u_mode");
   const uColor = gl.getUniformLocation(program, "u_color");
@@ -197,12 +203,22 @@ export function initGridScene(
       return;
     }
 
+    const now = performance.now() / 1000;
+    const time = now - startTime;
+
     // ---- Magnetize: pull circle toward CTA when mouse is near -----
 
     // biome-ignore lint/suspicious/noExplicitAny: cross-module bridge via window globals
-    const ctaBounds = (window as any).__ctaScreenBounds as {
-      x: number; y: number; width: number; height: number; radius: number;
-    } | null | undefined;
+    const ctaBounds = (window as any).__ctaScreenBounds as
+      | {
+          x: number;
+          y: number;
+          width: number;
+          height: number;
+          radius: number;
+        }
+      | null
+      | undefined;
 
     let effectiveTargetX = targetMouseX;
     let effectiveTargetY = targetMouseY;
@@ -233,7 +249,8 @@ export function initGridScene(
         effectiveTargetY = targetMouseY + (ctaNDCY - targetMouseY) * t;
 
         // Blend circle radius to wrap the CTA (1.15× CTA radius, in NDC Y units)
-        const ctaRadiusNDC = (ctaBounds.radius / (window.innerHeight / 2)) * 1.15;
+        const ctaRadiusNDC =
+          (ctaBounds.radius / (window.innerHeight / 2)) * 1.15;
         targetRadius = DEFAULT_RADIUS + (ctaRadiusNDC - DEFAULT_RADIUS) * t;
       }
     }
@@ -253,6 +270,7 @@ export function initGridScene(
 
     // Shared uniforms
     gl.uniform2f(uMouse, mouseX, mouseY);
+    gl.uniform1f(uTime, time);
     gl.uniform1f(uAspect, aspect);
     gl.uniform1f(uRadius, currentRadius);
 
