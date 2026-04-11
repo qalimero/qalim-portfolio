@@ -1,0 +1,38 @@
+name: "Copilot Setup Steps"
+
+# Run automatically when this file changes to confirm the setup steps execute
+# successfully. Also supports manual runs from the Actions tab.
+on:
+    workflow_dispatch:
+    push:
+        paths:
+            - .github/workflows/copilot-setup-steps.yml
+    pull_request:
+        paths:
+            - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+    # This job MUST be named `copilot-setup-steps` — Copilot ignores any other name.
+    copilot-setup-steps:
+        runs-on: ubuntu-latest
+
+        permissions:
+            contents: read
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            # Match the exact Node version from .nvmrc (22.14.0).
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: "npm"
+                  cache-dependency-path: front/package-lock.json
+
+            # Pre-install all front/ dependencies so Copilot can run
+            # `npm run build`, `npm run type-check`, and `npm test` immediately.
+            - name: Install front-end dependencies
+              working-directory: front
+              run: npm ci

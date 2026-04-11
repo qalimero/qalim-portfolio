@@ -6,6 +6,7 @@
 import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/Layout.astro';
 import ThreeScene from '../components/scenes/ThreeScene.jsx';
+import WebGLGrid from '../components/scenes/WebGLGrid.jsx';
 import Marquee from '../components/ui/Marquee.astro';
 import Popin from '../components/ui/Popin.astro';
 import Link from '../components/ui/Link.astro';
@@ -24,6 +25,9 @@ const popin = popinInfo?.[0];
   description="Retour très bientôt."
   bodyClass="page-maintenance"
 >
+
+  <!-- WebGL distortion grid background -->
+  <WebGLGrid client:load />
 
   <section class="maintenance">
 
@@ -57,10 +61,33 @@ const popin = popinInfo?.[0];
       </div>
     )}
 
-    <!-- Three.js Scene -->
+    <!-- Three.js Scene (must be before CTA so card bounds are available) -->
     <div class="canvas-host">
       <ThreeScene client:load />
     </div>
 
   </section>
+
+  <script>
+    import { initStaticCta } from '../lib/animations/ctaPosition';
+    import { initCtaParticles } from '../lib/animations/ctaParticles';
+
+    function boot() {
+      const ctaEl = document.querySelector('.maintenance__cta') as HTMLElement | null;
+      if (!ctaEl) return;
+
+      const btnEl = ctaEl.querySelector<HTMLElement>('.btn');
+
+      // Static positioning + draw-on reveal animation
+      initStaticCta(ctaEl);
+
+      // Particle diffusion on hover (attached to the inner .btn element)
+      if (btnEl) {
+        initCtaParticles(btnEl);
+      }
+    }
+
+    // Astro scripts are type="module" → deferred, DOM is ready
+    boot();
+  </script>
 </BaseLayout>

@@ -1,7 +1,7 @@
-import * as THREE from 'three';
-import { createCamera } from './createCamera';
-import { createRenderer } from './createRenderer';
-import { loadCard } from './loadCard';
+import * as THREE from "three";
+import { createCamera } from "./createCamera";
+import { createRenderer } from "./createRenderer";
+import { loadCard } from "./loadCard";
 
 interface SplineSceneInstance {
   scene: THREE.Scene;
@@ -12,7 +12,7 @@ interface SplineSceneInstance {
 }
 
 export function initSplineScene(
-  containerId: string
+  containerId: string,
 ): SplineSceneInstance | null {
   const container = document.getElementById(containerId);
   if (!container) {
@@ -23,10 +23,10 @@ export function initSplineScene(
   }
 
   // Check if there's already a canvas in the container
-  const existingCanvas = container.querySelector('canvas');
+  const existingCanvas = container.querySelector("canvas");
   if (existingCanvas) {
     if (import.meta.env.DEV) {
-      console.warn('Canvas already exists in container, removing it first');
+      console.warn("Canvas already exists in container, removing it first");
     }
     existingCanvas.remove();
   }
@@ -39,16 +39,24 @@ export function initSplineScene(
   let cardObject: THREE.Object3D | null = null;
   let disposeCardInteraction: (() => void) | null = null;
   loadCard(scene, camera, renderer)
-    .then(card => {
+    .then((card) => {
       cardObject = card;
       if (card) {
         fitCameraToCard(card, camera);
-        disposeCardInteraction = addCardClickInteraction(card, camera, renderer);
+        disposeCardInteraction = addCardClickInteraction(
+          card,
+          camera,
+          renderer,
+        );
+
+        // Expose card screen bounds for CTA positioning & WebGL cursor magnetize
+        (window as any).__getCardScreenBounds = () =>
+          projectCardToScreen(card, camera, renderer);
       }
     })
-    .catch(error => {
+    .catch((error) => {
       if (import.meta.env.DEV) {
-        console.error('[initSplineScene] Failed to load card:', error);
+        console.error("[initSplineScene] Failed to load card:", error);
       }
     });
 
@@ -91,7 +99,7 @@ export function initSplineScene(
     }, 100); // Debounce final resize
   };
 
-  window.addEventListener('resize', handleResize);
+  window.addEventListener("resize", handleResize);
 
   // Cache pour éviter les calculs répétitifs
   let cardCenter: THREE.Vector3 | null = null;
@@ -128,7 +136,9 @@ export function initSplineScene(
     if (fps < 30 && renderer.getPixelRatio() > 1) {
       renderer.setPixelRatio(1);
       if (import.meta.env.DEV) {
-        console.warn('Low FPS detected, reducing pixel ratio for better performance');
+        console.warn(
+          "Low FPS detected, reducing pixel ratio for better performance",
+        );
       }
     }
   }
@@ -143,14 +153,17 @@ export function initSplineScene(
     }
   };
 
-  document.addEventListener('visibilitychange', handleVisibilityChange);
+  document.addEventListener("visibilitychange", handleVisibilityChange);
 
   // Cleanup function
   const cleanup = () => {
     renderer.setAnimationLoop(null);
-    document.removeEventListener('visibilitychange', handleVisibilityChange);
-    window.removeEventListener('resize', handleResize);
+    document.removeEventListener("visibilitychange", handleVisibilityChange);
+    window.removeEventListener("resize", handleResize);
     clearTimeout(resizeTimeout);
+
+    // Remove global card-bounds bridge
+    delete (window as any).__getCardScreenBounds;
 
     // Background click event listeners removed
 
@@ -160,11 +173,11 @@ export function initSplineScene(
     }
 
     // Dispose of geometries and materials
-    scene.traverse(object => {
+    scene.traverse((object) => {
       if (object instanceof THREE.Mesh) {
         object.geometry?.dispose();
         if (Array.isArray(object.material)) {
-          object.material.forEach(material => material.dispose());
+          object.material.forEach((material) => material.dispose());
         } else {
           object.material?.dispose();
         }
@@ -187,7 +200,7 @@ export function initSplineScene(
 // Helper function to fit camera to card with perfect centering
 function fitCameraToCard(
   card: THREE.Object3D,
-  camera: THREE.PerspectiveCamera
+  camera: THREE.PerspectiveCamera,
 ) {
   const box = new THREE.Box3().setFromObject(card);
   const sphere = box.getBoundingSphere(new THREE.Sphere());
@@ -205,15 +218,18 @@ function fitCameraToCard(
   const distH = sphere.radius / Math.tan(hFov / 2);
   const distance = Math.max(distV, distH) * (1 + margin);
 
+  // Shrink card by 15% — push camera further back
+  const cardScale = 1.15;
+
   // Additional mobile optimization - bring card closer on small screens
   const mobileMultiplier = screenSize < 768 ? 0.7 : 1.0;
-  const finalDistance = distance * mobileMultiplier;
+  const finalDistance = distance * mobileMultiplier * cardScale;
 
   // Position camera to look at the card center
   camera.position.set(
     sphere.center.x,
     sphere.center.y,
-    sphere.center.z + finalDistance
+    sphere.center.z + finalDistance,
   );
   camera.lookAt(sphere.center);
 
@@ -221,20 +237,59 @@ function fitCameraToCard(
   camera.near = Math.max(0.1, finalDistance - sphere.radius * 2);
   camera.far = finalDistance + sphere.radius * 3;
   camera.updateProjectionMatrix();
+}
 
+// ---------------------------------------------------------------------------
+// Card → screen-space projection (used by CTA positioning & WebGL grid magnetize)
+// ---------------------------------------------------------------------------
+
+function projectCardToScreen(
+  card: THREE.Object3D,
+  camera: THREE.PerspectiveCamera,
+  renderer: THREE.WebGLRenderer,
+): { x: number; y: number; width: number; height: number } | null {
+  const box = new THREE.Box3().setFromObject(card);
+  const corners = [
+    new THREE.Vector3(box.min.x, box.min.y, box.min.z),
+    new THREE.Vector3(box.max.x, box.min.y, box.min.z),
+    new THREE.Vector3(box.min.x, box.max.y, box.min.z),
+    new THREE.Vector3(box.max.x, box.max.y, box.min.z),
+    new THREE.Vector3(box.min.x, box.min.y, box.max.z),
+    new THREE.Vector3(box.max.x, box.min.y, box.max.z),
+    new THREE.Vector3(box.min.x, box.max.y, box.max.z),
+    new THREE.Vector3(box.max.x, box.max.y, box.max.z),
+  ];
+
+  const canvasRect = renderer.domElement.getBoundingClientRect();
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+
+  for (const c of corners) {
+    c.project(camera);
+    const sx = canvasRect.left + (c.x * 0.5 + 0.5) * canvasRect.width;
+    const sy = canvasRect.top + (-c.y * 0.5 + 0.5) * canvasRect.height;
+    if (sx < minX) minX = sx;
+    if (sy < minY) minY = sy;
+    if (sx > maxX) maxX = sx;
+    if (sy > maxY) maxY = sy;
+  }
+
+  return { x: minX, y: minY, width: maxX - minX, height: maxY - minY };
 }
 
 // Add click interaction to open LinkedIn profile
 function addCardClickInteraction(
   card: THREE.Object3D,
   camera: THREE.PerspectiveCamera,
-  renderer: THREE.WebGLRenderer
+  renderer: THREE.WebGLRenderer,
 ): () => void {
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
 
   // LinkedIn profile URL
-  const LINKEDIN_URL = 'https://www.linkedin.com/in/quentin-serda/';
+  const LINKEDIN_URL = "https://www.linkedin.com/in/quentin-serda/";
 
   const handleClick = (event: MouseEvent) => {
     // Calculate mouse position in normalized device coordinates (-1 to +1)
@@ -248,12 +303,12 @@ function addCardClickInteraction(
     const intersects = raycaster.intersectObject(card, true);
 
     if (intersects.length > 0) {
-      window.open(LINKEDIN_URL, '_blank');
+      window.open(LINKEDIN_URL, "_blank");
     }
   };
 
   // Add click event listener
-  renderer.domElement.addEventListener('click', handleClick);
+  renderer.domElement.addEventListener("click", handleClick);
 
   // Add visual feedback on hover
   let rafPending = false;
@@ -275,16 +330,17 @@ function addCardClickInteraction(
       raycaster.setFromCamera(mouse, camera);
       const intersects = raycaster.intersectObject(card, true);
 
-      renderer.domElement.style.cursor = intersects.length > 0 ? 'pointer' : 'default';
+      renderer.domElement.style.cursor =
+        intersects.length > 0 ? "pointer" : "default";
     });
   };
 
-  renderer.domElement.addEventListener('mousemove', handleMouseMove);
+  renderer.domElement.addEventListener("mousemove", handleMouseMove);
 
   const cleanup = () => {
-    renderer.domElement.removeEventListener('click', handleClick);
-    renderer.domElement.removeEventListener('mousemove', handleMouseMove);
-    renderer.domElement.style.cursor = '';
+    renderer.domElement.removeEventListener("click", handleClick);
+    renderer.domElement.removeEventListener("mousemove", handleMouseMove);
+    renderer.domElement.style.cursor = "";
   };
 
   return cleanup;

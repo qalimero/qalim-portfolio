@@ -24,8 +24,9 @@
     -webkit-backface-visibility: hidden;
     animation: marquee-scroll calc(20s / var(--marquee-speed, 1)) linear infinite;
 
-    // Pause animation on hover
-    &:hover {
+    // Pause animation on hover or when any interactive child has focus
+    &:hover,
+    &:focus-within {
       animation-play-state: paused;
     }
   }
