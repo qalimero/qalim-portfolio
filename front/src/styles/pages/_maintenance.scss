@@ -101,7 +101,7 @@
       // Grid: 12 × 5.75rem columns + 11 × 1rem gutters = 80rem (1280px at base 16px)
       // Centered container: (100vw - 80rem) / 2
       // Column 2 start: col 1 (5.75rem) + gutter (1rem) = 6.75rem → 108px at 1280px
-      left: calc((100vw - 80rem) / 2 + 6.75rem);
+      left: calc((100vw - 95rem) / 2 + 6.75rem);
 
       // 4 columns + 3 gutters = 4×5.75rem + 3×1rem = 26rem → 416px at 1280px
       width: calc(5.75rem * 4 + 1rem * 3);
