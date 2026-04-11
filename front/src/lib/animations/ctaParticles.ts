@@ -143,8 +143,11 @@ export function initCtaParticles(btnEl: HTMLElement): () => void {
 
 	// ---- Canvas positioning (keeps it aligned with the button) ----------------
 
-	function syncCanvas(): void {
+	/** Syncs the canvas position/size and returns the button rect + CSS dimensions. */
+	function syncCanvas(): { rect: DOMRect; cssW: number; cssH: number } {
 		const rect = btnEl.getBoundingClientRect();
+		// Cap DPR at 2× — higher ratios waste GPU memory with no visible benefit
+		// for small particle dots, while 2× is sharp enough on retina displays.
 		const dpr = Math.min(window.devicePixelRatio || 1, 2);
 		const cssW = rect.width + OVERFLOW * 2;
 		const cssH = rect.height + OVERFLOW * 2;
@@ -156,6 +159,8 @@ export function initCtaParticles(btnEl: HTMLElement): () => void {
 		canvas.width = Math.round(cssW * dpr);
 		canvas.height = Math.round(cssH * dpr);
 		draw.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+		return { rect, cssW, cssH };
 	}
 
 	// ---- Render loop --------------------------------------------------------
@@ -164,9 +169,8 @@ export function initCtaParticles(btnEl: HTMLElement): () => void {
 		const dt = lastTime > 0 ? Math.min((time - lastTime) / 1000, 0.05) : 0.016;
 		lastTime = time;
 
-		syncCanvas();
+		const { rect, cssW, cssH } = syncCanvas();
 
-		const rect = btnEl.getBoundingClientRect();
 		const cx = rect.left + rect.width / 2;
 		const cy = rect.top + rect.height / 2;
 		const btnR = rect.width / 2;
@@ -176,9 +180,6 @@ export function initCtaParticles(btnEl: HTMLElement): () => void {
 			spawnBurst(particles, cx, cy, btnR, DRIP_COUNT);
 		}
 
-		// Clear (CSS dimensions, not canvas pixel dimensions)
-		const cssW = rect.width + OVERFLOW * 2;
-		const cssH = rect.height + OVERFLOW * 2;
 		draw.clearRect(0, 0, cssW, cssH);
 
 		// Offset for drawing in canvas-local CSS coordinates
