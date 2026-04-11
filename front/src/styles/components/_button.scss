@@ -197,8 +197,6 @@
   // ============================================================
 
   // The CTA wrapper starts invisible; JS adds .is-visible after REVEAL_DELAY.
-  // Using visibility + opacity avoids a FOUC while keeping the element
-  // accessible to assistive technologies after reveal.
   &--shape-circle.is-visible,
   .is-visible &--shape-circle {
     .btn__shape-ring {

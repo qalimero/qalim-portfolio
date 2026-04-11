@@ -95,6 +95,7 @@ export function initGridScene(
   const uMode = gl.getUniformLocation(program, "u_mode");
   const uColor = gl.getUniformLocation(program, "u_color");
   const uRadius = gl.getUniformLocation(program, "u_radius");
+  const uTime = gl.getUniformLocation(program, "u_time");
   const aPosition = gl.getAttribLocation(program, "a_position");
 
   // ---- Grid mesh -----------------------------------------------------------
