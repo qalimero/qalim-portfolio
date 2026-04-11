@@ -190,31 +190,32 @@
   // Draw-on reveal animation
   // Triggered by adding .is-visible to the CTA wrapper element.
   // Four sequential stages for a "lively draw" feel:
-  //   1. Ring stroke draws itself    (0 → 0.6 s)
-  //   2. Subtle scale pop            (0.35 → 0.65 s)
-  //   3. Fill circle fades in        (0.4 → 0.7 s)
-  //   4. Text fades in + lifts up    (0.55 → 0.9 s)
+  //   1. Ring stroke draws itself    (0 → 0.9 s)
+  //   2. Subtle scale pop            (0.525 → 0.975 s)
+  //   3. Fill circle fades in        (0.6 → 1.05 s)
+  //   4. Text fades in + lifts up    (0.825 → 1.35 s)
+  // (all durations and delays ×1.5 for a more detailed, deliberate draw)
   // ============================================================
 
   // The CTA wrapper starts invisible; JS adds .is-visible after REVEAL_DELAY.
   &--shape-circle.is-visible,
   .is-visible &--shape-circle {
     .btn__shape-ring {
-      animation: btn-circle-draw 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+      animation: btn-circle-draw 0.9s cubic-bezier(0.65, 0, 0.35, 1) forwards;
     }
 
     .btn__shape-fill {
-      animation: btn-circle-fill-appear 0.3s ease 0.4s both;
+      animation: btn-circle-fill-appear 0.45s ease 0.6s both;
     }
 
     .btn__shape-text,
     .btn__content {
-      animation: btn-circle-text-appear 0.35s cubic-bezier(0.33, 1, 0.68, 1)
-        0.55s both;
+      animation: btn-circle-text-appear 0.525s cubic-bezier(0.33, 1, 0.68, 1)
+        0.825s both;
     }
 
     // Subtle scale pop after the ring draws — adds energy to the reveal
-    animation: btn-circle-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s both;
+    animation: btn-circle-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.525s both;
   }
 
   // ============================================================
@@ -239,6 +240,17 @@
 
     &--shape-circle {
       width: var(--btn-shape-circle-size-mobile, var(--btn-shape-circle-size));
+      // Morph circle → rounded square at tablet
+      border-radius: 12px !important;
+      transition:
+        transform 200ms ease,
+        opacity 200ms ease,
+        width 400ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        border-radius 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+      .btn__shape-ring {
+        display: none;
+      }
     }
   }
 }

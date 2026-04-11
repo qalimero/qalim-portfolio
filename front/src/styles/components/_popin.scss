@@ -11,6 +11,12 @@
   top: auto;
   left: 0;
 
+  // Tablet and below: pin to top instead of bottom
+  @media (max-width: 768px) {
+    bottom: auto;
+    top: 0;
+  }
+
   // Hide native backdrop
   &::backdrop {
     display: none;

@@ -1,0 +1,169 @@
+---
+/**
+ * Terminal page — accessible via the CTA pixel-wipe transition from /maintenance.
+ * A minimal dark interface with a WebGL grid background, styled as a terminal.
+ */
+import BaseLayout from '../layouts/Layout.astro';
+import WebGLGrid from '../components/scenes/WebGLGrid.jsx';
+---
+
+<BaseLayout
+  title="Qalim — Terminal"
+  description="Welcome to the terminal."
+  bodyClass="page-terminal"
+>
+  <WebGLGrid client:load />
+
+  <section class="terminal">
+    <div class="terminal__window">
+      <div class="terminal__bar">
+        <span class="terminal__dot terminal__dot--red"></span>
+        <span class="terminal__dot terminal__dot--yellow"></span>
+        <span class="terminal__dot terminal__dot--green"></span>
+        <span class="terminal__bar-title">qalim — terminal</span>
+      </div>
+      <div class="terminal__body" aria-label="Terminal interface">
+        <div class="terminal__line">
+          <span class="terminal__prompt">qalim@portfolio:~$</span>
+          <span class="terminal__command"> whoami</span>
+        </div>
+        <div class="terminal__output">
+          Creative developer · Accessibility expert · RGAA/RAWEB/WCAG
+        </div>
+        <div class="terminal__line">
+          <span class="terminal__prompt">qalim@portfolio:~$</span>
+          <span class="terminal__command"> ls projects/</span>
+        </div>
+        <div class="terminal__output">
+          Coming soon — portfolio under construction.
+        </div>
+        <div class="terminal__line terminal__line--active">
+          <span class="terminal__prompt">qalim@portfolio:~$</span>
+          <span class="terminal__command terminal__cursor"> _</span>
+        </div>
+      </div>
+    </div>
+
+    <a href="/maintenance" class="terminal__back">
+      ← Back to maintenance
+    </a>
+  </section>
+</BaseLayout>
+
+<style lang="scss">
+.page-terminal {
+  background: #000;
+  color: #fff;
+  min-height: 100vh;
+}
+
+.terminal {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 2rem;
+
+  &__window {
+    width: 100%;
+    max-width: 680px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(4px);
+  }
+
+  &__bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  &__dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+
+    &--red    { background: #ff5f57; }
+    &--yellow { background: #febc2e; }
+    &--green  { background: #28c840; }
+  }
+
+  &__bar-title {
+    margin-left: auto;
+    margin-right: auto;
+    font-family: var(--font-family-mono, monospace);
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.05em;
+  }
+
+  &__body {
+    padding: 24px;
+    font-family: var(--font-family-mono, monospace);
+    font-size: 0.875rem;
+    line-height: 1.8;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__line {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  &__prompt {
+    color: #3200f2;
+    flex-shrink: 0;
+  }
+
+  &__command {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  &__output {
+    color: rgba(255, 255, 255, 0.5);
+    padding-left: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  &__cursor {
+    animation: blink 1s step-end infinite;
+  }
+
+  &__back {
+    font-family: var(--font-family-mono, monospace);
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.4);
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: color 200ms ease;
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    &:focus-visible {
+      outline: 2px solid #3200f2;
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+</style>
