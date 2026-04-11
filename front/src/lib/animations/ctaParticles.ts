@@ -11,6 +11,7 @@
  * Performance:
  *  - The canvas is sized to cover only the button area + OVERFLOW margin.
  *  - The render loop runs only while particles are alive (or the pointer hovers).
+ *  - DPR-aware: renders at device pixel ratio for crisp output on retina.
  *  - Compatible with all browsers that support Canvas 2D (full support since IE9).
  */
 
@@ -19,35 +20,35 @@
 // ---------------------------------------------------------------------------
 
 /** Extra space around the button for particles to travel into (px) */
-const OVERFLOW = 90;
+const OVERFLOW = 100;
 
 /** Maximum simultaneous live particles */
-const MAX_PARTICLES = 30;
+const MAX_PARTICLES = 40;
 
 /** Particles spawned per "burst" on mouseenter */
-const BURST_COUNT = 12;
+const BURST_COUNT = 14;
 
 /** Probability of spawning a small extra particle each frame while hovering */
-const DRIP_CHANCE = 0.35;
+const DRIP_CHANCE = 0.3;
 
 /** Number of drip particles per qualifying frame */
-const DRIP_COUNT = 3;
+const DRIP_COUNT = 2;
 
 /** Brand blue identical to --color-brand-primary */
 const COLOR_BLUE = "#3200f2";
 const COLOR_WHITE = "#ffffff";
 
-/** Spawn radius as a fraction of button radius: 0.85–1.15× (particles start at the edge) */
-const SPAWN_RADIUS_MIN_RATIO = 0.85;
-const SPAWN_RADIUS_VARIANCE = 0.3;
+/** Spawn radius as a fraction of button radius */
+const SPAWN_RADIUS_MIN_RATIO = 0.88;
+const SPAWN_RADIUS_VARIANCE = 0.24;
 
-/** Particle launch speed range (px/s): MIN_SPEED to MIN_SPEED + SPEED_VARIANCE */
-const MIN_PARTICLE_SPEED = 40;
-const SPEED_VARIANCE = 80;
+/** Particle launch speed range (px/s) */
+const MIN_PARTICLE_SPEED = 30;
+const SPEED_VARIANCE = 60;
 
-/** Particle lifetime range (s): MIN_LIFETIME to MIN_LIFETIME + LIFETIME_VARIANCE */
-const MIN_LIFETIME_SEC = 0.4;
-const LIFETIME_VARIANCE_SEC = 0.6;
+/** Particle lifetime range (s) */
+const MIN_LIFETIME_SEC = 0.5;
+const LIFETIME_VARIANCE_SEC = 0.7;
 
 // ---------------------------------------------------------------------------
 // Types
@@ -66,7 +67,7 @@ interface Particle {
 	life: number;
 	/** How fast life drains (1 / duration_in_seconds) */
 	drain: number;
-	/** Radius in canvas pixels */
+	/** Radius in CSS pixels */
 	radius: number;
 	/** CSS colour string */
 	color: string;
@@ -87,7 +88,6 @@ function spawnBurst(
 		if (particles.length >= MAX_PARTICLES) break;
 
 		const angle = Math.random() * Math.PI * 2;
-		// Spawn at the circle edge (SPAWN_RADIUS_MIN_RATIO to ~1.15× button radius)
 		const spawnR =
 			btnRadius *
 			(SPAWN_RADIUS_MIN_RATIO + Math.random() * SPAWN_RADIUS_VARIANCE);
@@ -100,8 +100,8 @@ function spawnBurst(
 			vy: Math.sin(angle) * speed,
 			life: 1,
 			drain: 1 / (MIN_LIFETIME_SEC + Math.random() * LIFETIME_VARIANCE_SEC),
-			radius: 1 + Math.random() * 1.5,
-			color: Math.random() > 0.4 ? COLOR_WHITE : COLOR_BLUE,
+			radius: 0.8 + Math.random() * 1.8,
+			color: Math.random() > 0.35 ? COLOR_WHITE : COLOR_BLUE,
 		});
 	}
 }
@@ -122,7 +122,6 @@ export function initCtaParticles(btnEl: HTMLElement): () => void {
 		"position:fixed",
 		"pointer-events:none",
 		"z-index:11",
-		"will-change:transform",
 	].join(";");
 
 	document.body.appendChild(canvas);
@@ -133,8 +132,6 @@ export function initCtaParticles(btnEl: HTMLElement): () => void {
 		return () => {};
 	}
 
-	// Narrowed to CanvasRenderingContext2D after the null guard above.
-	// TypeScript cannot narrow through closures, so we keep a typed alias.
 	const draw: CanvasRenderingContext2D = ctx;
 
 	// ---- State --------------------------------------------------------------
@@ -144,14 +141,21 @@ export function initCtaParticles(btnEl: HTMLElement): () => void {
 	let hovering = false;
 	let lastTime = 0;
 
-	// ---- Canvas positioning (keeps it aligned with the moving button) -------
+	// ---- Canvas positioning (keeps it aligned with the button) ----------------
 
 	function syncCanvas(): void {
 		const rect = btnEl.getBoundingClientRect();
+		const dpr = Math.min(window.devicePixelRatio || 1, 2);
+		const cssW = rect.width + OVERFLOW * 2;
+		const cssH = rect.height + OVERFLOW * 2;
+
 		canvas.style.left = `${rect.left - OVERFLOW}px`;
 		canvas.style.top = `${rect.top - OVERFLOW}px`;
-		canvas.width = Math.round(rect.width + OVERFLOW * 2);
-		canvas.height = Math.round(rect.height + OVERFLOW * 2);
+		canvas.style.width = `${cssW}px`;
+		canvas.style.height = `${cssH}px`;
+		canvas.width = Math.round(cssW * dpr);
+		canvas.height = Math.round(cssH * dpr);
+		draw.setTransform(dpr, 0, 0, dpr, 0, 0);
 	}
 
 	// ---- Render loop --------------------------------------------------------
@@ -162,7 +166,6 @@ export function initCtaParticles(btnEl: HTMLElement): () => void {
 
 		syncCanvas();
 
-		// Derive button centre & radius in viewport space
 		const rect = btnEl.getBoundingClientRect();
 		const cx = rect.left + rect.width / 2;
 		const cy = rect.top + rect.height / 2;
@@ -173,10 +176,12 @@ export function initCtaParticles(btnEl: HTMLElement): () => void {
 			spawnBurst(particles, cx, cy, btnR, DRIP_COUNT);
 		}
 
-		// Clear
-		draw.clearRect(0, 0, canvas.width, canvas.height);
+		// Clear (CSS dimensions, not canvas pixel dimensions)
+		const cssW = rect.width + OVERFLOW * 2;
+		const cssH = rect.height + OVERFLOW * 2;
+		draw.clearRect(0, 0, cssW, cssH);
 
-		// Offset for drawing in canvas-local coordinates
+		// Offset for drawing in canvas-local CSS coordinates
 		const ox = rect.left - OVERFLOW;
 		const oy = rect.top - OVERFLOW;
 
@@ -187,7 +192,7 @@ export function initCtaParticles(btnEl: HTMLElement): () => void {
 			p.x += p.vx * dt;
 			p.y += p.vy * dt;
 
-			// Gentle drag — particles slow down as they travel
+			// Gentle drag — particles decelerate as they travel
 			p.vx *= 0.97;
 			p.vy *= 0.97;
 
@@ -198,7 +203,7 @@ export function initCtaParticles(btnEl: HTMLElement): () => void {
 				continue;
 			}
 
-			// Ease-out alpha: starts bright, fades quickly at end
+			// Smooth ease-out alpha
 			const alpha = p.life * p.life;
 
 			draw.save();
@@ -216,8 +221,7 @@ export function initCtaParticles(btnEl: HTMLElement): () => void {
 		} else {
 			animId = 0;
 			lastTime = 0;
-			// Clear canvas when idle so no ghost pixels remain
-			draw.clearRect(0, 0, canvas.width, canvas.height);
+			draw.clearRect(0, 0, cssW, cssH);
 		}
 	}
 

@@ -49,7 +49,7 @@ export function initSplineScene(
           renderer,
         );
 
-        // Expose card screen bounds for the floating CTA collision system
+        // Expose card screen bounds for CTA positioning & WebGL cursor magnetize
         (window as any).__getCardScreenBounds = () =>
           projectCardToScreen(card, camera, renderer);
       }
@@ -240,7 +240,7 @@ function fitCameraToCard(
 }
 
 // ---------------------------------------------------------------------------
-// Card → screen-space projection (used by floating CTA collision)
+// Card → screen-space projection (used by CTA positioning & WebGL grid magnetize)
 // ---------------------------------------------------------------------------
 
 function projectCardToScreen(

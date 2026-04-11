@@ -22,7 +22,7 @@
 // ---------------------------------------------------------------------------
 
 /** Time before the CTA is revealed (ms) — "0.3–0.5 s after page load" */
-const REVEAL_DELAY = 350;
+const REVEAL_DELAY = 400;
 
 /** Minimum gap from viewport edges (px) */
 const EDGE_PADDING = 16;
