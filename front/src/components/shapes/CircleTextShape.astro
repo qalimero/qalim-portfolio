@@ -62,8 +62,8 @@ const displayText = textWithSep.repeat(repeatCount).toUpperCase();
     />
   </defs>
 
-  <!-- Background circle — fills the full viewBox -->
-  <circle cx="100" cy="100" r="100" fill="var(--btn-shape-fill)" stroke="var(--btn-shape-stroke)" />
+  <!-- Background circle — fills the full viewBox, fades in after stroke draw -->
+  <circle class="btn__shape-fill" cx="100" cy="100" r="100" fill="var(--btn-shape-fill)" />
 
   <!-- Circular text following the path (decorative — parent SVG is aria-hidden) -->
   {displayText && (
@@ -77,4 +77,23 @@ const displayText = textWithSep.repeat(repeatCount).toUpperCase();
       <textPath href={`#${pathId}`}>{displayText}</textPath>
     </text>
   )}
+
+  <!--
+    Draw-on ring: animated stroke that traces the circle outline on reveal.
+    r=98 keeps it inside the fill circle.
+    stroke-dasharray/dashoffset = circumference = 2π × 98 ≈ 616 SVG units.
+    The CSS draw-on animation overrides stroke-dashoffset from 616 → 0.
+  -->
+  <circle
+    class="btn__shape-ring"
+    cx="100"
+    cy="100"
+    r="98"
+    fill="none"
+    stroke="var(--btn-shape-stroke)"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-dasharray="616"
+    stroke-dashoffset="616"
+  />
 </svg>

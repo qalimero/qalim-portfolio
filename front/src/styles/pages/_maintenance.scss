@@ -55,13 +55,30 @@
     z-index: 0; // Behind marquee and popin
   }
 
-  // CTA button — floats around the 3D scene, positioned by JS.
-  // Size is controlled dynamically by floatingCta.ts based on the available
-  // corridor around the Spline card (shrinks only when space is insufficient).
+  // CTA button — positioned statically by JS to the right of the 3D card,
+  // centred in the corridor between the card and the viewport edge.
+  // Starts invisible; JS adds `.is-visible` after REVEAL_DELAY ms, which
+  // triggers the draw-on animation defined in _button.scss.
   &__cta {
     position: fixed;
     z-index: 10;
     pointer-events: auto;
+
+    // Start invisible — the draw-on animation reveals it.
+    // Using opacity + visibility keeps the element accessible but hidden,
+    // and prevents it from flickering at position (0,0) before JS runs.
+    opacity: 0;
+    visibility: hidden;
+    // Disable interactions until visible so the button can't be accidentally
+    // triggered during the pre-reveal window.
+    pointer-events: none;
+
+    &.is-visible {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      // No opacity transition here — the draw animation IS the reveal.
+    }
   }
 
   // Ensure the 3D scene container fills its parent
