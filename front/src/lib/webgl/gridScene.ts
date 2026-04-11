@@ -197,7 +197,7 @@ export function initGridScene(
       return;
     }
 
-    // ---- Magnetize: pull circle toward floating CTA when mouse is near -----
+    // ---- Magnetize: pull circle toward CTA when mouse is near -----
 
     // biome-ignore lint/suspicious/noExplicitAny: cross-module bridge via window globals
     const ctaBounds = (window as any).__ctaScreenBounds as {
