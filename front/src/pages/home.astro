@@ -44,11 +44,28 @@ import BaseLayout from "../layouts/Layout.astro";
       </div>
     </div>
 
-    <a href="/maintenance" class="home__back">
+    <a href="/maintenance" class="home__back" data-internal>
       ← Back to maintenance
     </a>
   </section>
 </BaseLayout>
+
+<script>
+  import { initTransitionScene } from '../lib/webgl/transitionScene';
+
+  const transition = initTransitionScene();
+  const backLink = document.querySelector<HTMLAnchorElement>('.home__back');
+
+  if (backLink && transition) {
+    backLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      const href = backLink.href;
+      transition.trigger(() => {
+        window.location.href = href;
+      });
+    });
+  }
+</script>
 
 <style lang="scss">
 .page-home {

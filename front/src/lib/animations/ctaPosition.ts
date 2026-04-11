@@ -2,7 +2,7 @@
  * ctaPosition.ts
  *
  * Positions the CTA button on the grid — its edges snap to grid lines so
- * the button fills exactly 2×2 cells on desktop and 2×1 cells below the
+ * the button fills exactly 2×2 cells on desktop and 4×1 cells below the
  * tablet breakpoint.
  *
  * After a short reveal delay the button appears (CSS `is-visible`).
@@ -64,8 +64,8 @@ function computeLayout(): CtaLayout {
 	const cell = GRID_CELL_SIZE_CSS;
 	const isTablet = viewW <= TABLET_BREAKPOINT_PX;
 
-	// CTA spans 2×2 cells on desktop, 2×1 on tablet
-	const ctaW = cell * 2;
+	// CTA spans 2×2 cells on desktop, 4×1 on tablet
+	const ctaW = isTablet ? cell * 4 : cell * 2;
 	const ctaH = isTablet ? cell : cell * 2;
 
 	const card = window.__getCardScreenBounds?.();

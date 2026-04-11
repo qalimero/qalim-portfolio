@@ -171,21 +171,21 @@
       opacity: 0;
     }
 
-    // ── Revealed state (pixel-creation done → show CSS children) ──
+    // ── Revealed state (pixel-creation done → show fill) ──
     &.is-revealed {
       .btn__shape-fill {
         opacity: 1;
       }
+    }
+
+    // ── Morphed state: circle → square, then show text ──
+    &.is-morphed {
+      border-radius: 0;
 
       .btn__shape-text,
       .btn__content {
-        animation: btn-circle-text-appear 0.525s cubic-bezier(0.33, 1, 0.68, 1) 0.1s both;
+        animation: btn-circle-text-appear 0.525s cubic-bezier(0.33, 1, 0.68, 1) 0.4s both;
       }
-    }
-
-    // ── Morphed state: circle → square ──
-    &.is-morphed {
-      border-radius: 0;
     }
 
     // Scale decorative SVG on hover
@@ -244,9 +244,9 @@
     }
 
     &--shape-circle {
-      // On tablet the morphed state becomes a horizontal rectangle (2×1 cells)
+      // On tablet the morphed state becomes a wide horizontal bar (4×1 cells)
       &.is-morphed {
-        aspect-ratio: 2;
+        aspect-ratio: 4;
       }
 
       .btn__shape-ring {
