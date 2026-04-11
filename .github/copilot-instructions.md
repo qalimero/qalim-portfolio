@@ -10,6 +10,7 @@ This repository contains WebGL and graphics-related code, examples, and reusable
 
 - Keep repository-wide conventions in this file.
 - Keep reusable domain knowledge in `.github/skills/webgl-expert/`.
+- Keep reusable motion/physics/animation knowledge in `.github/skills/processing-expert/`.
 - Keep runnable or teaching-oriented examples in `examples/`.
 - Keep reusable shader snippets in `shaders/`.
 - Keep deep-dive implementation guidance in `patterns/`.
@@ -44,6 +45,10 @@ When asked to generate or edit WebGL code:
 4. Validate the render path in this order: context, shaders, buffers, uniforms, textures, draw call.
 5. If debugging, use the checklist in `.github/skills/webgl-expert/prompts/debugging-checklist.md`.
 6. If performance is mentioned, consult `.github/skills/webgl-expert/patterns/performance.md`.
+7. For motion, animation, physics, particle systems, or steering behaviors, start from `.github/skills/processing-expert/examples/`.
+8. Reuse simulation patterns from `.github/skills/processing-expert/patterns/` when possible.
+9. If the task combines motion simulation with WebGL rendering, consult `.github/skills/processing-expert/patterns/integration-with-webgl.md`.
+10. All simulations must be adaptive to window size — never hardcode pixel values.
 
 ## Output quality
 
