@@ -201,22 +201,22 @@
 	width: calc(#{$cell} * 2);
 	height: calc(#{$cell} * 2);
 
-	// Square — NO border-radius
-	border: var(--text-maintenance-border-width) solid transparent;
-	background: transparent;
+	// Square — NO border-radius, orange background
+	border: var(--maintenance-link-border-width) solid var(--maintenance-link-border-color);
+	background: var(--maintenance-link-background);
 
-	// Typography
-	font-family: var(--text-maintenance-font-family);
-	font-size: var(--text-maintenance-font-size);
-	font-weight: var(--text-maintenance-font-weight);
-	letter-spacing: var(--text-maintenance-letter-spacing);
+	// Typography — 0.875rem (14px) for accessibility
+	font-family: var(--maintenance-link-font-family);
+	font-size: var(--maintenance-link-font-size);
+	font-weight: var(--maintenance-link-font-weight);
+	letter-spacing: var(--maintenance-link-letter-spacing);
 	text-transform: uppercase;
-	color: var(--text-maintenance-color);
+	color: var(--maintenance-link-color);
 
 	// Transitions
 	transition:
-		transform 200ms ease,
-		border-color 300ms ease;
+		transform var(--maintenance-link-transition-duration) var(--ease-default),
+		border-color var(--duration-fast) var(--ease-default);
 
 	// ── Initial hidden state ──
 	visibility: hidden;
@@ -229,16 +229,16 @@
 
 	// ── Revealed state (pixel-creation done) ──
 	&.is-revealed {
-		border-color: var(--text-maintenance-border-color);
+		border-color: var(--maintenance-link-border-color-revealed);
 		pointer-events: auto;
 
 		.maintenance-link__content {
-			animation: ml-content-appear 0.525s cubic-bezier(0.33, 1, 0.68, 1) 0.15s both;
+			animation: ml-content-appear var(--maintenance-link-reveal-duration) var(--maintenance-link-reveal-easing) 0.15s both;
 		}
 
 		.maintenance-link__icon-wrapper {
 			animation:
-				ml-content-appear 0.525s cubic-bezier(0.33, 1, 0.68, 1) 0.3s both,
+				ml-content-appear var(--maintenance-link-reveal-duration) var(--maintenance-link-reveal-easing) 0.3s both,
 				ml-icon-spin 4s linear 0.8s infinite;
 		}
 	}
@@ -264,18 +264,17 @@
 		transform: scale(0.97);
 	}
 
-	// ── Content wrapper ──
+	// ── Content wrapper — inline layout (text + icon side by side) ──
 	&__content {
 		display: inline-flex;
-		flex-direction: column;
+		flex-direction: row;
 		align-items: center;
-		gap: var(--spacing-xs);
+		gap: var(--maintenance-link-content-gap);
 		opacity: 0;
 		text-align: center;
 
-		// Tablet: horizontal layout
+		// Tablet: same inline layout, wider gap
 		@media (max-width: vars.$breakpoint-lg - 1) {
-			flex-direction: row;
 			gap: var(--spacing-sm);
 		}
 	}
@@ -297,8 +296,8 @@
 	// ── Icon ──
 	&__icon {
 		flex-shrink: 0;
-		width: var(--text-maintenance-icon-size);
-		height: var(--text-maintenance-icon-size);
+		width: var(--maintenance-link-icon-size);
+		height: var(--maintenance-link-icon-size);
 	}
 
 	// ── SR-only hint for external links ──
