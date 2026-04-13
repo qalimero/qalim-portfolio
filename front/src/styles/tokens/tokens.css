@@ -1,265 +1,265 @@
 :root {
-	/* ========================================
+  /* ========================================
      DTCG-Compliant Design Tokens
      3-tier architecture: Core → Alias → Component
      Following Design Token Community Group naming rules.
      Structure: --{tier}-{category}-{property}-{variant}
      ======================================== */
 
-	/* ========================================
+  /* ========================================
      TIER 1 — CORE TOKENS
      Raw, immutable values. The single source
      of truth for every visual decision.
      ======================================== */
 
-	/* Core · Color */
-	--color-brand-primary: #3200f2;
-	--color-brand-secondary: #ff602f;
-	--color-neutral-darkest: #232121;
-	--color-neutral-lightest: #ffffff;
+  /* Core · Color */
+  --color-brand-primary: #3200f2;
+  --color-brand-secondary: #ff602f;
+  --color-neutral-darkest: #232121;
+  --color-neutral-lightest: #ffffff;
 
-	/* Core · Border Radius */
-	--border-radius-sm: 1rem;
-	--border-radius-md: 2.5rem;
+  /* Core · Border Radius */
+  --border-radius-sm: 1rem;
+  --border-radius-md: 2.5rem;
 
-	/* Core · Font Family */
-	--font-family-base: Satoshi;
-	--font-family-mono: PP Fraktion Mono;
+  /* Core · Font Family */
+  --font-family-base: Satoshi;
+  --font-family-mono: PP Fraktion Mono;
 
-	/* Core · Font Size
+  /* Core · Font Size
      Scale: 10 → 14 → 16 → 26 → 42 → 68 → 110
      Each step is visually distinct — do not interpolate. */
-	--font-size-xxs: 0.625rem;
-	--font-size-2xs: 0.875rem;
-	--font-size-xs: 1rem;
-	--font-size-sm: 1.625rem;
-	--font-size-md: 2.625rem;
-	--font-size-lg: 4.25rem;
-	--font-size-xl: 6.875rem;
+  --font-size-xxs: 0.625rem;
+  --font-size-2xs: 0.875rem;
+  --font-size-xs: 1rem;
+  --font-size-sm: 1.625rem;
+  --font-size-md: 2.625rem;
+  --font-size-lg: 4.25rem;
+  --font-size-xl: 6.875rem;
 
-	/* Core · Font Weight */
-	--font-weight-regular: 400;
-	--font-weight-bold: 700;
+  /* Core · Font Weight */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
 
-	/* Core · Line Height */
-	--line-height-tight: 1.1;
-	--line-height-snug: 1.2;
-	--line-height-normal: 1.5;
-	--line-height-relaxed: 1.6;
+  /* Core · Line Height */
+  --line-height-tight: 1.1;
+  --line-height-snug: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.6;
 
-	/* Core · Letter Spacing */
-	--letter-spacing-none: 0;
-	--letter-spacing-tight: -0.02em;
-	--letter-spacing-tighter: -0.03em;
-	--letter-spacing-display: -0.05em;
+  /* Core · Letter Spacing */
+  --letter-spacing-none: 0;
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-tighter: -0.03em;
+  --letter-spacing-display: -0.05em;
 
-	/* Core · Spacing
+  /* Core · Spacing
      Base unit: 4px. All values on this scale. */
-	--spacing-xxs: 0.25rem;
-	--spacing-xs: 0.5rem;
-	--spacing-sm: 0.75rem;
-	--spacing-md: 1rem;
-	--spacing-lg: 1.5rem;
-	--spacing-xl: 2rem;
-	--spacing-2xl: 2.5rem;
-	--spacing-3xl: 3rem;
-	--spacing-4xl: 4rem;
-	--spacing-5xl: 5rem;
+  --spacing-xxs: 0.25rem;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 2.5rem;
+  --spacing-3xl: 3rem;
+  --spacing-4xl: 4rem;
+  --spacing-5xl: 5rem;
 
-	/* Core · Duration */
-	--duration-instant: 200ms;
-	--duration-fast: 300ms;
-	--duration-normal: 400ms;
-	--duration-slow: 600ms;
-	--duration-reveal: 525ms;
+  /* Core · Duration */
+  --duration-instant: 200ms;
+  --duration-fast: 300ms;
+  --duration-normal: 400ms;
+  --duration-slow: 600ms;
+  --duration-reveal: 525ms;
 
-	/* Core · Easing */
-	--ease-default: ease;
-	--ease-in-out: ease-in-out;
-	--ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
-	--ease-out-expo: cubic-bezier(0.33, 1, 0.68, 1);
+  /* Core · Easing */
+  --ease-default: ease;
+  --ease-in-out: ease-in-out;
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out-expo: cubic-bezier(0.33, 1, 0.68, 1);
 
-	/* ========================================
+  /* ========================================
      TIER 2 — ALIAS TOKENS
      Semantic references to core tokens.
      Describe intent, not value.
      ======================================== */
 
-	/* Alias · Color — Surface */
-	--color-surface-brand: var(--color-brand-primary);
-	--color-surface-accent: var(--color-brand-secondary);
-	--color-surface-page: var(--color-neutral-darkest);
+  /* Alias · Color — Surface */
+  --color-surface-brand: var(--color-brand-primary);
+  --color-surface-accent: var(--color-brand-secondary);
+  --color-surface-page: var(--color-neutral-darkest);
 
-	/* Alias · Color — Text */
-	--color-text-on-brand: var(--color-neutral-lightest);
-	--color-text-on-accent: var(--color-neutral-lightest);
-	--color-text-on-dark: var(--color-neutral-lightest);
-	--color-text-default: var(--color-neutral-darkest);
+  /* Alias · Color — Text */
+  --color-text-on-brand: var(--color-neutral-lightest);
+  --color-text-on-accent: var(--color-neutral-lightest);
+  --color-text-on-dark: var(--color-neutral-lightest);
+  --color-text-default: var(--color-neutral-darkest);
 
-	/* Alias · Color — Interactive */
-	--color-interactive-hover: var(--color-brand-secondary);
-	--color-interactive-focus: var(--color-brand-primary);
+  /* Alias · Color — Interactive */
+  --color-interactive-hover: var(--color-brand-secondary);
+  --color-interactive-focus: var(--color-brand-primary);
 
-	/* Alias · Color — Border */
-	--color-border-accent: var(--color-brand-secondary);
-	--color-border-focus: var(--color-neutral-lightest);
+  /* Alias · Color — Border */
+  --color-border-accent: var(--color-brand-secondary);
+  --color-border-focus: var(--color-neutral-lightest);
 
-	/* Alias · Typography — Body (p) — content reading layer */
-	--typography-body-font-family: var(--font-family-mono);
-	--typography-body-font-size: var(--font-size-xs);
-	--typography-body-font-weight: var(--font-weight-regular);
-	--typography-body-line-height: var(--line-height-relaxed);
-	--typography-body-letter-spacing: var(--letter-spacing-none);
-	--typography-body-text-transform: none;
+  /* Alias · Typography — Body (p) — content reading layer */
+  --typography-body-font-family: var(--font-family-mono);
+  --typography-body-font-size: var(--font-size-xs);
+  --typography-body-font-weight: var(--font-weight-regular);
+  --typography-body-line-height: var(--line-height-relaxed);
+  --typography-body-letter-spacing: var(--letter-spacing-none);
+  --typography-body-text-transform: none;
 
-	/* Alias · Typography — Label (span, small) — auxiliary / caption text */
-	--typography-label-font-family: var(--font-family-mono);
-	--typography-label-font-size: var(--font-size-xxs);
-	--typography-label-font-weight: var(--font-weight-regular);
-	--typography-label-line-height: var(--line-height-normal);
-	--typography-label-letter-spacing: var(--letter-spacing-none);
-	--typography-label-text-transform: none;
+  /* Alias · Typography — Label (span, small) — auxiliary / caption text */
+  --typography-label-font-family: var(--font-family-mono);
+  --typography-label-font-size: var(--font-size-xxs);
+  --typography-label-font-weight: var(--font-weight-regular);
+  --typography-label-line-height: var(--line-height-normal);
+  --typography-label-letter-spacing: var(--letter-spacing-none);
+  --typography-label-text-transform: none;
 
-	/* Alias · Typography — h4 — ticker label, section sub-label */
-	--typography-h4-font-family: var(--font-family-base);
-	--typography-h4-font-size: var(--font-size-sm);
-	--typography-h4-font-weight: var(--font-weight-bold);
-	--typography-h4-line-height: var(--line-height-snug);
-	--typography-h4-letter-spacing: var(--letter-spacing-display);
-	--typography-h4-text-transform: uppercase;
+  /* Alias · Typography — h4 — ticker label, section sub-label */
+  --typography-h4-font-family: var(--font-family-base);
+  --typography-h4-font-size: var(--font-size-sm);
+  --typography-h4-font-weight: var(--font-weight-bold);
+  --typography-h4-line-height: var(--line-height-snug);
+  --typography-h4-letter-spacing: var(--letter-spacing-display);
+  --typography-h4-text-transform: uppercase;
 
-	/* Alias · Typography — h3 — card title / sub-section heading */
-	--typography-h3-font-family: var(--font-family-base);
-	--typography-h3-font-size: var(--font-size-md);
-	--typography-h3-font-weight: var(--font-weight-bold);
-	--typography-h3-line-height: var(--line-height-snug);
-	--typography-h3-letter-spacing: var(--letter-spacing-tight);
-	--typography-h3-text-transform: uppercase;
+  /* Alias · Typography — h3 — card title / sub-section heading */
+  --typography-h3-font-family: var(--font-family-base);
+  --typography-h3-font-size: var(--font-size-md);
+  --typography-h3-font-weight: var(--font-weight-bold);
+  --typography-h3-line-height: var(--line-height-snug);
+  --typography-h3-letter-spacing: var(--letter-spacing-tight);
+  --typography-h3-text-transform: uppercase;
 
-	/* Alias · Typography — h2 — page section heading */
-	--typography-h2-font-family: var(--font-family-base);
-	--typography-h2-font-size: var(--font-size-lg);
-	--typography-h2-font-weight: var(--font-weight-bold);
-	--typography-h2-line-height: var(--line-height-tight);
-	--typography-h2-letter-spacing: var(--letter-spacing-tight);
-	--typography-h2-text-transform: uppercase;
+  /* Alias · Typography — h2 — page section heading */
+  --typography-h2-font-family: var(--font-family-base);
+  --typography-h2-font-size: var(--font-size-lg);
+  --typography-h2-font-weight: var(--font-weight-bold);
+  --typography-h2-line-height: var(--line-height-tight);
+  --typography-h2-letter-spacing: var(--letter-spacing-tight);
+  --typography-h2-text-transform: uppercase;
 
-	/* Alias · Typography — h1 — hero / main page title, display level */
-	--typography-h1-font-family: var(--font-family-base);
-	--typography-h1-font-size: var(--font-size-xl);
-	--typography-h1-font-weight: var(--font-weight-bold);
-	--typography-h1-line-height: var(--line-height-tight);
-	--typography-h1-letter-spacing: var(--letter-spacing-tighter);
-	--typography-h1-text-transform: uppercase;
+  /* Alias · Typography — h1 — hero / main page title, display level */
+  --typography-h1-font-family: var(--font-family-base);
+  --typography-h1-font-size: var(--font-size-xl);
+  --typography-h1-font-weight: var(--font-weight-bold);
+  --typography-h1-line-height: var(--line-height-tight);
+  --typography-h1-letter-spacing: var(--letter-spacing-tighter);
+  --typography-h1-text-transform: uppercase;
 
-	/* Alias · Border Radius */
-	--radius-container-mobile: var(--border-radius-sm);
-	--radius-container-desktop: var(--border-radius-md);
+  /* Alias · Border Radius */
+  --radius-container-mobile: var(--border-radius-sm);
+  --radius-container-desktop: var(--border-radius-md);
 
-	/* Alias · Focus Ring */
-	--focus-ring-width: 2px;
-	--focus-ring-offset: 3px;
+  /* Alias · Focus Ring */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 3px;
 
-	/* ========================================
+  /* ========================================
      TIER 3 — COMPONENT TOKENS
      Scoped to a single component.
      Always reference alias or core tokens.
      ======================================== */
 
-	/* Component · Marquee */
-	--marquee-font-size-mobile: var(--font-size-xs);
-	--marquee-font-size-desktop: var(--font-size-sm);
-	--marquee-background-color: var(--color-surface-brand);
-	--marquee-font-color: var(--color-text-on-brand);
-	--marquee-item-gap: var(--spacing-md);
-	--marquee-font-family: var(--font-family-mono);
-	--marquee-font-weight: var(--font-weight-bold);
-	--marquee-text-transform: uppercase;
+  /* Component · Marquee */
+  --marquee-font-size-mobile: var(--font-size-xs);
+  --marquee-font-size-desktop: var(--font-size-sm);
+  --marquee-background-color: var(--color-surface-brand);
+  --marquee-font-color: var(--color-text-on-brand);
+  --marquee-item-gap: var(--spacing-md);
+  --marquee-font-family: var(--font-family-mono);
+  --marquee-font-weight: var(--font-weight-bold);
+  --marquee-text-transform: uppercase;
 
-	/* Component · Marquee — Link Hover States */
-	--marquee-link-background-color-hover: var(--color-interactive-hover);
-	--marquee-link-border-radius-hover-mobile: var(--radius-container-mobile);
-	--marquee-link-border-radius-hover-desktop: var(--radius-container-desktop);
-	--marquee-link-padding-vertical-hover-mobile: var(--spacing-xxs);
-	--marquee-link-padding-vertical-hover-desktop: var(--spacing-xs);
-	--marquee-link-padding-horizontal-hover-mobile: var(--spacing-xs);
-	--marquee-link-padding-horizontal-hover-desktop: var(--spacing-md);
+  /* Component · Marquee — Link Hover States */
+  --marquee-link-background-color-hover: var(--color-interactive-hover);
+  --marquee-link-border-radius-hover-mobile: var(--radius-container-mobile);
+  --marquee-link-border-radius-hover-desktop: var(--radius-container-desktop);
+  --marquee-link-padding-vertical-hover-mobile: var(--spacing-xxs);
+  --marquee-link-padding-vertical-hover-desktop: var(--spacing-xs);
+  --marquee-link-padding-horizontal-hover-mobile: var(--spacing-xs);
+  --marquee-link-padding-horizontal-hover-desktop: var(--spacing-md);
 
-	/* Component · Marquee — Container */
-	--marquee-padding-horizontal-mobile: var(--spacing-md);
-	--marquee-padding-horizontal-desktop: var(--spacing-lg);
-	--marquee-padding-vertical-mobile: var(--spacing-xs);
-	--marquee-padding-vertical-desktop: var(--spacing-md);
-	--marquee-border-radius-mobile: var(--radius-container-mobile);
-	--marquee-border-radius-desktop: var(--radius-container-desktop);
+  /* Component · Marquee — Container */
+  --marquee-padding-horizontal-mobile: var(--spacing-md);
+  --marquee-padding-horizontal-desktop: var(--spacing-lg);
+  --marquee-padding-vertical-mobile: var(--spacing-xs);
+  --marquee-padding-vertical-desktop: var(--spacing-md);
+  --marquee-border-radius-mobile: var(--radius-container-mobile);
+  --marquee-border-radius-desktop: var(--radius-container-desktop);
 
-	/* Component · Marquee — Animation */
-	--marquee-scroll-duration: 20s;
-	--marquee-icon-spin-duration: 8s;
+  /* Component · Marquee — Animation */
+  --marquee-scroll-duration: 20s;
+  --marquee-icon-spin-duration: 8s;
 
-	/* Component · Popin */
-	--popin-background-color: var(--color-surface-brand);
-	--popin-text-color: var(--color-text-on-brand);
-	--popin-text-size: var(--font-size-xs);
-	--popin-font-family: var(--font-family-base);
-	--popin-font-weight: var(--font-weight-regular);
-	--popin-padding-xy: var(--spacing-lg);
-	--popin-gap-y: var(--spacing-md);
-	--popin-close-min-size: 2.75rem;
+  /* Component · Popin */
+  --popin-background-color: var(--color-surface-brand);
+  --popin-text-color: var(--color-text-on-brand);
+  --popin-text-size: var(--font-size-xs);
+  --popin-font-family: var(--font-family-base);
+  --popin-font-weight: var(--font-weight-regular);
+  --popin-padding-xy: var(--spacing-lg);
+  --popin-gap-y: var(--spacing-md);
+  --popin-close-min-size: 2.75rem;
 
-	/* Component · Button — Shared */
-	--btn-font-family: var(--font-family-mono);
-	--btn-font-size: var(--font-size-xs);
-	--btn-font-weight: var(--font-weight-bold);
-	--btn-letter-spacing: var(--letter-spacing-tight);
-	--btn-text-transform: uppercase;
-	--btn-gap: var(--spacing-xs);
-	--btn-transition-duration: var(--duration-instant);
-	--btn-transition-easing: var(--ease-default);
+  /* Component · Button — Shared */
+  --btn-font-family: var(--font-family-mono);
+  --btn-font-size: var(--font-size-xs);
+  --btn-font-weight: var(--font-weight-bold);
+  --btn-letter-spacing: var(--letter-spacing-tight);
+  --btn-text-transform: uppercase;
+  --btn-gap: var(--spacing-xs);
+  --btn-transition-duration: var(--duration-instant);
+  --btn-transition-easing: var(--ease-default);
 
-	/* Component · Button — Primary variant */
-	--btn-primary-background: var(--color-surface-accent);
-	--btn-primary-color: var(--color-text-on-accent);
-	--btn-primary-border-radius: var(--radius-container-desktop);
-	--btn-primary-padding-x: var(--spacing-xl);
-	--btn-primary-padding-y: var(--spacing-md);
+  /* Component · Button — Primary variant */
+  --btn-primary-background: var(--color-surface-accent);
+  --btn-primary-color: var(--color-text-on-accent);
+  --btn-primary-border-radius: var(--radius-container-desktop);
+  --btn-primary-padding-x: var(--spacing-xl);
+  --btn-primary-padding-y: var(--spacing-md);
 
-	/* Component · Button — Shape variant (circular SVG frame) */
-	--btn-shape-fill: var(--color-surface-accent);
-	--btn-shape-stroke: var(--color-surface-brand);
-	--btn-shape-color: var(--color-text-on-accent);
-	--btn-shape-padding-x: var(--spacing-2xl);
-	--btn-shape-padding-y: var(--spacing-lg);
-	--btn-shape-circle-size: 10rem;
-	--btn-shape-morph-duration: var(--duration-slow);
-	--btn-shape-morph-easing: var(--ease-out-back);
+  /* Component · Button — Shape variant (circular SVG frame) */
+  --btn-shape-fill: var(--color-surface-accent);
+  --btn-shape-stroke: var(--color-surface-brand);
+  --btn-shape-color: var(--color-text-on-accent);
+  --btn-shape-padding-x: var(--spacing-2xl);
+  --btn-shape-padding-y: var(--spacing-lg);
+  --btn-shape-circle-size: 10rem;
+  --btn-shape-morph-duration: var(--duration-slow);
+  --btn-shape-morph-easing: var(--ease-out-back);
 
-	/* Component · TextMaintenance */
-	--text-maintenance-border-color: var(--color-border-accent);
-	--text-maintenance-border-width: 2px;
-	--text-maintenance-color: var(--color-text-on-dark);
-	--text-maintenance-font-family: var(--font-family-mono);
-	--text-maintenance-font-size: var(--font-size-2xs);
-	--text-maintenance-font-weight: var(--font-weight-bold);
-	--text-maintenance-letter-spacing: var(--letter-spacing-tight);
-	--text-maintenance-line-height: var(--line-height-relaxed);
-	--text-maintenance-icon-size: 1.25em;
-	--text-maintenance-padding-x: var(--spacing-xl);
-	--text-maintenance-padding-y: var(--spacing-lg);
+  /* Component · TextMaintenance */
+  --text-maintenance-border-color: var(--color-border-accent);
+  --text-maintenance-border-width: 2px;
+  --text-maintenance-color: var(--color-text-on-dark);
+  --text-maintenance-font-family: var(--font-family-mono);
+  --text-maintenance-font-size: var(--font-size-xs);
+  --text-maintenance-font-weight: var(--font-weight-bold);
+  --text-maintenance-letter-spacing: var(--letter-spacing-tight);
+  --text-maintenance-line-height: var(--line-height-relaxed);
+  --text-maintenance-icon-size: 1.25em;
+  --text-maintenance-padding-x: var(--spacing-xl);
+  --text-maintenance-padding-y: var(--spacing-lg);
 
-	/* Component · Maintenance Link (orange square CTA) */
-	--maintenance-link-background: var(--color-surface-accent);
-	--maintenance-link-color: var(--color-text-on-accent);
-	--maintenance-link-border-color: transparent;
-	--maintenance-link-border-color-revealed: var(--color-border-accent);
-	--maintenance-link-border-width: var(--text-maintenance-border-width);
-	--maintenance-link-font-family: var(--font-family-mono);
-	--maintenance-link-font-size: var(--font-size-2xs);
-	--maintenance-link-font-weight: var(--font-weight-bold);
-	--maintenance-link-letter-spacing: var(--letter-spacing-tight);
-	--maintenance-link-icon-size: var(--text-maintenance-icon-size);
-	--maintenance-link-content-gap: var(--spacing-xs);
-	--maintenance-link-transition-duration: var(--duration-instant);
-	--maintenance-link-reveal-duration: var(--duration-reveal);
-	--maintenance-link-reveal-easing: var(--ease-out-expo);
+  /* Component · Maintenance Link (orange square CTA) */
+  --maintenance-link-background: var(--color-surface-accent);
+  --maintenance-link-color: var(--color-text-on-accent);
+  --maintenance-link-border-color: transparent;
+  --maintenance-link-border-color-revealed: var(--color-border-accent);
+  --maintenance-link-border-width: var(--text-maintenance-border-width);
+  --maintenance-link-font-family: var(--font-family-mono);
+  --maintenance-link-font-size: var(--font-size-2xs);
+  --maintenance-link-font-weight: var(--font-weight-bold);
+  --maintenance-link-letter-spacing: var(--letter-spacing-tight);
+  --maintenance-link-icon-size: var(--text-maintenance-icon-size);
+  --maintenance-link-content-gap: var(--spacing-xs);
+  --maintenance-link-transition-duration: var(--duration-instant);
+  --maintenance-link-reveal-duration: var(--duration-reveal);
+  --maintenance-link-reveal-easing: var(--ease-out-expo);
 }
